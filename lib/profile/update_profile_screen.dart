@@ -10,7 +10,7 @@ class UpdateProfileScreen extends StatefulWidget {
 
 class _UpdateProfileScreenState
     extends State<UpdateProfileScreen> {
-  static const Color bg = Color(0xFF09070F);
+  static const Color background = Color(0xFF0B0B0F);
   static const Color purple = Color(0xFF8B5CF6);
 
   final TextEditingController nameController =
@@ -26,13 +26,13 @@ class _UpdateProfileScreenState
     super.dispose();
   }
 
-  void saveProfile() {
+  void saveChanges() {
     FocusScope.of(context).unfocus();
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Profile updated successfully'),
-        backgroundColor: Color(0xFF24143D),
+        backgroundColor: purple,
       ),
     );
   }
@@ -40,59 +40,42 @@ class _UpdateProfileScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: background,
       appBar: AppBar(
-        backgroundColor: bg,
+        backgroundColor: background,
         elevation: 0,
-        centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
         title: const Text(
           'Edit Profile',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(
-          24,
-          25,
-          24,
-          40,
-        ),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(3),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: purple,
-                  width: 2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: purple.withOpacity(.25),
-                    blurRadius: 25,
-                  ),
-                ],
-              ),
-              child: const CircleAvatar(
-                radius: 58,
-                backgroundColor: Color(0xFF1B1228),
+            const SizedBox(height: 20),
+
+            const CircleAvatar(
+              radius: 55,
+              backgroundColor: purple,
+              child: CircleAvatar(
+                radius: 52,
+                backgroundColor: Color(0xFF202027),
                 child: Icon(
                   Icons.person,
                   color: Colors.white70,
-                  size: 60,
+                  size: 55,
                 ),
               ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             TextButton(
               onPressed: () {},
@@ -101,34 +84,82 @@ class _UpdateProfileScreenState
                 style: TextStyle(
                   color: purple,
                   fontSize: 15,
-                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
 
             const SizedBox(height: 30),
 
-            _buildField(
+            TextField(
               controller: nameController,
-              label: 'Name',
-              icon: Icons.person_outline,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+              cursorColor: purple,
+              decoration: InputDecoration(
+                labelText: 'Name',
+                labelStyle: const TextStyle(
+                  color: Colors.white54,
+                ),
+                prefixIcon: const Icon(
+                  Icons.person_outline,
+                  color: purple,
+                ),
+                filled: true,
+                fillColor: const Color(0xFF18181F),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                    color: purple,
+                  ),
+                ),
+              ),
             ),
 
             const SizedBox(height: 18),
 
-            _buildField(
+            TextField(
               controller: emailController,
-              label: 'Email',
-              icon: Icons.email_outlined,
+              keyboardType: TextInputType.emailAddress,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+              cursorColor: purple,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                labelStyle: const TextStyle(
+                  color: Colors.white54,
+                ),
+                prefixIcon: const Icon(
+                  Icons.email_outlined,
+                  color: purple,
+                ),
+                filled: true,
+                fillColor: const Color(0xFF18181F),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                    color: purple,
+                  ),
+                ),
+              ),
             ),
 
-            const SizedBox(height: 35),
+            const SizedBox(height: 30),
 
             SizedBox(
               width: double.infinity,
-              height: 52,
+              height: 50,
               child: ElevatedButton(
-                onPressed: saveProfile,
+                onPressed: saveChanges,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: purple,
                   foregroundColor: Colors.white,
@@ -147,44 +178,6 @@ class _UpdateProfileScreenState
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-  }) {
-    return TextField(
-      controller: controller,
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 15,
-      ),
-      cursorColor: purple,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(
-          color: Colors.white54,
-        ),
-        prefixIcon: Icon(
-          icon,
-          color: purple,
-        ),
-        filled: true,
-        fillColor: const Color(0xFF15111D),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(7),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(7),
-          borderSide: const BorderSide(
-            color: purple,
-            width: 1.2,
-          ),
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({super.key});
+class FavoritesScreen extends StatelessWidget {
+  const FavoritesScreen({super.key});
 
   static const Color background = Color(0xFF0B0B0F);
   static const Color purple = Color(0xFF8B5CF6);
@@ -18,7 +18,7 @@ class HistoryScreen extends StatelessWidget {
           color: Colors.white,
         ),
         title: const Text(
-          'History',
+          'Favorites',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -33,7 +33,7 @@ class HistoryScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
-                Icons.history,
+                Icons.favorite_border,
                 color: purple,
                 size: 70,
               ),
@@ -41,7 +41,7 @@ class HistoryScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               const Text(
-                'No History Yet',
+                'No Favorites Yet',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -52,7 +52,7 @@ class HistoryScreen extends StatelessWidget {
               const SizedBox(height: 8),
 
               const Text(
-                'Movies you watch will appear here.',
+                'Movies you like will appear here.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white54,

@@ -3,96 +3,60 @@ import 'package:flutter/material.dart';
 class WatchlistScreen extends StatelessWidget {
   const WatchlistScreen({super.key});
 
-  static const Color bg = Color(0xFF09070F);
+  static const Color background = Color(0xFF0B0B0F);
   static const Color purple = Color(0xFF8B5CF6);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: background,
+
       appBar: AppBar(
-        backgroundColor: bg,
+        backgroundColor: background,
         elevation: 0,
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
         title: const Text(
-          'My Watchlist',
+          'Watchlist',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
+
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(25),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: 95,
-                height: 95,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF24143D),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.bookmark_rounded,
-                  color: purple,
-                  size: 48,
-                ),
+              const Icon(
+                Icons.bookmark_outline,
+                color: purple,
+                size: 70,
               ),
 
-              const SizedBox(height: 25),
+              const SizedBox(height: 20),
 
               const Text(
                 'Your Watchlist is Empty',
-                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 21,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
 
               const Text(
-                'Save movies you want to watch later.',
+                'Movies you save will appear here.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white54,
                   fontSize: 14,
-                ),
-              ),
-
-              const SizedBox(height: 25),
-
-              SizedBox(
-                height: 45,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: purple,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7),
-                    ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 18),
-                    child: Text(
-                      'Browse Movies',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
                 ),
               ),
             ],
