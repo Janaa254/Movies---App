@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'avatar_picker.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -19,11 +20,39 @@ class _UpdateProfileScreenState
   final TextEditingController emailController =
   TextEditingController(text: 'user@email.com');
 
+  int selectedAvatar = 0;
+
+  final List<String> avatars = const [
+    'https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg',
+    'https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
+    'https://image.tmdb.org/t/p/w500/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg',
+    'https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg',
+    'https://image.tmdb.org/t/p/w500/q6AGQZS8D7uK4p6M9q2xV5h8x8Y.jpg',
+    'https://image.tmdb.org/t/p/w500/6b7swg6DLqXv8Y9L4kJv9Y3x7YQ.jpg',
+  ];
+
   @override
   void dispose() {
     nameController.dispose();
     emailController.dispose();
     super.dispose();
+  }
+
+  void showAvatarPicker() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return AvatarPicker(
+          selectedAvatar: selectedAvatar,
+          onAvatarSelected: (index) {
+            setState(() {
+              selectedAvatar = index;
+            });
+          },
+        );
+      },
+    );
   }
 
   void saveChanges() {
@@ -41,6 +70,7 @@ class _UpdateProfileScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
+
       appBar: AppBar(
         backgroundColor: background,
         elevation: 0,
@@ -55,22 +85,41 @@ class _UpdateProfileScreenState
           color: Colors.white,
         ),
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             const SizedBox(height: 20),
 
-            const CircleAvatar(
-              radius: 55,
-              backgroundColor: purple,
-              child: CircleAvatar(
-                radius: 52,
-                backgroundColor: Color(0xFF202027),
-                child: Icon(
-                  Icons.person,
-                  color: Colors.white70,
-                  size: 55,
+            GestureDetector(
+              onTap: showAvatarPicker,
+              child: Container(
+                width: 116,
+                height: 116,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: purple,
+                    width: 3,
+                  ),
+                ),
+                padding: const EdgeInsets.all(3),
+                child: ClipOval(
+                  child: Image.network(
+                    avatars[selectedAvatar],
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: const Color(0xFF202027),
+                        child: const Icon(
+                          Icons.person,
+                          color: Colors.white70,
+                          size: 55,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -78,9 +127,9 @@ class _UpdateProfileScreenState
             const SizedBox(height: 10),
 
             TextButton(
-              onPressed: () {},
+              onPressed: showAvatarPicker,
               child: const Text(
-                'Change Photo',
+                'Change Avatar',
                 style: TextStyle(
                   color: purple,
                   fontSize: 15,
