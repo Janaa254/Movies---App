@@ -80,8 +80,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
 
       showMessage(message);
-    } catch (_) {
-      showMessage('Something went wrong.');
+    } catch (e) {
+      showMessage(e.toString());
     } finally {
       if (mounted) {
         setState(() {

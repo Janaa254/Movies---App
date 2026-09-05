@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:movies_app/profile/profile_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -39,9 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
 
-      showMessage('Login successful.');
-
-      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const ProfileScreen(),
+        ),
+      );
     } on FirebaseAuthException catch (e) {
       String message = 'Something went wrong.';
 
@@ -86,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
+
       appBar: AppBar(
         backgroundColor: background,
         elevation: 0,
@@ -100,8 +105,10 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -162,22 +169,27 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               width: double.infinity,
               height: 50,
+
               child: ElevatedButton(
                 onPressed: isLoading ? null : login,
+
                 style: ElevatedButton.styleFrom(
                   backgroundColor: purple,
                   foregroundColor: Colors.white,
                   disabledBackgroundColor:
                   purple.withValues(alpha: 0.5),
                   elevation: 0,
+
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(7),
                   ),
                 ),
+
                 child: isLoading
                     ? const SizedBox(
                   width: 22,
                   height: 22,
+
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     color: Colors.white,
@@ -203,6 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     '/register',
                   );
                 },
+
                 child: const Text(
                   "Don't have an account? Create Account",
                   style: TextStyle(
@@ -232,28 +245,39 @@ class _LoginScreenState extends State<LoginScreen> {
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
+
       style: const TextStyle(
         color: Colors.white,
       ),
+
       cursorColor: purple,
+
       decoration: InputDecoration(
         labelText: label,
+
         labelStyle: const TextStyle(
           color: Colors.white54,
         ),
+
         prefixIcon: Icon(
           icon,
           color: purple,
         ),
+
         suffixIcon: suffixIcon,
+
         filled: true,
+
         fillColor: const Color(0xFF18181F),
+
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide.none,
         ),
+
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
+
           borderSide: const BorderSide(
             color: purple,
           ),

@@ -1,32 +1,202 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'update_profile_screen.dart';
 import 'watchlist_screen.dart';
 import 'history_screen.dart';
 import 'favorites_screen.dart';
+import 'avatar_picker.dart';
 import '../auth/login_screen.dart';
 import '../auth/register_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   static const Color background = Color(0xFF0B0B0F);
   static const Color purple = Color(0xFF8B5CF6);
 
   @override
-  Widget build(BuildContext context) {
-    final User? user = FirebaseAuth.instance.currentUser;
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
 
-    // ------------------------------------------------------------
-    // User is NOT logged in
-    // ------------------------------------------------------------
+class _ProfileScreenState extends State<ProfileScreen> {
+  int selectedAvatar = 0;
+  bool isLoadingAvatar = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadAvatar();
+  }
+
+  Future<void> loadAvatar() async {
+    final User? user =
+        FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      if (mounted) {
+        setState(() {
+          isLoadingAvatar = false;
+        });
+      }
+      return;
+    }
+
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (!mounted) return;
+
+      final data = doc.data();
+      final avatarIndex = data?['avatarIndex'];
+
+      if (avatarIndex is int &&
+          avatarIndex >= 0 &&
+          avatarIndex < AvatarPicker.allAvatars.length) {
+        setState(() {
+          selectedAvatar = avatarIndex;
+        });
+      }
+    } catch (_) {
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoadingAvatar = false;
+        });
+      }
+    }
+  }
+
+  Future<void> openUpdateProfile() async {
+    final bool? updated = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const UpdateProfileScreen(),
+      ),
+    );
+
+    if (updated == true && mounted) {
+      await FirebaseAuth.instance.currentUser?.reload();
+
+      await loadAvatar();
+
+      if (mounted) {
+        setState(() {});
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Profile updated successfully.'),
+            backgroundColor: ProfileScreen.purple,
+          ),
+        );
+      }
+    }
+  }
+
+  Widget buildProfileAvatar() {
+    if (isLoadingAvatar) {
+      return Container(
+        width: 104,
+        height: 104,
+        color: const Color(0xFF202027),
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: ProfileScreen.purple,
+            strokeWidth: 2,
+          ),
+        ),
+      );
+    }
+
+    if (selectedAvatar >=
+        AvatarPicker.allAvatars.length) {
+      return Container(
+        width: 104,
+        height: 104,
+        color: const Color(0xFF202027),
+        child: const Icon(
+          Icons.person,
+          color: Colors.white70,
+          size: 55,
+        ),
+      );
+    }
+
+    final avatar =
+    AvatarPicker.allAvatars[selectedAvatar];
+
+    return FutureBuilder<String?>(
+      future: AvatarPicker.getWikipediaImage(
+        avatar.person,
+      ),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState ==
+            ConnectionState.waiting) {
+          return Container(
+            width: 104,
+            height: 104,
+            color: const Color(0xFF202027),
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: ProfileScreen.purple,
+                strokeWidth: 2,
+              ),
+            ),
+          );
+        }
+
+        if (!snapshot.hasData ||
+            snapshot.data == null) {
+          return Container(
+            width: 104,
+            height: 104,
+            color: const Color(0xFF202027),
+            child: const Icon(
+              Icons.person,
+              color: Colors.white70,
+              size: 55,
+            ),
+          );
+        }
+
+        return Image.network(
+          snapshot.data!,
+          width: 104,
+          height: 104,
+          fit: BoxFit.cover,
+          errorBuilder:
+              (context, error, stackTrace) {
+            return Container(
+              width: 104,
+              height: 104,
+              color: const Color(0xFF202027),
+              child: const Icon(
+                Icons.person,
+                color: Colors.white70,
+                size: 55,
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final User? user =
+        FirebaseAuth.instance.currentUser;
 
     if (user == null) {
       return Scaffold(
-        backgroundColor: background,
+        backgroundColor: ProfileScreen.background,
         appBar: AppBar(
-          backgroundColor: background,
+          backgroundColor: ProfileScreen.background,
           elevation: 0,
           centerTitle: true,
           title: const Text(
@@ -46,7 +216,7 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 const CircleAvatar(
                   radius: 55,
-                  backgroundColor: purple,
+                  backgroundColor: ProfileScreen.purple,
                   child: CircleAvatar(
                     radius: 52,
                     backgroundColor: Color(0xFF202027),
@@ -77,8 +247,6 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30),
-
-                // Login
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -92,7 +260,7 @@ class ProfileScreen extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: purple,
+                      backgroundColor: ProfileScreen.purple,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -108,10 +276,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 12),
-
-                // Register
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -127,7 +292,7 @@ class ProfileScreen extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.white,
                       side: const BorderSide(
-                        color: purple,
+                        color: ProfileScreen.purple,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(7),
@@ -149,10 +314,6 @@ class ProfileScreen extends StatelessWidget {
       );
     }
 
-    // ------------------------------------------------------------
-    // User IS logged in
-    // ------------------------------------------------------------
-
     final String name =
     user.displayName?.isNotEmpty == true
         ? user.displayName!
@@ -161,9 +322,9 @@ class ProfileScreen extends StatelessWidget {
     final String email = user.email ?? '';
 
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: ProfileScreen.background,
       appBar: AppBar(
-        backgroundColor: background,
+        backgroundColor: ProfileScreen.background,
         elevation: 0,
         centerTitle: true,
         title: const Text(
@@ -176,14 +337,7 @@ class ProfileScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const UpdateProfileScreen(),
-                ),
-              );
-            },
+            onPressed: openUpdateProfile,
             icon: const Icon(
               Icons.edit_outlined,
               color: Colors.white,
@@ -197,24 +351,21 @@ class ProfileScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
 
-            // Avatar
-            const CircleAvatar(
-              radius: 55,
-              backgroundColor: purple,
-              child: CircleAvatar(
-                radius: 52,
-                backgroundColor: Color(0xFF202027),
-                child: Icon(
-                  Icons.person,
-                  color: Colors.white70,
-                  size: 55,
-                ),
+            Container(
+              width: 110,
+              height: 110,
+              padding: const EdgeInsets.all(3),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: ProfileScreen.purple,
+              ),
+              child: ClipOval(
+                child: buildProfileAvatar(),
               ),
             ),
 
             const SizedBox(height: 15),
 
-            // Name
             Text(
               name,
               style: const TextStyle(
@@ -226,7 +377,6 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 5),
 
-            // Email
             Text(
               email,
               style: const TextStyle(
@@ -237,7 +387,6 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // Statistics
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -258,7 +407,6 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 40),
 
-            // My Library
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -273,7 +421,6 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
-            // Watchlist
             _MenuItem(
               icon: Icons.bookmark_outline,
               title: 'Watchlist',
@@ -287,7 +434,6 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
 
-            // Favorites
             _MenuItem(
               icon: Icons.favorite_border,
               title: 'Favorites',
@@ -301,7 +447,6 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
 
-            // History
             _MenuItem(
               icon: Icons.history,
               title: 'History',
@@ -317,7 +462,6 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // Logout
             SizedBox(
               width: double.infinity,
               height: 48,
@@ -361,10 +505,6 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-// ------------------------------------------------------------
-// Statistics
-// ------------------------------------------------------------
-
 class _Stat extends StatelessWidget {
   final String number;
   final String title;
@@ -398,10 +538,6 @@ class _Stat extends StatelessWidget {
     );
   }
 }
-
-// ------------------------------------------------------------
-// Library Item
-// ------------------------------------------------------------
 
 class _MenuItem extends StatelessWidget {
   final IconData icon;

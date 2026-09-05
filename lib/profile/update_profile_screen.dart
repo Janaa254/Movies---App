@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +38,35 @@ class _UpdateProfileScreenState
 
     emailController.text =
         user?.email ?? '';
+
+    loadSelectedAvatar();
+  }
+
+  Future<void> loadSelectedAvatar() async {
+    final User? user =
+        FirebaseAuth.instance.currentUser;
+
+    if (user == null) return;
+
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (!mounted) return;
+
+      final data = doc.data();
+      final avatarIndex = data?['avatarIndex'];
+
+      if (avatarIndex is int &&
+          avatarIndex >= 0 &&
+          avatarIndex < AvatarPicker.allAvatars.length) {
+        setState(() {
+          selectedAvatar = avatarIndex;
+        });
+      }
+    } catch (_) {}
   }
 
   void showAvatarPicker() {
@@ -98,15 +128,26 @@ class _UpdateProfileScreenState
         await user.verifyBeforeUpdateEmail(email);
       }
 
+      // Save avatar + profile data in Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .set(
+        {
+          'avatarIndex': selectedAvatar,
+          'name': name,
+          'email': email,
+        },
+        SetOptions(merge: true),
+      );
+
+      // Reload Firebase user data
       await user.reload();
 
       if (!mounted) return;
 
-      showMessage(
-        'Profile updated successfully.',
-      );
-
-      Navigator.pop(context);
+      // Send true to ProfileScreen
+      Navigator.pop(context, true);
     } on FirebaseAuthException catch (e) {
       String message =
           'Something went wrong.';
@@ -198,11 +239,73 @@ class _UpdateProfileScreenState
                 ),
 
                 child: ClipOval(
-                  child: Container(
-                    color: const Color(
-                      0xFF202027,
+                  child: selectedAvatar <
+                      AvatarPicker.allAvatars.length
+                      ? FutureBuilder<String?>(
+                    future:
+                    AvatarPicker.getWikipediaImage(
+                      AvatarPicker
+                          .allAvatars[selectedAvatar]
+                          .person,
                     ),
+                    builder:
+                        (context, snapshot) {
+                      if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Container(
+                          color:
+                          const Color(0xFF202027),
+                          child: const Center(
+                            child:
+                            CircularProgressIndicator(
+                              color: purple,
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        );
+                      }
 
+                      if (!snapshot.hasData ||
+                          snapshot.data == null) {
+                        return Container(
+                          color:
+                          const Color(0xFF202027),
+                          child: const Icon(
+                            Icons.movie_outlined,
+                            color:
+                            Colors.white70,
+                            size: 55,
+                          ),
+                        );
+                      }
+
+                      return Image.network(
+                        snapshot.data!,
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (
+                            context,
+                            error,
+                            stackTrace,
+                            ) {
+                          return Container(
+                            color:
+                            const Color(
+                              0xFF202027,
+                            ),
+                            child: const Icon(
+                              Icons.movie_outlined,
+                              color:
+                              Colors.white70,
+                              size: 55,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  )
+                      : Container(
+                    color: const Color(0xFF202027),
                     child: const Icon(
                       Icons.movie_outlined,
                       color: Colors.white70,

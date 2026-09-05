@@ -22,165 +22,77 @@ class AvatarPicker extends StatefulWidget {
     required this.onAvatarSelected,
   });
 
-  @override
-  State<AvatarPicker> createState() => _AvatarPickerState();
-}
-
-class _AvatarPickerState extends State<AvatarPicker> {
-  static const Color background = Color(0xFF0B0B0F);
-  static const Color purple = Color(0xFF8B5CF6);
-
-  final Map<String, String> imageCache = {};
-
-  final List<Map<String, dynamic>> categories = [
+  static const List<Map<String, dynamic>> categories = [
     {
       'title': 'Marvel',
-      'avatars': const [
-        Avatar(
-          name: 'Iron Man',
-          person: 'Robert Downey Jr.',
-        ),
-        Avatar(
-          name: 'Captain America',
-          person: 'Chris Evans',
-        ),
-        Avatar(
-          name: 'Thor',
-          person: 'Chris Hemsworth',
-        ),
-        Avatar(
-          name: 'Black Widow',
-          person: 'Scarlett Johansson',
-        ),
-        Avatar(
-          name: 'Spider-Man',
-          person: 'Tom Holland',
-        ),
-        Avatar(
-          name: 'Wanda',
-          person: 'Elizabeth Olsen',
-        ),
+      'avatars': [
+        Avatar(name: 'Iron Man', person: 'Robert Downey Jr.'),
+        Avatar(name: 'Captain America', person: 'Chris Evans'),
+        Avatar(name: 'Thor', person: 'Chris Hemsworth'),
+        Avatar(name: 'Black Widow', person: 'Scarlett Johansson'),
+        Avatar(name: 'Spider-Man', person: 'Tom Holland'),
+        Avatar(name: 'Wanda', person: 'Elizabeth Olsen'),
       ],
     },
     {
       'title': 'Disney',
-      'avatars': const [
-        Avatar(
-          name: 'Elsa',
-          person: 'Idina Menzel',
-        ),
-        Avatar(
-          name: 'Anna',
-          person: 'Kristen Bell',
-        ),
-        Avatar(
-          name: 'Stitch',
-          person: 'Chris Sanders',
-        ),
-        Avatar(
-          name: 'Ariel',
-          person: 'Halle Bailey',
-        ),
-        Avatar(
-          name: 'Rapunzel',
-          person: 'Mandy Moore',
-        ),
-        Avatar(
-          name: 'Moana',
-          person: 'Auliʻi Cravalho',
-        ),
+      'avatars': [
+        Avatar(name: 'Elsa', person: 'Idina Menzel'),
+        Avatar(name: 'Anna', person: 'Kristen Bell'),
+        Avatar(name: 'Stitch', person: 'Chris Sanders'),
+        Avatar(name: 'Ariel', person: 'Halle Bailey'),
+        Avatar(name: 'Rapunzel', person: 'Mandy Moore'),
+        Avatar(name: 'Moana', person: 'Auliʻi Cravalho'),
       ],
     },
     {
       'title': 'Harry Potter',
-      'avatars': const [
-        Avatar(
-          name: 'Harry',
-          person: 'Daniel Radcliffe',
-        ),
-        Avatar(
-          name: 'Hermione',
-          person: 'Emma Watson',
-        ),
-        Avatar(
-          name: 'Ron',
-          person: 'Rupert Grint',
-        ),
-        Avatar(
-          name: 'Draco',
-          person: 'Tom Felton',
-        ),
-        Avatar(
-          name: 'Luna',
-          person: 'Evanna Lynch',
-        ),
-        Avatar(
-          name: 'Snape',
-          person: 'Alan Rickman',
-        ),
+      'avatars': [
+        Avatar(name: 'Harry', person: 'Daniel Radcliffe'),
+        Avatar(name: 'Hermione', person: 'Emma Watson'),
+        Avatar(name: 'Ron', person: 'Rupert Grint'),
+        Avatar(name: 'Draco', person: 'Tom Felton'),
+        Avatar(name: 'Luna', person: 'Evanna Lynch'),
+        Avatar(name: 'Snape', person: 'Alan Rickman'),
       ],
     },
     {
       'title': 'Money Heist',
-      'avatars': const [
-        Avatar(
-          name: 'Tokyo',
-          person: 'Úrsula Corberó',
-        ),
-        Avatar(
-          name: 'Professor',
-          person: 'Álvaro Morte',
-        ),
-        Avatar(
-          name: 'Berlin',
-          person: 'Pedro Alonso',
-        ),
-        Avatar(
-          name: 'Nairobi',
-          person: 'Alba Flores',
-        ),
-        Avatar(
-          name: 'Denver',
-          person: 'Jaime Lorente',
-        ),
-        Avatar(
-          name: 'Rio',
-          person: 'Miguel Herrán',
-        ),
+      'avatars': [
+        Avatar(name: 'Tokyo', person: 'Úrsula Corberó'),
+        Avatar(name: 'Professor', person: 'Álvaro Morte'),
+        Avatar(name: 'Berlin', person: 'Pedro Alonso'),
+        Avatar(name: 'Nairobi', person: 'Alba Flores'),
+        Avatar(name: 'Denver', person: 'Jaime Lorente'),
+        Avatar(name: 'Rio', person: 'Miguel Herrán'),
       ],
     },
     {
       'title': 'Lucifer',
-      'avatars': const [
-        Avatar(
-          name: 'Lucifer',
-          person: 'Tom Ellis',
-        ),
-        Avatar(
-          name: 'Chloe',
-          person: 'Lauren German',
-        ),
-        Avatar(
-          name: 'Maze',
-          person: 'Lesley-Ann Brandt',
-        ),
-        Avatar(
-          name: 'Amenadiel',
-          person: 'D. B. Woodside',
-        ),
-        Avatar(
-          name: 'Ella',
-          person: 'Aimee Garcia',
-        ),
-        Avatar(
-          name: 'Dan',
-          person: 'Kevin Alejandro',
-        ),
+      'avatars': [
+        Avatar(name: 'Lucifer', person: 'Tom Ellis'),
+        Avatar(name: 'Chloe', person: 'Lauren German'),
+        Avatar(name: 'Maze', person: 'Lesley-Ann Brandt'),
+        Avatar(name: 'Amenadiel', person: 'D. B. Woodside'),
+        Avatar(name: 'Ella', person: 'Aimee Garcia'),
+        Avatar(name: 'Dan', person: 'Kevin Alejandro'),
       ],
     },
   ];
 
-  Future<String?> getWikipediaImage(String person) async {
+  static final Map<String, String> imageCache = {};
+
+  static List<Avatar> get allAvatars {
+    final List<Avatar> result = [];
+
+    for (final category in categories) {
+      result.addAll(category['avatars'] as List<Avatar>);
+    }
+
+    return result;
+  }
+
+  static Future<String?> getWikipediaImage(String person) async {
     if (imageCache.containsKey(person)) {
       return imageCache[person];
     }
@@ -214,6 +126,14 @@ class _AvatarPickerState extends State<AvatarPicker> {
 
     return null;
   }
+
+  @override
+  State<AvatarPicker> createState() => _AvatarPickerState();
+}
+
+class _AvatarPickerState extends State<AvatarPicker> {
+  static const Color background = Color(0xFF0B0B0F);
+  static const Color purple = Color(0xFF8B5CF6);
 
   @override
   Widget build(BuildContext context) {
@@ -266,9 +186,10 @@ class _AvatarPickerState extends State<AvatarPicker> {
               padding: const EdgeInsets.only(
                 bottom: 30,
               ),
-              itemCount: categories.length,
+              itemCount: AvatarPicker.categories.length,
               itemBuilder: (context, categoryIndex) {
-                final category = categories[categoryIndex];
+                final category =
+                AvatarPicker.categories[categoryIndex];
 
                 final List<Avatar> avatars =
                 category['avatars'] as List<Avatar>;
@@ -305,8 +226,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                           final avatar = avatars[avatarIndex];
 
                           final globalIndex =
-                              categoryIndex * 6 +
-                                  avatarIndex;
+                              categoryIndex * 6 + avatarIndex;
 
                           final isSelected =
                               widget.selectedAvatar ==
@@ -339,17 +259,22 @@ class _AvatarPickerState extends State<AvatarPicker> {
                                       ),
                                     ),
                                     child: ClipOval(
-                                      child: FutureBuilder<String?>(
-                                        future: getWikipediaImage(
+                                      child:
+                                      FutureBuilder<String?>(
+                                        future:
+                                        AvatarPicker
+                                            .getWikipediaImage(
                                           avatar.person,
                                         ),
                                         builder:
                                             (context, snapshot) {
                                           if (snapshot
                                               .connectionState ==
-                                              ConnectionState.waiting) {
+                                              ConnectionState
+                                                  .waiting) {
                                             return Container(
-                                              color: const Color(
+                                              color:
+                                              const Color(
                                                 0xFF202027,
                                               ),
                                               child: const Center(
@@ -370,12 +295,14 @@ class _AvatarPickerState extends State<AvatarPicker> {
                                           if (!snapshot.hasData ||
                                               snapshot.data == null) {
                                             return Container(
-                                              color: const Color(
+                                              color:
+                                              const Color(
                                                 0xFF202027,
                                               ),
                                               child: const Icon(
                                                 Icons.person,
-                                                color: Colors.white54,
+                                                color:
+                                                Colors.white54,
                                                 size: 30,
                                               ),
                                             );
@@ -397,8 +324,8 @@ class _AvatarPickerState extends State<AvatarPicker> {
                                                 ),
                                                 child: const Icon(
                                                   Icons.person,
-                                                  color:
-                                                  Colors.white54,
+                                                  color: Colors
+                                                      .white54,
                                                   size: 30,
                                                 ),
                                               );
