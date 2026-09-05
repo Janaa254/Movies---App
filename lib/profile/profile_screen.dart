@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'update_profile_screen.dart';
+import 'watchlist_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -66,13 +67,13 @@ class ProfileScreen extends StatelessWidget {
 
             // Update Profile
             _ProfileOption(
-              icon: Icons.edit_outlined,
-              title: 'Update Profile',
+              icon: Icons.bookmark_border,
+              title: 'Watchlist',
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const UpdateProfileScreen(),
+                    builder: (context) => const WatchlistScreen(),
                   ),
                 );
               },
