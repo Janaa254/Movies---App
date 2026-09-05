@@ -22,27 +22,12 @@ class _UpdateProfileScreenState
 
   int selectedAvatar = 0;
 
-  final List<String> avatars = const [
-    'https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg',
-    'https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
-    'https://image.tmdb.org/t/p/w500/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg',
-    'https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg',
-    'https://image.tmdb.org/t/p/w500/q6AGQZS8D7uK4p6M9q2xV5h8x8Y.jpg',
-    'https://image.tmdb.org/t/p/w500/6b7swg6DLqXv8Y9L4kJv9Y3x7YQ.jpg',
-  ];
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    emailController.dispose();
-    super.dispose();
-  }
-
   void showAvatarPicker() {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) {
+      isScrollControlled: true,
+      builder: (_) {
         return AvatarPicker(
           selectedAvatar: selectedAvatar,
           onAvatarSelected: (index) {
@@ -60,17 +45,25 @@ class _UpdateProfileScreenState
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Profile updated successfully'),
+        content: Text(
+          'Profile updated successfully',
+        ),
         backgroundColor: purple,
       ),
     );
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
-
       appBar: AppBar(
         backgroundColor: background,
         elevation: 0,
@@ -85,7 +78,6 @@ class _UpdateProfileScreenState
           color: Colors.white,
         ),
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -97,28 +89,19 @@ class _UpdateProfileScreenState
               child: Container(
                 width: 116,
                 height: 116,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: purple,
-                    width: 3,
-                  ),
-                ),
                 padding: const EdgeInsets.all(3),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: purple,
+                ),
                 child: ClipOval(
-                  child: Image.network(
-                    avatars[selectedAvatar],
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: const Color(0xFF202027),
-                        child: const Icon(
-                          Icons.person,
-                          color: Colors.white70,
-                          size: 55,
-                        ),
-                      );
-                    },
+                  child: Container(
+                    color: const Color(0xFF202027),
+                    child: const Icon(
+                      Icons.movie_outlined,
+                      color: Colors.white70,
+                      size: 55,
+                    ),
                   ),
                 ),
               ),
@@ -226,6 +209,8 @@ class _UpdateProfileScreenState
                 ),
               ),
             ),
+
+            const SizedBox(height: 20),
           ],
         ),
       ),

@@ -14,10 +14,12 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: background,
+
       appBar: AppBar(
         backgroundColor: background,
         elevation: 0,
         centerTitle: true,
+
         title: const Text(
           'Profile',
           style: TextStyle(
@@ -26,6 +28,7 @@ class ProfileScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+
         actions: [
           IconButton(
             onPressed: () {
@@ -43,13 +46,14 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
             const SizedBox(height: 20),
 
-            // Profile Picture
+            // Avatar
             const CircleAvatar(
               radius: 55,
               backgroundColor: purple,
@@ -66,6 +70,7 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
+            // Name
             const Text(
               'User Name',
               style: TextStyle(
@@ -77,6 +82,7 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 5),
 
+            // Email
             const Text(
               'user@email.com',
               style: TextStyle(
@@ -87,7 +93,7 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // Stats
+            // Statistics
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: const [
@@ -108,6 +114,7 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 40),
 
+            // My Library
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -122,6 +129,7 @@ class ProfileScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
+            // Watchlist
             _MenuItem(
               icon: Icons.bookmark_outline,
               title: 'Watchlist',
@@ -135,6 +143,7 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
 
+            // Favorites
             _MenuItem(
               icon: Icons.favorite_border,
               title: 'Favorites',
@@ -148,6 +157,7 @@ class ProfileScreen extends StatelessWidget {
               },
             ),
 
+            // History
             _MenuItem(
               icon: Icons.history,
               title: 'History',
@@ -168,6 +178,10 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
+
+// ------------------------------------------------------------
+// Statistics
+// ------------------------------------------------------------
 
 class _Stat extends StatelessWidget {
   final String number;
@@ -190,7 +204,9 @@ class _Stat extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+
         const SizedBox(height: 5),
+
         Text(
           title,
           style: const TextStyle(
@@ -202,6 +218,10 @@ class _Stat extends StatelessWidget {
     );
   }
 }
+
+// ------------------------------------------------------------
+// Library Item
+// ------------------------------------------------------------
 
 class _MenuItem extends StatelessWidget {
   final IconData icon;
@@ -218,15 +238,18 @@ class _MenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
+
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 5,
         vertical: 5,
       ),
+
       leading: Icon(
         icon,
         color: ProfileScreen.purple,
         size: 25,
       ),
+
       title: Text(
         title,
         style: const TextStyle(
@@ -234,6 +257,7 @@ class _MenuItem extends StatelessWidget {
           fontSize: 16,
         ),
       ),
+
       trailing: const Icon(
         Icons.chevron_right,
         color: Colors.white38,
