@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'update_profile_screen.dart';
 import 'watchlist_screen.dart';
+import 'history_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -101,8 +102,16 @@ class ProfileScreen extends StatelessWidget {
             _ProfileOption(
               icon: Icons.history,
               title: 'History',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HistoryScreen(),
+                  ),
+                );
+              },
             ),
+
           ],
         ),
       ),
