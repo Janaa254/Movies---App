@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "384518109352",
+    "project_id": "movies-app-rewan",
+    "storage_bucket": "movies-app-rewan.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384518109352:android:9a7e1067888ddca33c6a9d",
+        "android_client_info": {
+          "package_name": "com.example.movies_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp6tJbWTlatyzpqHg3pmSWFrF2ANsS-EU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
