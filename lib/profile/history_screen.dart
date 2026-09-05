@@ -3,94 +3,100 @@ import 'package:flutter/material.dart';
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
 
-  static const Color backgroundColor = Color(0xFF080B10);
-  static const Color cardColor = Color(0xFF11161D);
-  static const Color accentColor = Color(0xFF19E6D2);
+  static const Color bg = Color(0xFF09070F);
+  static const Color purple = Color(0xFF8B5CF6);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: bg,
       appBar: AppBar(
-        backgroundColor: backgroundColor,
+        backgroundColor: bg,
         elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'History',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 21,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
+        title: const Text(
+          'Watch History',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const SizedBox(height: 80),
-
-            Container(
-              width: 115,
-              height: 115,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: cardColor,
-                border: Border.all(
-                  color: accentColor.withOpacity(0.25),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 95,
+                height: 95,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF24143D),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: accentColor.withOpacity(0.08),
-                    blurRadius: 30,
-                    spreadRadius: 3,
+                child: const Icon(
+                  Icons.history_rounded,
+                  color: purple,
+                  size: 48,
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              const Text(
+                'No History Yet',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 10),
+
+              const Text(
+                'Movies you watch will appear here.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 14,
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              SizedBox(
+                height: 45,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: purple,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(7),
+                    ),
                   ),
-                ],
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 18),
+                    child: Text(
+                      'Browse Movies',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              child: const Icon(
-                Icons.history_rounded,
-                color: accentColor,
-                size: 58,
-              ),
-            ),
-
-            const SizedBox(height: 28),
-
-            const Text(
-              'No History Yet',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 21,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            const Text(
-              'Movies you watch will appear here.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white54,
-                fontSize: 14,
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            Container(
-              width: 45,
-              height: 3,
-              decoration: BoxDecoration(
-                color: accentColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

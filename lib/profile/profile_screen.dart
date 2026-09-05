@@ -6,507 +6,382 @@ import 'history_screen.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  static const Color backgroundColor = Color(0xFF080B10);
-  static const Color cardColor = Color(0xFF11161D);
-  static const Color accentColor = Color(0xFF19E6D2);
+  static const Color bg = Color(0xFF09070F);
+  static const Color purple = Color(0xFF8B5CF6);
+  static const Color purpleDark = Color(0xFF24143D);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeader(context),
-
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 30),
-              child: Column(
-                children: [
-                  const SizedBox(height: 75),
-
-                  const Text(
-                    'User Name',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
+      backgroundColor: bg,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: _buildProfileHeader(context),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 25, 20, 35),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                _buildStats(),
+                const SizedBox(height: 35),
+                const Text(
+                  'My Movies',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
                   ),
-
-                  const SizedBox(height: 6),
-
-                  const Text(
-                    'user@email.com',
-                    style: TextStyle(
-                      color: Colors.white60,
-                      fontSize: 14,
+                ),
+                const SizedBox(height: 16),
+                _buildMovieSection(
+                  context,
+                  title: 'Watchlist',
+                  subtitle: 'Movies you want to watch',
+                  icon: Icons.bookmark_rounded,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const WatchlistScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 14),
+                _buildMovieSection(
+                  context,
+                  title: 'Favorites',
+                  subtitle: 'Your favorite movies',
+                  icon: Icons.favorite_rounded,
+                  onTap: () {},
+                ),
+                const SizedBox(height: 14),
+                _buildMovieSection(
+                  context,
+                  title: 'History',
+                  subtitle: 'Recently watched',
+                  icon: Icons.history_rounded,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const HistoryScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 35),
+                SizedBox(
+                  height: 52,
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const UpdateProfileScreen(),
+                        ),
+                      );
+                    },
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        color: purple.withOpacity(.6),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
-                  ),
-
-                  const SizedBox(height: 25),
-
-                  _buildStatistics(),
-
-                  const SizedBox(height: 28),
-
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'My Library',
+                    child: const Text(
+                      'Edit Profile',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 15),
-
-                  _buildLibraryGrid(context),
-
-                  const SizedBox(height: 20),
-
-                  _buildUpdateProfileButton(context),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          height: 155,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF111C25),
-                Color(0xFF0A1017),
-                Color(0xFF152B2D),
-              ],
-            ),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                top: 25,
-                right: 25,
-                child: Icon(
-                  Icons.movie_creation_outlined,
-                  size: 75,
-                  color: accentColor.withOpacity(0.10),
                 ),
-              ),
-
-              Positioned(
-                left: -15,
-                bottom: -20,
-                child: Icon(
-                  Icons.movie_filter_outlined,
-                  size: 110,
-                  color: Colors.white.withOpacity(0.035),
-                ),
-              ),
-
-              Positioned(
-                right: 90,
-                top: 40,
-                child: Container(
-                  width: 100,
-                  height: 2,
-                  color: accentColor.withOpacity(0.20),
-                ),
-              ),
-
-              Positioned(
-                right: 45,
-                top: 75,
-                child: Container(
-                  width: 55,
-                  height: 2,
-                  color: Colors.white.withOpacity(0.08),
-                ),
-              ),
-
-              Positioned(
-                left: 30,
-                top: 35,
-                child: Container(
-                  width: 130,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    gradient: RadialGradient(
-                      colors: [
-                        accentColor.withOpacity(0.12),
-                        Colors.transparent,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        Positioned(
-          top: 45,
-          right: 20,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.30),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.more_horiz,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-
-        Positioned(
-          bottom: -58,
-          left: 0,
-          right: 0,
-          child: Center(
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: accentColor,
-                  width: 2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: accentColor.withOpacity(0.18),
-                    blurRadius: 20,
-                    spreadRadius: 2,
-                  ),
-                ],
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: backgroundColor,
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.12),
-                    width: 1,
-                  ),
-                ),
-                child: const CircleAvatar(
-                  radius: 54,
-                  backgroundColor: Color(0xFF171E26),
-                  child: Icon(
-                    Icons.person,
-                    size: 58,
-                    color: Colors.white70,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatistics() {
-    return Row(
-      children: [
-        Expanded(
-          child: _StatCard(
-            icon: Icons.bookmark_rounded,
-            number: '0',
-            label: 'Watchlist',
-          ),
-        ),
-
-        const SizedBox(width: 10),
-
-        Expanded(
-          child: _StatCard(
-            icon: Icons.favorite_rounded,
-            number: '0',
-            label: 'Favorites',
-          ),
-        ),
-
-        const SizedBox(width: 10),
-
-        Expanded(
-          child: _StatCard(
-            icon: Icons.history_rounded,
-            number: '0',
-            label: 'History',
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLibraryGrid(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: _LibraryCard(
-                icon: Icons.bookmark_rounded,
-                title: 'Watchlist',
-                subtitle: 'Saved movies',
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF102B30),
-                    Color(0xFF0D171D),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const WatchlistScreen(),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(width: 12),
-
-            Expanded(
-              child: _LibraryCard(
-                icon: Icons.favorite_rounded,
-                title: 'Favorites',
-                subtitle: 'Loved movies',
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF241820),
-                    Color(0xFF121317),
-                  ],
-                ),
-                onTap: () {
-                  // Favorites screen will be connected later.
-                },
-              ),
-            ),
-          ],
-        ),
-
-        const SizedBox(height: 12),
-
-        _LibraryCard(
-          icon: Icons.history_rounded,
-          title: 'History',
-          subtitle: 'Recently watched',
-          gradient: const LinearGradient(
-            colors: [
-              Color(0xFF182331),
-              Color(0xFF101419),
-            ],
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HistoryScreen(),
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildUpdateProfileButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 55,
-      child: OutlinedButton.icon(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const UpdateProfileScreen(),
-            ),
-          );
-        },
-        icon: const Icon(
-          Icons.edit_outlined,
-          color: accentColor,
-        ),
-        label: const Text(
-          'Update Profile',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
-            color: accentColor.withOpacity(0.45),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  final IconData icon;
-  final String number;
-  final String label;
-
-  const _StatCard({
-    required this.icon,
-    required this.number,
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      decoration: BoxDecoration(
-        color: ProfileScreen.cardColor,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.05),
-        ),
-      ),
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            color: ProfileScreen.accentColor,
-            size: 22,
-          ),
-
-          const SizedBox(height: 7),
-
-          Text(
-            number,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          const SizedBox(height: 2),
-
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.white54,
-              fontSize: 11,
+              ]),
             ),
           ),
         ],
       ),
     );
   }
+
+  Widget _buildProfileHeader(BuildContext context) {
+    return SizedBox(
+      height: 350,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: 250,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF32165B),
+                  Color(0xFF160D25),
+                  bg,
+                ],
+              ),
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 45,
+                  left: 25,
+                  child: Container(
+                    width: 140,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: purple.withOpacity(.12),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: -40,
+                  top: 10,
+                  child: Container(
+                    width: 190,
+                    height: 190,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: purple.withOpacity(.08),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 35,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    height: 90,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          bg,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  right: 12,
+                  top: 8,
+                ),
+                child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.settings_outlined,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          Positioned(
+            top: 155,
+            left: 0,
+            right: 0,
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: purple,
+                      width: 2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: purple.withOpacity(.35),
+                        blurRadius: 25,
+                      ),
+                    ],
+                  ),
+                  child: const CircleAvatar(
+                    radius: 52,
+                    backgroundColor: Color(0xFF1B1228),
+                    child: Icon(
+                      Icons.person,
+                      size: 55,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                const Text(
+                  'User Name',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                const Text(
+                  'user@email.com',
+                  style: TextStyle(
+                    color: Colors.white54,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStats() {
+    return Row(
+      children: [
+        Expanded(
+          child: _StatItem(
+            number: '0',
+            label: 'Watchlist',
+          ),
+        ),
+        Expanded(
+          child: _StatItem(
+            number: '0',
+            label: 'Favorites',
+          ),
+        ),
+        Expanded(
+          child: _StatItem(
+            number: '0',
+            label: 'Watched',
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMovieSection(
+      BuildContext context, {
+        required String title,
+        required String subtitle,
+        required IconData icon,
+        required VoidCallback onTap,
+      }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        height: 88,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 18,
+        ),
+        decoration: BoxDecoration(
+          color: const Color(0xFF15111D),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Colors.white.withOpacity(.05),
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                color: purpleDark,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: purple,
+                size: 25,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.white54,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: Colors.white38,
+              size: 27,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
-class _LibraryCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final Gradient gradient;
-  final VoidCallback onTap;
+class _StatItem extends StatelessWidget {
+  final String number;
+  final String label;
 
-  const _LibraryCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.gradient,
-    required this.onTap,
+  const _StatItem({
+    required this.number,
+    required this.label,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
-        child: Container(
-          height: 125,
-          decoration: BoxDecoration(
-            gradient: gradient,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.06),
-            ),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                right: -15,
-                bottom: -20,
-                child: Icon(
-                  icon,
-                  size: 95,
-                  color: Colors.white.withOpacity(0.035),
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      icon,
-                      color: ProfileScreen.accentColor,
-                      size: 27,
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    const SizedBox(height: 3),
-
-                    Text(
-                      subtitle,
-                      style: const TextStyle(
-                        color: Colors.white54,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+    return Column(
+      children: [
+        Text(
+          number,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
           ),
         ),
-      ),
+        const SizedBox(height: 5),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white54,
+            fontSize: 12,
+          ),
+        ),
+      ],
     );
   }
 }
