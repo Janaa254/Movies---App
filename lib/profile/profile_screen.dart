@@ -67,13 +67,13 @@ class ProfileScreen extends StatelessWidget {
 
             // Update Profile
             _ProfileOption(
-              icon: Icons.bookmark_border,
-              title: 'Watchlist',
+              icon: Icons.edit_outlined,
+              title: 'Update Profile',
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const WatchlistScreen(),
+                    builder: (context) => const UpdateProfileScreen(),
                   ),
                 );
               },
@@ -85,7 +85,14 @@ class ProfileScreen extends StatelessWidget {
             _ProfileOption(
               icon: Icons.bookmark_border,
               title: 'Watchlist',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WatchlistScreen(),
+                  ),
+                );
+              },
             ),
 
             const SizedBox(height: 12),
