@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'update_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -67,7 +68,14 @@ class ProfileScreen extends StatelessWidget {
             _ProfileOption(
               icon: Icons.edit_outlined,
               title: 'Update Profile',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UpdateProfileScreen(),
+                  ),
+                );
+              },
             ),
 
             const SizedBox(height: 12),
