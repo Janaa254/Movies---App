@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'update_profile_screen.dart';
 import 'watchlist_screen.dart';
 import 'history_screen.dart';
 import 'favorites_screen.dart';
+import '../auth/login_screen.dart';
+import '../auth/register_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -12,14 +16,156 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final User? user = FirebaseAuth.instance.currentUser;
+
+    // ------------------------------------------------------------
+    // User is NOT logged in
+    // ------------------------------------------------------------
+
+    if (user == null) {
+      return Scaffold(
+        backgroundColor: background,
+        appBar: AppBar(
+          backgroundColor: background,
+          elevation: 0,
+          centerTitle: true,
+          title: const Text(
+            'Profile',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircleAvatar(
+                  radius: 55,
+                  backgroundColor: purple,
+                  child: CircleAvatar(
+                    radius: 52,
+                    backgroundColor: Color(0xFF202027),
+                    child: Icon(
+                      Icons.person_outline,
+                      color: Colors.white70,
+                      size: 55,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Welcome to Movies App',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Login or create an account to access your profile, watchlist and favorites.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white54,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 30),
+
+                // Login
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const LoginScreen(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: purple,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                // Register
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const RegisterScreen(),
+                        ),
+                      );
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      side: const BorderSide(
+                        color: purple,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                    ),
+                    child: const Text(
+                      'Create Account',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    // ------------------------------------------------------------
+    // User IS logged in
+    // ------------------------------------------------------------
+
+    final String name =
+    user.displayName?.isNotEmpty == true
+        ? user.displayName!
+        : 'User';
+
+    final String email = user.email ?? '';
+
     return Scaffold(
       backgroundColor: background,
-
       appBar: AppBar(
         backgroundColor: background,
         elevation: 0,
         centerTitle: true,
-
         title: const Text(
           'Profile',
           style: TextStyle(
@@ -28,7 +174,6 @@ class ProfileScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         actions: [
           IconButton(
             onPressed: () {
@@ -46,7 +191,6 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -71,9 +215,9 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 15),
 
             // Name
-            const Text(
-              'User Name',
-              style: TextStyle(
+            Text(
+              name,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -83,9 +227,9 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 5),
 
             // Email
-            const Text(
-              'user@email.com',
-              style: TextStyle(
+            Text(
+              email,
+              style: const TextStyle(
                 color: Colors.white54,
                 fontSize: 14,
               ),
@@ -94,9 +238,9 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 30),
 
             // Statistics
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
+              children: [
                 _Stat(
                   number: '0',
                   title: 'Watchlist',
@@ -172,6 +316,44 @@ class ProfileScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 30),
+
+            // Logout
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: OutlinedButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+
+                  if (!context.mounted) return;
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ProfileScreen(),
+                    ),
+                  );
+                },
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.white70,
+                  side: const BorderSide(
+                    color: Colors.white24,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                ),
+                child: const Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 30),
           ],
         ),
       ),
@@ -204,9 +386,7 @@ class _Stat extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         const SizedBox(height: 5),
-
         Text(
           title,
           style: const TextStyle(
@@ -238,18 +418,15 @@ class _MenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 5,
         vertical: 5,
       ),
-
       leading: Icon(
         icon,
         color: ProfileScreen.purple,
         size: 25,
       ),
-
       title: Text(
         title,
         style: const TextStyle(
@@ -257,7 +434,6 @@ class _MenuItem extends StatelessWidget {
           fontSize: 16,
         ),
       ),
-
       trailing: const Icon(
         Icons.chevron_right,
         color: Colors.white38,
