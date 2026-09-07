@@ -1,9 +1,9 @@
 class RegisterData {
   static const List<String> avatars = [
-    'assets/images/avatar_1.png',
-    'assets/images/avatar_2.png',
-    'assets/images/avatar_3.png',
-    'assets/images/avatar_4.png',
-    'assets/images/avatar_5.png',
+    'assets/avatars/avatar1.png',
+    'assets/avatars/avatar2.png',
+    'assets/avatars/avatar3.png',
+    'assets/avatars/avatar4.png',
+    'assets/avatars/avatar5.png',
   ];
 }

@@ -34,29 +34,26 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0B0D0C),
+      backgroundColor: const Color(0xFF111312),
 
-      body: Center(
-        child: SizedBox(
-          width: 130,
-          height: 130,
-          child: Image.asset(
-            'assets/images/logo.png',
-            fit: BoxFit.contain,
-
-            errorBuilder: (
-                context,
-                error,
-                stackTrace,
-                ) {
-              return const Icon(
-                Icons.play_circle_outline,
-                color: Color(0xFFFFC400),
-                size: 100,
-              );
-            },
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              color: const Color(0xFF111312),
+            ),
           ),
-        ),
+
+          Align(
+            alignment: const Alignment(0, -0.15),
+            child: Image.asset(
+              'assets/images/logo.png',
+              width: 125,
+              height: 125,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ],
       ),
     );
   }
