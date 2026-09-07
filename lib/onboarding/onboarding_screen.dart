@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import '../auth/login_screen.dart';
 
 import 'onboarding_data.dart';
-import 'onboarding_page.dart';
 import 'onboarding_theme.dart';
+
+import 'widgets/first_onboarding_page.dart';
+import 'widgets/standard_onboarding_page.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -28,7 +30,7 @@ class _OnboardingScreenState
         onboardingData.length - 1) {
       _pageController.nextPage(
         duration:
-        const Duration(milliseconds: 400),
+        const Duration(milliseconds: 350),
         curve: Curves.easeInOut,
       );
 
@@ -45,7 +47,7 @@ class _OnboardingScreenState
 
     _pageController.previousPage(
       duration:
-      const Duration(milliseconds: 400),
+      const Duration(milliseconds: 350),
       curve: Curves.easeInOut,
     );
   }
@@ -67,6 +69,7 @@ class _OnboardingScreenState
   @override
   void dispose() {
     _pageController.dispose();
+
     super.dispose();
   }
 
@@ -81,7 +84,8 @@ class _OnboardingScreenState
       body: PageView.builder(
         controller: _pageController,
 
-        itemCount: onboardingData.length,
+        itemCount:
+        onboardingData.length,
 
         onPageChanged: (index) {
           setState(() {
@@ -93,13 +97,32 @@ class _OnboardingScreenState
             context,
             index,
             ) {
-          return OnboardingPage(
-            item: onboardingData[index],
-            index: index,
-            currentPage: currentPage,
-            totalPages:
-            onboardingData.length,
+          final item =
+          onboardingData[index];
+
+          // ================= FIRST PAGE =================
+
+          if (index == 0) {
+            return FirstOnboardingPage(
+              item: item,
+              onNext: nextPage,
+            );
+          }
+
+          // ================= OTHER PAGES =================
+
+          return StandardOnboardingPage(
+            item: item,
+
+            showBack: index >= 2,
+
+            isLastPage:
+            index ==
+                onboardingData.length -
+                    1,
+
             onNext: nextPage,
+
             onBack: previousPage,
           );
         },

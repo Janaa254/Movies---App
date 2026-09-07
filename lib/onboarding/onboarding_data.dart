@@ -1,6 +1,6 @@
 import 'onboarding_model.dart';
 
-final List<OnboardingModel> onboardingData = [
+const List<OnboardingModel> onboardingData = [
   OnboardingModel(
     image: 'assets/images/onboarding1.png',
     title: 'Find Your Next\nFavorite Movie Here',
