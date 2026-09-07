@@ -46,7 +46,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           isLoadingAvatar = false;
         });
       }
-
       return;
     }
 
@@ -108,14 +107,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  // ================= AVATAR =================
+  // ================= PROFILE AVATAR =================
 
   Widget buildProfileAvatar() {
     if (isLoadingAvatar) {
       return Container(
         width: 104,
         height: 104,
-        color: const Color(0xFF202020),
+        color: ProfileColors.cardColor,
         child: const Center(
           child: CircularProgressIndicator(
             color: ProfileColors.yellow,
@@ -125,11 +124,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
 
-    if (selectedAvatar >= AvatarPicker.allAvatars.length) {
+    if (selectedAvatar < 0 ||
+        selectedAvatar >= AvatarPicker.allAvatars.length) {
       return Container(
         width: 104,
         height: 104,
-        color: const Color(0xFF202020),
+        color: ProfileColors.cardColor,
         child: const Icon(
           Icons.person,
           color: Colors.white70,
@@ -138,62 +138,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
 
-    final avatar = AvatarPicker.allAvatars[selectedAvatar];
+    final avatar =
+    AvatarPicker.allAvatars[selectedAvatar];
 
-    return FutureBuilder<String?>(
-      future: AvatarPicker.getWikipediaImage(
-        avatar.person,
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState ==
-            ConnectionState.waiting) {
-          return Container(
-            width: 104,
-            height: 104,
-            color: const Color(0xFF202020),
-            child: const Center(
-              child: CircularProgressIndicator(
-                color: ProfileColors.yellow,
-                strokeWidth: 2,
-              ),
-            ),
-          );
-        }
-
-        if (!snapshot.hasData || snapshot.data == null) {
-          return Container(
-            width: 104,
-            height: 104,
-            color: const Color(0xFF202020),
-            child: const Icon(
-              Icons.person,
-              color: Colors.white70,
-              size: 55,
-            ),
-          );
-        }
-
-        return Image.network(
-          snapshot.data!,
+    return Image.asset(
+      avatar.imagePath,
+      width: 104,
+      height: 104,
+      fit: BoxFit.cover,
+      errorBuilder: (
+          context,
+          error,
+          stackTrace,
+          ) {
+        return Container(
           width: 104,
           height: 104,
-          fit: BoxFit.cover,
-          errorBuilder: (
-              context,
-              error,
-              stackTrace,
-              ) {
-            return Container(
-              width: 104,
-              height: 104,
-              color: const Color(0xFF202020),
-              child: const Icon(
-                Icons.person,
-                color: Colors.white70,
-                size: 55,
-              ),
-            );
-          },
+          color: ProfileColors.cardColor,
+          child: const Icon(
+            Icons.person,
+            color: Colors.white70,
+            size: 55,
+          ),
         );
       },
     );
@@ -252,23 +218,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     crossAxisAlignment:
                     CrossAxisAlignment.start,
                     children: [
-                      // Avatar + Name
+                      // ================= AVATAR + NAME =================
+
                       Column(
                         children: [
                           Container(
                             width: 116,
                             height: 116,
-                            padding:
-                            const EdgeInsets.all(3),
+                            padding: const EdgeInsets.all(3),
                             decoration:
                             const BoxDecoration(
                               shape: BoxShape.circle,
-                              color:
-                              ProfileColors.yellow,
+                              color: ProfileColors.yellow,
                             ),
                             child: ClipOval(
-                              child:
-                              buildProfileAvatar(),
+                              child: buildProfileAvatar(),
                             ),
                           ),
 
@@ -278,8 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: 125,
                             child: Text(
                               name,
-                              textAlign:
-                              TextAlign.center,
+                              textAlign: TextAlign.center,
                               maxLines: 1,
                               overflow:
                               TextOverflow.ellipsis,
@@ -297,7 +260,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                       const Spacer(),
 
-                      // Stats
+                      // ================= STATS =================
+
                       const Padding(
                         padding:
                         EdgeInsets.only(top: 28),
@@ -351,7 +315,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               RoundedRectangleBorder(
                                 borderRadius:
                                 BorderRadius.circular(
-                                    14),
+                                  14,
+                                ),
                               ),
                             ),
                             child: const Text(
@@ -384,13 +349,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               RoundedRectangleBorder(
                                 borderRadius:
                                 BorderRadius.circular(
-                                    14),
+                                  14,
+                                ),
                               ),
                             ),
                             child: const Row(
                               mainAxisAlignment:
-                              MainAxisAlignment
-                                  .center,
+                              MainAxisAlignment.center,
                               children: [
                                 Text(
                                   'Exit',
@@ -400,9 +365,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     FontWeight.w500,
                                   ),
                                 ),
-
                                 SizedBox(width: 6),
-
                                 Icon(
                                   Icons.logout,
                                   size: 20,
@@ -485,8 +448,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // ================= BOTTOM NAV =================
 
             Padding(
-              padding:
-              const EdgeInsets.fromLTRB(
+              padding: const EdgeInsets.fromLTRB(
                 9,
                 0,
                 9,
@@ -495,8 +457,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Container(
                 height: 62,
                 decoration: BoxDecoration(
-                  color:
-                  ProfileColors.cardColor,
+                  color: ProfileColors.cardColor,
                   borderRadius:
                   BorderRadius.circular(17),
                 ),
@@ -537,8 +498,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color:
-                          ProfileColors.yellow,
+                          color: ProfileColors.yellow,
                           width: 2,
                         ),
                       ),
@@ -568,8 +528,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding:
-            const EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 25,
             ),
             child: Column(
@@ -642,7 +601,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       RoundedRectangleBorder(
                         borderRadius:
                         BorderRadius.circular(
-                            14),
+                          14,
+                        ),
                       ),
                     ),
                     child: const Text(
@@ -684,7 +644,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       RoundedRectangleBorder(
                         borderRadius:
                         BorderRadius.circular(
-                            14),
+                          14,
+                        ),
                       ),
                     ),
                     child: const Text(
@@ -805,7 +766,6 @@ class _ProfileTab extends StatelessWidget {
 
           const SizedBox(height: 4),
 
-          // Yellow line only under selected tab
           AnimatedContainer(
             duration:
             const Duration(

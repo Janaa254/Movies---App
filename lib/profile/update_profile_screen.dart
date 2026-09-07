@@ -105,7 +105,6 @@ class _UpdateProfileScreenState
       showMessage(
         'Please fill in all fields.',
       );
-
       return;
     }
 
@@ -116,7 +115,6 @@ class _UpdateProfileScreenState
       showMessage(
         'No user is currently logged in.',
       );
-
       return;
     }
 
@@ -152,8 +150,6 @@ class _UpdateProfileScreenState
           merge: true,
         ),
       );
-
-      // ================= RELOAD USER =================
 
       await user.reload();
 
@@ -229,14 +225,11 @@ class _UpdateProfileScreenState
         backgroundColor:
         ProfileColors.background,
         elevation: 0,
-
         centerTitle: true,
-
         iconTheme:
         const IconThemeData(
           color: Colors.white,
         ),
-
         title: const Text(
           'Edit Profile',
           style: TextStyle(
@@ -260,120 +253,19 @@ class _UpdateProfileScreenState
 
             GestureDetector(
               onTap: showAvatarPicker,
-
               child: Container(
                 width: 116,
                 height: 116,
-
                 padding:
                 const EdgeInsets.all(3),
-
                 decoration:
                 const BoxDecoration(
                   shape: BoxShape.circle,
                   color:
                   ProfileColors.yellow,
                 ),
-
                 child: ClipOval(
-                  child: selectedAvatar <
-                      AvatarPicker
-                          .allAvatars.length
-                      ? FutureBuilder<String?>(
-                    future: AvatarPicker
-                        .getWikipediaImage(
-                      AvatarPicker
-                          .allAvatars[
-                      selectedAvatar]
-                          .person,
-                    ),
-                    builder: (
-                        context,
-                        snapshot,
-                        ) {
-                      if (snapshot
-                          .connectionState ==
-                          ConnectionState
-                              .waiting) {
-                        return Container(
-                          color:
-                          const Color(
-                            0xFF202020,
-                          ),
-                          child:
-                          const Center(
-                            child:
-                            CircularProgressIndicator(
-                              color:
-                              ProfileColors
-                                  .yellow,
-                              strokeWidth: 2,
-                            ),
-                          ),
-                        );
-                      }
-
-                      if (!snapshot
-                          .hasData ||
-                          snapshot.data ==
-                              null) {
-                        return Container(
-                          color:
-                          const Color(
-                            0xFF202020,
-                          ),
-                          child:
-                          const Icon(
-                            Icons
-                                .movie_outlined,
-                            color:
-                            Colors.white70,
-                            size: 55,
-                          ),
-                        );
-                      }
-
-                      return Image.network(
-                        snapshot.data!,
-                        fit:
-                        BoxFit.cover,
-                        errorBuilder: (
-                            context,
-                            error,
-                            stackTrace,
-                            ) {
-                          return Container(
-                            color:
-                            const Color(
-                              0xFF202020,
-                            ),
-                            child:
-                            const Icon(
-                              Icons
-                                  .movie_outlined,
-                              color:
-                              Colors.white70,
-                              size: 55,
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  )
-                      : Container(
-                    color:
-                    const Color(
-                      0xFF202020,
-                    ),
-                    child:
-                    const Icon(
-                      Icons
-                          .movie_outlined,
-                      color:
-                      Colors.white70,
-                      size: 55,
-                    ),
-                  ),
+                  child: _buildSelectedAvatar(),
                 ),
               ),
             ),
@@ -382,14 +274,12 @@ class _UpdateProfileScreenState
 
             TextButton.icon(
               onPressed: showAvatarPicker,
-
               icon: const Icon(
                 Icons.edit_outlined,
                 color:
                 ProfileColors.yellow,
                 size: 19,
               ),
-
               label: const Text(
                 'Change Avatar',
                 style: TextStyle(
@@ -433,32 +323,25 @@ class _UpdateProfileScreenState
             SizedBox(
               width: double.infinity,
               height: 54,
-
               child: ElevatedButton(
                 onPressed:
                 isLoading
                     ? null
                     : saveChanges,
-
                 style:
                 ElevatedButton.styleFrom(
                   backgroundColor:
                   ProfileColors.yellow,
-
                   foregroundColor:
                   Colors.black,
-
                   disabledBackgroundColor:
                   ProfileColors.yellow
                       .withValues(
                     alpha: 0.5,
                   ),
-
                   disabledForegroundColor:
                   Colors.black54,
-
                   elevation: 0,
-
                   shape:
                   RoundedRectangleBorder(
                     borderRadius:
@@ -467,12 +350,10 @@ class _UpdateProfileScreenState
                     ),
                   ),
                 ),
-
                 child: isLoading
                     ? const SizedBox(
                   width: 23,
                   height: 23,
-
                   child:
                   CircularProgressIndicator(
                     strokeWidth: 2.5,
@@ -498,6 +379,49 @@ class _UpdateProfileScreenState
     );
   }
 
+  // ================= SELECTED AVATAR =================
+
+  Widget _buildSelectedAvatar() {
+    if (selectedAvatar < 0 ||
+        selectedAvatar >=
+            AvatarPicker.allAvatars.length) {
+      return Container(
+        color:
+        ProfileColors.cardColor,
+        child: const Icon(
+          Icons.person,
+          color: Colors.white70,
+          size: 55,
+        ),
+      );
+    }
+
+    final avatar =
+    AvatarPicker.allAvatars[selectedAvatar];
+
+    return Image.asset(
+      avatar.imagePath,
+      width: 110,
+      height: 110,
+      fit: BoxFit.cover,
+      errorBuilder: (
+          context,
+          error,
+          stackTrace,
+          ) {
+        return Container(
+          color:
+          ProfileColors.cardColor,
+          child: const Icon(
+            Icons.person,
+            color: Colors.white70,
+            size: 55,
+          ),
+        );
+      },
+    );
+  }
+
   // ================= TEXT FIELD =================
 
   Widget _buildTextField({
@@ -509,42 +433,32 @@ class _UpdateProfileScreenState
   }) {
     return TextField(
       controller: controller,
-
       keyboardType: keyboardType,
-
       style: const TextStyle(
         color: Colors.white,
         fontSize: 16,
       ),
-
       cursorColor:
       ProfileColors.yellow,
-
       decoration: InputDecoration(
         labelText: labelText,
-
         labelStyle:
         const TextStyle(
           color: Colors.white54,
         ),
-
         prefixIcon: Icon(
           icon,
           color:
           ProfileColors.yellow,
         ),
-
         filled: true,
-
         fillColor:
         ProfileColors.cardColor,
-
         contentPadding:
         const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 18,
         ),
-
         border:
         OutlineInputBorder(
           borderRadius:
@@ -552,7 +466,6 @@ class _UpdateProfileScreenState
           borderSide:
           BorderSide.none,
         ),
-
         enabledBorder:
         OutlineInputBorder(
           borderRadius:
@@ -560,7 +473,6 @@ class _UpdateProfileScreenState
           borderSide:
           BorderSide.none,
         ),
-
         focusedBorder:
         OutlineInputBorder(
           borderRadius:

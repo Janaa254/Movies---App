@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import 'profile_colors.dart';
 
@@ -9,11 +6,11 @@ import 'profile_colors.dart';
 
 class Avatar {
   final String name;
-  final String person;
+  final String imagePath;
 
   const Avatar({
     required this.name,
-    required this.person,
+    required this.imagePath,
   });
 }
 
@@ -37,27 +34,27 @@ class AvatarPicker extends StatefulWidget {
       'avatars': [
         Avatar(
           name: 'Iron Man',
-          person: 'Robert Downey Jr.',
+          imagePath: 'assets/avatars/marvel/iron_man.png',
         ),
         Avatar(
           name: 'Captain America',
-          person: 'Chris Evans',
+          imagePath: 'assets/avatars/marvel/captain_america.png',
         ),
         Avatar(
           name: 'Thor',
-          person: 'Chris Hemsworth',
+          imagePath: 'assets/avatars/marvel/thor.png',
         ),
         Avatar(
           name: 'Black Widow',
-          person: 'Scarlett Johansson',
+          imagePath: 'assets/avatars/marvel/black_widow.png',
         ),
         Avatar(
           name: 'Spider-Man',
-          person: 'Tom Holland',
+          imagePath: 'assets/avatars/marvel/spider_man.png',
         ),
         Avatar(
           name: 'Wanda',
-          person: 'Elizabeth Olsen',
+          imagePath: 'assets/avatars/marvel/wanda.png',
         ),
       ],
     },
@@ -67,27 +64,27 @@ class AvatarPicker extends StatefulWidget {
       'avatars': [
         Avatar(
           name: 'Elsa',
-          person: 'Idina Menzel',
+          imagePath: 'assets/avatars/disney/elsa.png',
         ),
         Avatar(
           name: 'Anna',
-          person: 'Kristen Bell',
+          imagePath: 'assets/avatars/disney/anna.png',
         ),
         Avatar(
           name: 'Stitch',
-          person: 'Chris Sanders',
+          imagePath: 'assets/avatars/disney/stitch.png',
         ),
         Avatar(
           name: 'Ariel',
-          person: 'Halle Bailey',
+          imagePath: 'assets/avatars/disney/ariel.png',
         ),
         Avatar(
           name: 'Rapunzel',
-          person: 'Mandy Moore',
+          imagePath: 'assets/avatars/disney/rapunzel.png',
         ),
         Avatar(
           name: 'Moana',
-          person: 'Auliʻi Cravalho',
+          imagePath: 'assets/avatars/disney/moana.png',
         ),
       ],
     },
@@ -97,35 +94,33 @@ class AvatarPicker extends StatefulWidget {
       'avatars': [
         Avatar(
           name: 'Harry',
-          person: 'Daniel Radcliffe',
+          imagePath: 'assets/avatars/harry_potter/harry.png',
         ),
         Avatar(
           name: 'Hermione',
-          person: 'Emma Watson',
+          imagePath: 'assets/avatars/harry_potter/hermione.png',
         ),
         Avatar(
           name: 'Ron',
-          person: 'Rupert Grint',
+          imagePath: 'assets/avatars/harry_potter/ron.png',
         ),
         Avatar(
           name: 'Draco',
-          person: 'Tom Felton',
+          imagePath: 'assets/avatars/harry_potter/draco.png',
         ),
         Avatar(
           name: 'Luna',
-          person: 'Evanna Lynch',
+          imagePath: 'assets/avatars/harry_potter/luna.png',
         ),
         Avatar(
           name: 'Snape',
-          person: 'Alan Rickman',
+          imagePath: 'assets/avatars/harry_potter/snape.png',
         ),
       ],
     },
   ];
 
-  // ================= IMAGE CACHE =================
-
-  static final Map<String, String> imageCache = {};
+  // ================= ALL AVATARS =================
 
   static List<Avatar> get allAvatars {
     final List<Avatar> result = [];
@@ -137,46 +132,6 @@ class AvatarPicker extends StatefulWidget {
     }
 
     return result;
-  }
-
-  // ================= WIKIPEDIA IMAGE =================
-
-  static Future<String?> getWikipediaImage(
-      String person,
-      ) async {
-    if (imageCache.containsKey(person)) {
-      return imageCache[person];
-    }
-
-    try {
-      final encodedName =
-      Uri.encodeComponent(person);
-
-      final url = Uri.parse(
-        'https://en.wikipedia.org/api/rest_v1/page/summary/$encodedName',
-      );
-
-      final response = await http.get(
-        url,
-        headers: {
-          'User-Agent': 'MoviesApp/1.0',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-
-        final imageUrl =
-        data['thumbnail']?['source'] as String?;
-
-        if (imageUrl != null) {
-          imageCache[person] = imageUrl;
-          return imageUrl;
-        }
-      }
-    } catch (_) {}
-
-    return null;
   }
 
   @override
@@ -375,13 +330,6 @@ class _AvatarPickerState
                                       shape:
                                       BoxShape.circle,
 
-                                      color:
-                                      isSelected
-                                          ? ProfileColors
-                                          .yellow
-                                          : Colors
-                                          .transparent,
-
                                       border:
                                       Border.all(
                                         color:
@@ -419,104 +367,36 @@ class _AvatarPickerState
                                     child:
                                     ClipOval(
                                       child:
-                                      FutureBuilder<
-                                          String?>(
-                                        future:
-                                        AvatarPicker
-                                            .getWikipediaImage(
-                                          avatar.person,
-                                        ),
+                                      Image.asset(
+                                        avatar
+                                            .imagePath,
 
-                                        builder: (
+                                        width: 100,
+                                        height: 100,
+
+                                        fit:
+                                        BoxFit.cover,
+
+                                        errorBuilder:
+                                            (
                                             context,
-                                            snapshot,
+                                            error,
+                                            stackTrace,
                                             ) {
-                                          if (snapshot
-                                              .connectionState ==
-                                              ConnectionState
-                                                  .waiting) {
-                                            return Container(
+                                          return Container(
+                                            color:
+                                            ProfileColors
+                                                .cardColor,
+
+                                            child:
+                                            const Icon(
+                                              Icons
+                                                  .person,
                                               color:
-                                              ProfileColors
-                                                  .cardColor,
-
-                                              child:
-                                              const Center(
-                                                child:
-                                                SizedBox(
-                                                  width:
-                                                  25,
-                                                  height:
-                                                  25,
-
-                                                  child:
-                                                  CircularProgressIndicator(
-                                                    strokeWidth:
-                                                    2.5,
-                                                    color:
-                                                    ProfileColors.yellow,
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          }
-
-                                          if (!snapshot
-                                              .hasData ||
-                                              snapshot.data ==
-                                                  null) {
-                                            return Container(
-                                              color:
-                                              ProfileColors
-                                                  .cardColor,
-
-                                              child:
-                                              const Icon(
-                                                Icons
-                                                    .person,
-                                                color:
-                                                Colors.white54,
-                                                size:
-                                                42,
-                                              ),
-                                            );
-                                          }
-
-                                          return Image
-                                              .network(
-                                            snapshot
-                                                .data!,
-
-                                            width:
-                                            100,
-                                            height:
-                                            100,
-
-                                            fit:
-                                            BoxFit.cover,
-
-                                            errorBuilder:
-                                                (
-                                                context,
-                                                error,
-                                                stackTrace,
-                                                ) {
-                                              return Container(
-                                                color:
-                                                ProfileColors
-                                                    .cardColor,
-
-                                                child:
-                                                const Icon(
-                                                  Icons
-                                                      .person,
-                                                  color:
-                                                  Colors.white54,
-                                                  size:
-                                                  42,
-                                                ),
-                                              );
-                                            },
+                                              Colors.white54,
+                                              size:
+                                              42,
+                                            ),
                                           );
                                         },
                                       ),
