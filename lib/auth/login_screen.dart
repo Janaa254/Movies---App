@@ -10,14 +10,23 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  static const Color background = Color(0xFF0B0B0F);
-  static const Color purple = Color(0xFF8B5CF6);
+  // ================= COLORS =================
+
+  static const Color background = Color(0xFF0B0D0C);
+  static const Color fieldColor = Color(0xFF292B29);
+  static const Color yellow = Color(0xFFFFC400);
+
+  // ================= CONTROLLERS =================
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  // ================= STATE =================
+
   bool isLoading = false;
   bool obscurePassword = true;
+
+  // ================= LOGIN =================
 
   Future<void> login() async {
     final email = emailController.text.trim();
@@ -70,219 +79,385 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  // ================= MESSAGE =================
+
   void showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: purple,
+        backgroundColor: yellow,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
+
+  // ================= NAVIGATION =================
+
+  void goToRegister() {
+    Navigator.pushNamed(
+      context,
+      '/register',
+    );
+  }
+
+  void goToForgetPassword() {
+    Navigator.pushNamed(
+      context,
+      '/forget-password',
+    );
+  }
+
+  // ================= BUILD =================
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: background,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final height = constraints.maxHeight;
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 23),
+              child: Column(
+                children: [
+                  // ================= LOGO =================
+
+                  const SizedBox(height: 20),
+
+                  SizedBox(
+                    height: 120,
+                    width: 170,
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.play_circle_outline,
+                          color: yellow,
+                          size: 70,
+                        );
+                      },
+                    ),
+                  ),
+
+                  SizedBox(height: height * 0.025),
+
+                  // ================= EMAIL FIELD =================
+
+                  _buildField(
+                    controller: emailController,
+                    hintText: 'Email',
+                    icon: Icons.email,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+
+                  SizedBox(height: height * 0.018),
+
+                  // ================= PASSWORD FIELD =================
+
+                  _buildField(
+                    controller: passwordController,
+                    hintText: 'Password',
+                    icon: Icons.lock,
+                    obscureText: obscurePassword,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          obscurePassword = !obscurePassword;
+                        });
+                      },
+                      icon: Icon(
+                        obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+                  ),
+
+                  // ================= FORGET PASSWORD =================
+
+                  SizedBox(
+                    height: height * 0.055,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: goToForgetPassword,
+                        child: const Text(
+                          'Forget Password ?',
+                          style: TextStyle(
+                            color: yellow,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // ================= LOGIN BUTTON =================
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: height * 0.075,
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : login,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: yellow,
+                        disabledBackgroundColor:
+                        yellow.withValues(alpha: 0.5),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: isLoading
+                          ? const SizedBox(
+                        width: 25,
+                        height: 25,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          color: Colors.black,
+                        ),
+                      )
+                          : const Text(
+                        'Login',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: height * 0.025),
+
+                  // ================= CREATE ACCOUNT =================
+
+                  SizedBox(
+                    height: height * 0.04,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Don’t Have Account ? ",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: goToRegister,
+                            child: const Text(
+                              'Create One',
+                              style: TextStyle(
+                                color: yellow,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: height * 0.025),
+
+                  // ================= OR DIVIDER =================
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 2,
+                          color: yellow,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 13),
+                        child: Text(
+                          'OR',
+                          style: TextStyle(
+                            color: yellow,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: 2,
+                          color: yellow,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: height * 0.025),
+
+                  // ================= GOOGLE LOGIN =================
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: height * 0.075,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showMessage(
+                          'Google login is not implemented yet.',
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: yellow,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'G',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 29,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 15),
+                          Text(
+                            'Login With Google',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 19,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const Spacer(),
+
+                  // ================= LANGUAGE SWITCHER =================
+
+                  Container(
+                    width: 110,
+                    height: 43,
+                    decoration: BoxDecoration(
+                      color: background,
+                      border: Border.all(
+                        color: yellow,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const Text(
+                          '🇺🇸',
+                          style: TextStyle(
+                            fontSize: 23,
+                          ),
+                        ),
+                        Container(
+                          width: 2,
+                          height: 25,
+                          color: yellow,
+                        ),
+                        const Text(
+                          '🇪🇬',
+                          style: TextStyle(
+                            fontSize: 23,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: height * 0.018),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  // ================= TEXT FIELD =================
+
+  Widget _buildField({
+    required TextEditingController controller,
+    required String hintText,
+    required IconData icon,
+    bool obscureText = false,
+    TextInputType? keyboardType,
+    Widget? suffixIcon,
+  }) {
+    return SizedBox(
+      height: 63,
+      child: TextField(
+        controller: controller,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 17,
+        ),
+        cursorColor: yellow,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 17,
+          ),
+          prefixIcon: Icon(
+            icon,
+            color: Colors.white,
+            size: 28,
+          ),
+          suffixIcon: suffixIcon,
+          filled: true,
+          fillColor: fieldColor,
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 20,
+            horizontal: 15,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(
+              color: yellow,
+              width: 1.5,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ================= DISPOSE =================
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: background,
-
-      appBar: AppBar(
-        backgroundColor: background,
-        elevation: 0,
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        title: const Text(
-          'Login',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 25),
-
-            const Text(
-              'Welcome Back',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            const Text(
-              'Login to continue watching your favorite movies and shows.',
-              style: TextStyle(
-                color: Colors.white54,
-                fontSize: 14,
-              ),
-            ),
-
-            const SizedBox(height: 35),
-
-            _buildField(
-              controller: emailController,
-              label: 'Email',
-              icon: Icons.email_outlined,
-              keyboardType: TextInputType.emailAddress,
-            ),
-
-            const SizedBox(height: 18),
-
-            _buildField(
-              controller: passwordController,
-              label: 'Password',
-              icon: Icons.lock_outline,
-              obscureText: obscurePassword,
-              suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    obscurePassword = !obscurePassword;
-                  });
-                },
-                icon: Icon(
-                  obscurePassword
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
-                  color: Colors.white54,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-
-              child: ElevatedButton(
-                onPressed: isLoading ? null : login,
-
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: purple,
-                  foregroundColor: Colors.white,
-                  disabledBackgroundColor:
-                  purple.withValues(alpha: 0.5),
-                  elevation: 0,
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                ),
-
-                child: isLoading
-                    ? const SizedBox(
-                  width: 22,
-                  height: 22,
-
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
-                  ),
-                )
-                    : const Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Center(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/register',
-                  );
-                },
-
-                child: const Text(
-                  "Don't have an account? Create Account",
-                  style: TextStyle(
-                    color: purple,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    bool obscureText = false,
-    TextInputType? keyboardType,
-    Widget? suffixIcon,
-  }) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-
-      style: const TextStyle(
-        color: Colors.white,
-      ),
-
-      cursorColor: purple,
-
-      decoration: InputDecoration(
-        labelText: label,
-
-        labelStyle: const TextStyle(
-          color: Colors.white54,
-        ),
-
-        prefixIcon: Icon(
-          icon,
-          color: purple,
-        ),
-
-        suffixIcon: suffixIcon,
-
-        filled: true,
-
-        fillColor: const Color(0xFF18181F),
-
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
-        ),
-
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-
-          borderSide: const BorderSide(
-            color: purple,
-          ),
-        ),
-      ),
-    );
   }
 }
