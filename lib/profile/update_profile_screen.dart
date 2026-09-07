@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'avatar_picker.dart';
+import 'profile_colors.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -14,9 +15,6 @@ class UpdateProfileScreen extends StatefulWidget {
 
 class _UpdateProfileScreenState
     extends State<UpdateProfileScreen> {
-  static const Color background = Color(0xFF0B0B0F);
-  static const Color purple = Color(0xFF8B5CF6);
-
   final TextEditingController nameController =
   TextEditingController();
 
@@ -42,6 +40,8 @@ class _UpdateProfileScreenState
     loadSelectedAvatar();
   }
 
+  // ================= LOAD AVATAR =================
+
   Future<void> loadSelectedAvatar() async {
     final User? user =
         FirebaseAuth.instance.currentUser;
@@ -61,13 +61,16 @@ class _UpdateProfileScreenState
 
       if (avatarIndex is int &&
           avatarIndex >= 0 &&
-          avatarIndex < AvatarPicker.allAvatars.length) {
+          avatarIndex <
+              AvatarPicker.allAvatars.length) {
         setState(() {
           selectedAvatar = avatarIndex;
         });
       }
     } catch (_) {}
   }
+
+  // ================= AVATAR PICKER =================
 
   void showAvatarPicker() {
     showModalBottomSheet(
@@ -87,6 +90,8 @@ class _UpdateProfileScreenState
     );
   }
 
+  // ================= SAVE CHANGES =================
+
   Future<void> saveChanges() async {
     FocusScope.of(context).unfocus();
 
@@ -100,6 +105,7 @@ class _UpdateProfileScreenState
       showMessage(
         'Please fill in all fields.',
       );
+
       return;
     }
 
@@ -110,6 +116,7 @@ class _UpdateProfileScreenState
       showMessage(
         'No user is currently logged in.',
       );
+
       return;
     }
 
@@ -118,17 +125,20 @@ class _UpdateProfileScreenState
     });
 
     try {
-      // Update name
+      // ================= UPDATE NAME =================
+
       if (name != user.displayName) {
         await user.updateDisplayName(name);
       }
 
-      // Update email
+      // ================= UPDATE EMAIL =================
+
       if (email != user.email) {
         await user.verifyBeforeUpdateEmail(email);
       }
 
-      // Save avatar + profile data in Firestore
+      // ================= SAVE FIRESTORE DATA =================
+
       await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
@@ -138,16 +148,21 @@ class _UpdateProfileScreenState
           'name': name,
           'email': email,
         },
-        SetOptions(merge: true),
+        SetOptions(
+          merge: true,
+        ),
       );
 
-      // Reload Firebase user data
+      // ================= RELOAD USER =================
+
       await user.reload();
 
       if (!mounted) return;
 
-      // Send true to ProfileScreen
-      Navigator.pop(context, true);
+      Navigator.pop(
+        context,
+        true,
+      );
     } on FirebaseAuthException catch (e) {
       String message =
           'Something went wrong.';
@@ -155,12 +170,12 @@ class _UpdateProfileScreenState
       if (e.code == 'invalid-email') {
         message =
         'Please enter a valid email.';
-      } else if (e.code ==
-          'email-already-in-use') {
+      } else if (
+      e.code == 'email-already-in-use') {
         message =
         'This email is already in use.';
-      } else if (e.code ==
-          'requires-recent-login') {
+      } else if (
+      e.code == 'requires-recent-login') {
         message =
         'Please log in again before changing your email.';
       }
@@ -179,14 +194,21 @@ class _UpdateProfileScreenState
     }
   }
 
+  // ================= MESSAGE =================
+
   void showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: purple,
+        backgroundColor:
+        ProfileColors.yellow,
+        behavior:
+        SnackBarBehavior.floating,
       ),
     );
   }
+
+  // ================= DISPOSE =================
 
   @override
   void dispose() {
@@ -195,83 +217,115 @@ class _UpdateProfileScreenState
     super.dispose();
   }
 
+  // ================= BUILD =================
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor:
+      ProfileColors.background,
 
       appBar: AppBar(
-        backgroundColor: background,
+        backgroundColor:
+        ProfileColors.background,
         elevation: 0,
+
+        centerTitle: true,
+
+        iconTheme:
+        const IconThemeData(
+          color: Colors.white,
+        ),
 
         title: const Text(
           'Edit Profile',
           style: TextStyle(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            fontWeight:
+            FontWeight.bold,
           ),
-        ),
-
-        iconTheme: const IconThemeData(
-          color: Colors.white,
         ),
       ),
 
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding:
+        const EdgeInsets.all(20),
 
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
 
-            // Avatar
+            // ================= AVATAR =================
+
             GestureDetector(
               onTap: showAvatarPicker,
 
               child: Container(
                 width: 116,
                 height: 116,
-                padding: const EdgeInsets.all(3),
 
-                decoration: const BoxDecoration(
+                padding:
+                const EdgeInsets.all(3),
+
+                decoration:
+                const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: purple,
+                  color:
+                  ProfileColors.yellow,
                 ),
 
                 child: ClipOval(
                   child: selectedAvatar <
-                      AvatarPicker.allAvatars.length
-                      ? FutureBuilder<String?>(
-                    future:
-                    AvatarPicker.getWikipediaImage(
                       AvatarPicker
-                          .allAvatars[selectedAvatar]
+                          .allAvatars.length
+                      ? FutureBuilder<String?>(
+                    future: AvatarPicker
+                        .getWikipediaImage(
+                      AvatarPicker
+                          .allAvatars[
+                      selectedAvatar]
                           .person,
                     ),
-                    builder:
-                        (context, snapshot) {
-                      if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
+                    builder: (
+                        context,
+                        snapshot,
+                        ) {
+                      if (snapshot
+                          .connectionState ==
+                          ConnectionState
+                              .waiting) {
                         return Container(
                           color:
-                          const Color(0xFF202027),
-                          child: const Center(
+                          const Color(
+                            0xFF202020,
+                          ),
+                          child:
+                          const Center(
                             child:
                             CircularProgressIndicator(
-                              color: purple,
+                              color:
+                              ProfileColors
+                                  .yellow,
                               strokeWidth: 2,
                             ),
                           ),
                         );
                       }
 
-                      if (!snapshot.hasData ||
-                          snapshot.data == null) {
+                      if (!snapshot
+                          .hasData ||
+                          snapshot.data ==
+                              null) {
                         return Container(
                           color:
-                          const Color(0xFF202027),
-                          child: const Icon(
-                            Icons.movie_outlined,
+                          const Color(
+                            0xFF202020,
+                          ),
+                          child:
+                          const Icon(
+                            Icons
+                                .movie_outlined,
                             color:
                             Colors.white70,
                             size: 55,
@@ -281,9 +335,9 @@ class _UpdateProfileScreenState
 
                       return Image.network(
                         snapshot.data!,
-                        fit: BoxFit.cover,
-                        errorBuilder:
-                            (
+                        fit:
+                        BoxFit.cover,
+                        errorBuilder: (
                             context,
                             error,
                             stackTrace,
@@ -291,10 +345,12 @@ class _UpdateProfileScreenState
                           return Container(
                             color:
                             const Color(
-                              0xFF202027,
+                              0xFF202020,
                             ),
-                            child: const Icon(
-                              Icons.movie_outlined,
+                            child:
+                            const Icon(
+                              Icons
+                                  .movie_outlined,
                               color:
                               Colors.white70,
                               size: 55,
@@ -305,10 +361,16 @@ class _UpdateProfileScreenState
                     },
                   )
                       : Container(
-                    color: const Color(0xFF202027),
-                    child: const Icon(
-                      Icons.movie_outlined,
-                      color: Colors.white70,
+                    color:
+                    const Color(
+                      0xFF202020,
+                    ),
+                    child:
+                    const Icon(
+                      Icons
+                          .movie_outlined,
+                      color:
+                      Colors.white70,
                       size: 55,
                     ),
                   ),
@@ -318,164 +380,110 @@ class _UpdateProfileScreenState
 
             const SizedBox(height: 10),
 
-            TextButton(
+            TextButton.icon(
               onPressed: showAvatarPicker,
 
-              child: const Text(
+              icon: const Icon(
+                Icons.edit_outlined,
+                color:
+                ProfileColors.yellow,
+                size: 19,
+              ),
+
+              label: const Text(
                 'Change Avatar',
                 style: TextStyle(
-                  color: purple,
+                  color:
+                  ProfileColors.yellow,
                   fontSize: 15,
+                  fontWeight:
+                  FontWeight.w500,
                 ),
               ),
             ),
 
             const SizedBox(height: 30),
 
-            // Name
-            TextField(
+            // ================= NAME =================
+
+            _buildTextField(
               controller: nameController,
-
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-
-              cursorColor: purple,
-
-              decoration: InputDecoration(
-                labelText: 'Name',
-
-                labelStyle: const TextStyle(
-                  color: Colors.white54,
-                ),
-
-                prefixIcon: const Icon(
-                  Icons.person_outline,
-                  color: purple,
-                ),
-
-                filled: true,
-
-                fillColor: const Color(
-                  0xFF18181F,
-                ),
-
-                border: OutlineInputBorder(
-                  borderRadius:
-                  BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-
-                focusedBorder:
-                OutlineInputBorder(
-                  borderRadius:
-                  BorderRadius.circular(8),
-
-                  borderSide:
-                  const BorderSide(
-                    color: purple,
-                  ),
-                ),
-              ),
+              labelText: 'Name',
+              icon:
+              Icons.person_outline,
             ),
 
             const SizedBox(height: 18),
 
-            // Email
-            TextField(
-              controller: emailController,
+            // ================= EMAIL =================
 
+            _buildTextField(
+              controller: emailController,
+              labelText: 'Email',
+              icon:
+              Icons.email_outlined,
               keyboardType:
               TextInputType.emailAddress,
-
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-
-              cursorColor: purple,
-
-              decoration: InputDecoration(
-                labelText: 'Email',
-
-                labelStyle: const TextStyle(
-                  color: Colors.white54,
-                ),
-
-                prefixIcon: const Icon(
-                  Icons.email_outlined,
-                  color: purple,
-                ),
-
-                filled: true,
-
-                fillColor: const Color(
-                  0xFF18181F,
-                ),
-
-                border: OutlineInputBorder(
-                  borderRadius:
-                  BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-
-                focusedBorder:
-                OutlineInputBorder(
-                  borderRadius:
-                  BorderRadius.circular(8),
-
-                  borderSide:
-                  const BorderSide(
-                    color: purple,
-                  ),
-                ),
-              ),
             ),
 
             const SizedBox(height: 30),
 
-            // Save Changes
+            // ================= SAVE BUTTON =================
+
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: 54,
 
               child: ElevatedButton(
                 onPressed:
-                isLoading ? null : saveChanges,
+                isLoading
+                    ? null
+                    : saveChanges,
 
                 style:
                 ElevatedButton.styleFrom(
-                  backgroundColor: purple,
-                  foregroundColor: Colors.white,
+                  backgroundColor:
+                  ProfileColors.yellow,
+
+                  foregroundColor:
+                  Colors.black,
 
                   disabledBackgroundColor:
-                  purple.withValues(
+                  ProfileColors.yellow
+                      .withValues(
                     alpha: 0.5,
                   ),
+
+                  disabledForegroundColor:
+                  Colors.black54,
 
                   elevation: 0,
 
                   shape:
                   RoundedRectangleBorder(
                     borderRadius:
-                    BorderRadius.circular(7),
+                    BorderRadius.circular(
+                      14,
+                    ),
                   ),
                 ),
 
                 child: isLoading
                     ? const SizedBox(
-                  width: 22,
-                  height: 22,
+                  width: 23,
+                  height: 23,
 
                   child:
                   CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
+                    strokeWidth: 2.5,
+                    color:
+                    Colors.black,
                   ),
                 )
                     : const Text(
                   'Save Changes',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 17,
                     fontWeight:
                     FontWeight.bold,
                   ),
@@ -485,6 +493,84 @@ class _UpdateProfileScreenState
 
             const SizedBox(height: 20),
           ],
+        ),
+      ),
+    );
+  }
+
+  // ================= TEXT FIELD =================
+
+  Widget _buildTextField({
+    required TextEditingController
+    controller,
+    required String labelText,
+    required IconData icon,
+    TextInputType? keyboardType,
+  }) {
+    return TextField(
+      controller: controller,
+
+      keyboardType: keyboardType,
+
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+      ),
+
+      cursorColor:
+      ProfileColors.yellow,
+
+      decoration: InputDecoration(
+        labelText: labelText,
+
+        labelStyle:
+        const TextStyle(
+          color: Colors.white54,
+        ),
+
+        prefixIcon: Icon(
+          icon,
+          color:
+          ProfileColors.yellow,
+        ),
+
+        filled: true,
+
+        fillColor:
+        ProfileColors.cardColor,
+
+        contentPadding:
+        const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 18,
+        ),
+
+        border:
+        OutlineInputBorder(
+          borderRadius:
+          BorderRadius.circular(14),
+          borderSide:
+          BorderSide.none,
+        ),
+
+        enabledBorder:
+        OutlineInputBorder(
+          borderRadius:
+          BorderRadius.circular(14),
+          borderSide:
+          BorderSide.none,
+        ),
+
+        focusedBorder:
+        OutlineInputBorder(
+          borderRadius:
+          BorderRadius.circular(14),
+          borderSide:
+          const BorderSide(
+            color:
+            ProfileColors.yellow,
+            width: 1.5,
+          ),
         ),
       ),
     );

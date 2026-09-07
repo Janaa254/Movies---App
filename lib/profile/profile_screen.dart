@@ -1,19 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'update_profile_screen.dart';
-import 'watchlist_screen.dart';
-import 'history_screen.dart';
-import 'favorites_screen.dart';
-import 'avatar_picker.dart';
+
 import '../auth/login_screen.dart';
 import '../auth/register_screen.dart';
 
+import 'avatar_picker.dart';
+import 'profile_colors.dart';
+import 'update_profile_screen.dart';
+
+import 'tabs/watchlist_tab.dart';
+import 'tabs/history_tab.dart';
+import 'tabs/favorites_tab.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
-
-  static const Color background = Color(0xFF0B0B0F);
-  static const Color purple = Color(0xFF8B5CF6);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -23,15 +24,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int selectedAvatar = 0;
   bool isLoadingAvatar = true;
 
+  // 0 = Watch List
+  // 1 = History
+  // 2 = Favorites
+  int selectedSection = 0;
+
   @override
   void initState() {
     super.initState();
     loadAvatar();
   }
 
+  // ================= LOAD AVATAR =================
+
   Future<void> loadAvatar() async {
-    final User? user =
-        FirebaseAuth.instance.currentUser;
+    final User? user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
       if (mounted) {
@@ -39,6 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           isLoadingAvatar = false;
         });
       }
+
       return;
     }
 
@@ -70,6 +78,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  // ================= UPDATE PROFILE =================
+
   Future<void> openUpdateProfile() async {
     final bool? updated = await Navigator.push<bool>(
       context,
@@ -83,42 +93,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       await loadAvatar();
 
-      if (mounted) {
-        setState(() {});
-      }
+      if (!mounted) return;
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Profile updated successfully.'),
-            backgroundColor: ProfileScreen.purple,
+      setState(() {});
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Profile updated successfully.',
           ),
-        );
-      }
+          backgroundColor: ProfileColors.yellow,
+        ),
+      );
     }
   }
+
+  // ================= AVATAR =================
 
   Widget buildProfileAvatar() {
     if (isLoadingAvatar) {
       return Container(
         width: 104,
         height: 104,
-        color: const Color(0xFF202027),
+        color: const Color(0xFF202020),
         child: const Center(
           child: CircularProgressIndicator(
-            color: ProfileScreen.purple,
+            color: ProfileColors.yellow,
             strokeWidth: 2,
           ),
         ),
       );
     }
 
-    if (selectedAvatar >=
-        AvatarPicker.allAvatars.length) {
+    if (selectedAvatar >= AvatarPicker.allAvatars.length) {
       return Container(
         width: 104,
         height: 104,
-        color: const Color(0xFF202027),
+        color: const Color(0xFF202020),
         child: const Icon(
           Icons.person,
           color: Colors.white70,
@@ -127,8 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
 
-    final avatar =
-    AvatarPicker.allAvatars[selectedAvatar];
+    final avatar = AvatarPicker.allAvatars[selectedAvatar];
 
     return FutureBuilder<String?>(
       future: AvatarPicker.getWikipediaImage(
@@ -140,22 +150,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return Container(
             width: 104,
             height: 104,
-            color: const Color(0xFF202027),
+            color: const Color(0xFF202020),
             child: const Center(
               child: CircularProgressIndicator(
-                color: ProfileScreen.purple,
+                color: ProfileColors.yellow,
                 strokeWidth: 2,
               ),
             ),
           );
         }
 
-        if (!snapshot.hasData ||
-            snapshot.data == null) {
+        if (!snapshot.hasData || snapshot.data == null) {
           return Container(
             width: 104,
             height: 104,
-            color: const Color(0xFF202027),
+            color: const Color(0xFF202020),
             child: const Icon(
               Icons.person,
               color: Colors.white70,
@@ -169,12 +178,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           width: 104,
           height: 104,
           fit: BoxFit.cover,
-          errorBuilder:
-              (context, error, stackTrace) {
+          errorBuilder: (
+              context,
+              error,
+              stackTrace,
+              ) {
             return Container(
               width: 104,
               height: 104,
-              color: const Color(0xFF202027),
+              color: const Color(0xFF202020),
               child: const Icon(
                 Icons.person,
                 color: Colors.white70,
@@ -187,39 +199,391 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // ================= LOGOUT =================
+
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const ProfileScreen(),
+      ),
+    );
+  }
+
+  // ================= BUILD =================
+
   @override
   Widget build(BuildContext context) {
-    final User? user =
-        FirebaseAuth.instance.currentUser;
+    final User? user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
-      return Scaffold(
-        backgroundColor: ProfileScreen.background,
-        appBar: AppBar(
-          backgroundColor: ProfileScreen.background,
-          elevation: 0,
-          centerTitle: true,
-          title: const Text(
-            'Profile',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
+      return buildGuestProfile();
+    }
+
+    final String name =
+    user.displayName?.isNotEmpty == true
+        ? user.displayName!
+        : 'User';
+
+    return Scaffold(
+      backgroundColor: ProfileColors.background,
+
+      body: SafeArea(
+        child: Column(
+          children: [
+            // ================= PROFILE HEADER =================
+
+            Container(
+              width: double.infinity,
+              color: ProfileColors.topSection,
+              padding: const EdgeInsets.fromLTRB(
+                16,
+                20,
+                16,
+                0,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                    children: [
+                      // Avatar + Name
+                      Column(
+                        children: [
+                          Container(
+                            width: 116,
+                            height: 116,
+                            padding:
+                            const EdgeInsets.all(3),
+                            decoration:
+                            const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color:
+                              ProfileColors.yellow,
+                            ),
+                            child: ClipOval(
+                              child:
+                              buildProfileAvatar(),
+                            ),
+                          ),
+
+                          const SizedBox(height: 10),
+
+                          SizedBox(
+                            width: 125,
+                            child: Text(
+                              name,
+                              textAlign:
+                              TextAlign.center,
+                              maxLines: 1,
+                              overflow:
+                              TextOverflow.ellipsis,
+                              style:
+                              const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight:
+                                FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const Spacer(),
+
+                      // Stats
+                      const Padding(
+                        padding:
+                        EdgeInsets.only(top: 28),
+                        child: Row(
+                          children: [
+                            _Stat(
+                              number: '0',
+                              title: 'Wish List',
+                            ),
+
+                            SizedBox(width: 30),
+
+                            _Stat(
+                              number: '0',
+                              title: 'History',
+                            ),
+
+                            SizedBox(width: 20),
+
+                            _Stat(
+                              number: '0',
+                              title: 'Favorites',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 22),
+
+                  // ================= BUTTONS =================
+
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: SizedBox(
+                          height: 54,
+                          child: ElevatedButton(
+                            onPressed:
+                            openUpdateProfile,
+                            style:
+                            ElevatedButton.styleFrom(
+                              backgroundColor:
+                              ProfileColors.yellow,
+                              foregroundColor:
+                              Colors.black,
+                              elevation: 0,
+                              shape:
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(
+                                    14),
+                              ),
+                            ),
+                            child: const Text(
+                              'Edit Profile',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight:
+                                FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      Expanded(
+                        child: SizedBox(
+                          height: 54,
+                          child: ElevatedButton(
+                            onPressed: logout,
+                            style:
+                            ElevatedButton.styleFrom(
+                              backgroundColor:
+                              ProfileColors.red,
+                              foregroundColor:
+                              Colors.white,
+                              elevation: 0,
+                              shape:
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(
+                                    14),
+                              ),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment
+                                  .center,
+                              children: [
+                                Text(
+                                  'Exit',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight:
+                                    FontWeight.w500,
+                                  ),
+                                ),
+
+                                SizedBox(width: 6),
+
+                                Icon(
+                                  Icons.logout,
+                                  size: 20,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 22),
+
+                  // ================= TABS =================
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _ProfileTab(
+                          icon: Icons
+                              .format_list_bulleted_rounded,
+                          title: 'Watch List',
+                          isSelected:
+                          selectedSection == 0,
+                          onTap: () {
+                            setState(() {
+                              selectedSection = 0;
+                            });
+                          },
+                        ),
+                      ),
+
+                      Expanded(
+                        child: _ProfileTab(
+                          icon: Icons.history,
+                          title: 'History',
+                          isSelected:
+                          selectedSection == 1,
+                          onTap: () {
+                            setState(() {
+                              selectedSection = 1;
+                            });
+                          },
+                        ),
+                      ),
+
+                      Expanded(
+                        child: _ProfileTab(
+                          icon: Icons.favorite,
+                          title: 'Favorites',
+                          isSelected:
+                          selectedSection == 2,
+                          onTap: () {
+                            setState(() {
+                              selectedSection = 2;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
+
+            // ================= TAB CONTENT =================
+
+            Expanded(
+              child: IndexedStack(
+                index: selectedSection,
+                children: const [
+                  WatchlistTab(),
+                  HistoryTab(),
+                  FavoritesTab(),
+                ],
+              ),
+            ),
+
+            // ================= BOTTOM NAV =================
+
+            Padding(
+              padding:
+              const EdgeInsets.fromLTRB(
+                9,
+                0,
+                9,
+                10,
+              ),
+              child: Container(
+                height: 62,
+                decoration: BoxDecoration(
+                  color:
+                  ProfileColors.cardColor,
+                  borderRadius:
+                  BorderRadius.circular(17),
+                ),
+                child: Row(
+                  mainAxisAlignment:
+                  MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.home_rounded,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.search_rounded,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.movie_filter_rounded,
+                        color: Colors.white,
+                        size: 27,
+                      ),
+                    ),
+
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color:
+                          ProfileColors.yellow,
+                          width: 2,
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.person,
+                        color:
+                        ProfileColors.yellow,
+                        size: 23,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
-        body: Center(
+      ),
+    );
+  }
+
+  // ================= GUEST PROFILE =================
+
+  Widget buildGuestProfile() {
+    return Scaffold(
+      backgroundColor: ProfileColors.background,
+
+      body: SafeArea(
+        child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+            padding:
+            const EdgeInsets.symmetric(
+              horizontal: 25,
+            ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment:
+              MainAxisAlignment.center,
               children: [
                 const CircleAvatar(
                   radius: 55,
-                  backgroundColor: ProfileScreen.purple,
+                  backgroundColor:
+                  ProfileColors.yellow,
                   child: CircleAvatar(
                     radius: 52,
-                    backgroundColor: Color(0xFF202027),
+                    backgroundColor:
+                    ProfileColors.cardColor,
                     child: Icon(
                       Icons.person_outline,
                       color: Colors.white70,
@@ -227,17 +591,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 20),
+
                 const Text(
                   'Welcome to Movies App',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight:
+                    FontWeight.bold,
                   ),
                 ),
+
                 const SizedBox(height: 10),
+
                 const Text(
                   'Login or create an account to access your profile, watchlist and favorites.',
                   textAlign: TextAlign.center,
@@ -246,63 +615,84 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontSize: 14,
                   ),
                 ),
+
                 const SizedBox(height: 30),
+
                 SizedBox(
                   width: double.infinity,
-                  height: 50,
+                  height: 52,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const LoginScreen(),
+                          builder: (_) =>
+                          const LoginScreen(),
                         ),
                       );
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ProfileScreen.purple,
-                      foregroundColor: Colors.white,
+                    style:
+                    ElevatedButton.styleFrom(
+                      backgroundColor:
+                      ProfileColors.yellow,
+                      foregroundColor:
+                      Colors.black,
                       elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7),
+                      shape:
+                      RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(
+                            14),
                       ),
                     ),
                     child: const Text(
                       'Login',
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight:
+                        FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 12),
+
                 SizedBox(
                   width: double.infinity,
-                  height: 50,
+                  height: 52,
                   child: OutlinedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const RegisterScreen(),
+                          builder: (_) =>
+                          const RegisterScreen(),
                         ),
                       );
                     },
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
+                    style:
+                    OutlinedButton.styleFrom(
+                      foregroundColor:
+                      ProfileColors.yellow,
                       side: const BorderSide(
-                        color: ProfileScreen.purple,
+                        color:
+                        ProfileColors.yellow,
+                        width: 1.5,
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7),
+                      shape:
+                      RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(
+                            14),
                       ),
                     ),
                     child: const Text(
                       'Create Account',
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight:
+                        FontWeight.bold,
                       ),
                     ),
                   ),
@@ -311,199 +701,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ),
-      );
-    }
-
-    final String name =
-    user.displayName?.isNotEmpty == true
-        ? user.displayName!
-        : 'User';
-
-    final String email = user.email ?? '';
-
-    return Scaffold(
-      backgroundColor: ProfileScreen.background,
-      appBar: AppBar(
-        backgroundColor: ProfileScreen.background,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: openUpdateProfile,
-            icon: const Icon(
-              Icons.edit_outlined,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-
-            Container(
-              width: 110,
-              height: 110,
-              padding: const EdgeInsets.all(3),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: ProfileScreen.purple,
-              ),
-              child: ClipOval(
-                child: buildProfileAvatar(),
-              ),
-            ),
-
-            const SizedBox(height: 15),
-
-            Text(
-              name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 5),
-
-            Text(
-              email,
-              style: const TextStyle(
-                color: Colors.white54,
-                fontSize: 14,
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _Stat(
-                  number: '0',
-                  title: 'Watchlist',
-                ),
-                _Stat(
-                  number: '0',
-                  title: 'Favorites',
-                ),
-                _Stat(
-                  number: '0',
-                  title: 'Watched',
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 40),
-
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'My Library',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 15),
-
-            _MenuItem(
-              icon: Icons.bookmark_outline,
-              title: 'Watchlist',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const WatchlistScreen(),
-                  ),
-                );
-              },
-            ),
-
-            _MenuItem(
-              icon: Icons.favorite_border,
-              title: 'Favorites',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const FavoritesScreen(),
-                  ),
-                );
-              },
-            ),
-
-            _MenuItem(
-              icon: Icons.history,
-              title: 'History',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const HistoryScreen(),
-                  ),
-                );
-              },
-            ),
-
-            const SizedBox(height: 30),
-
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: OutlinedButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-
-                  if (!context.mounted) return;
-
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const ProfileScreen(),
-                    ),
-                  );
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.white70,
-                  side: const BorderSide(
-                    color: Colors.white24,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                ),
-                child: const Text(
-                  'Logout',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 30),
-          ],
-        ),
       ),
     );
   }
 }
+
+// ================= STAT =================
 
 class _Stat extends StatelessWidget {
   final String number;
@@ -522,16 +725,19 @@ class _Stat extends StatelessWidget {
           number,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 22,
+            fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 5),
+
+        const SizedBox(height: 8),
+
         Text(
           title,
           style: const TextStyle(
-            color: Colors.white54,
-            fontSize: 12,
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],
@@ -539,40 +745,83 @@ class _Stat extends StatelessWidget {
   }
 }
 
-class _MenuItem extends StatelessWidget {
+// ================= PROFILE TAB =================
+
+class _ProfileTab extends StatelessWidget {
   final IconData icon;
   final String title;
+  final bool isSelected;
   final VoidCallback onTap;
 
-  const _MenuItem({
+  const _ProfileTab({
     required this.icon,
     required this.title,
+    required this.isSelected,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return InkWell(
       onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 5,
-        vertical: 5,
-      ),
-      leading: Icon(
-        icon,
-        color: ProfileScreen.purple,
-        size: 25,
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-        ),
-      ),
-      trailing: const Icon(
-        Icons.chevron_right,
-        color: Colors.white38,
+      borderRadius:
+      BorderRadius.circular(10),
+
+      child: Column(
+        children: [
+          Padding(
+            padding:
+            const EdgeInsets.symmetric(
+              vertical: 8,
+            ),
+            child: Column(
+              children: [
+                Icon(
+                  icon,
+                  color: isSelected
+                      ? ProfileColors.yellow
+                      : Colors.white70,
+                  size: 31,
+                ),
+
+                const SizedBox(height: 7),
+
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: isSelected
+                        ? Colors.white
+                        : Colors.white70,
+                    fontSize: 15,
+                    fontWeight:
+                    isSelected
+                        ? FontWeight.w600
+                        : FontWeight.normal,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 4),
+
+          // Yellow line only under selected tab
+          AnimatedContainer(
+            duration:
+            const Duration(
+              milliseconds: 200,
+            ),
+            width:
+            isSelected ? 65 : 0,
+            height: 3,
+            decoration: BoxDecoration(
+              color:
+              ProfileColors.yellow,
+              borderRadius:
+              BorderRadius.circular(10),
+            ),
+          ),
+        ],
       ),
     );
   }
