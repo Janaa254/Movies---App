@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
 
-import 'onboarding/onboarding_screen.dart';
+import 'splash/splash_screen.dart';
 import 'auth/login_screen.dart';
 import 'auth/register_screen.dart';
 import 'auth/forget_password_screen.dart';
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         const ForgetPasswordScreen(),
       },
 
-      home: const OnboardingScreen(),
+      home: const SplashScreen(),
     );
   }
 }

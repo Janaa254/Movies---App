@@ -67,8 +67,8 @@ class AvatarPicker extends StatefulWidget {
           imagePath: 'assets/avatars/disney/elsa.png',
         ),
         Avatar(
-          name: 'Anna',
-          imagePath: 'assets/avatars/disney/anna.png',
+          name: 'Cinderella',
+          imagePath: 'assets/avatars/disney/cinderella.png',
         ),
         Avatar(
           name: 'Stitch',
