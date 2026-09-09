@@ -24,6 +24,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Load saved app language before starting the app
+  await loadSavedLocale();
+
   runApp(const MoviesApp());
 }
 

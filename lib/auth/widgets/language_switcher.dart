@@ -31,17 +31,15 @@ class LanguageSwitcher extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // ================= ENGLISH =================
-
           Expanded(
             child: GestureDetector(
-              onTap: () {
-                appLocale.value =
-                const Locale('en');
+              onTap: () async {
+                await changeAppLocale('en');
               },
               child: AnimatedContainer(
-                duration:
-                const Duration(milliseconds: 200),
+                duration: const Duration(
+                  milliseconds: 200,
+                ),
                 height: double.infinity,
                 decoration: BoxDecoration(
                   color: isEnglish
@@ -65,17 +63,15 @@ class LanguageSwitcher extends StatelessWidget {
 
           const SizedBox(width: 4),
 
-          // ================= ARABIC =================
-
           Expanded(
             child: GestureDetector(
-              onTap: () {
-                appLocale.value =
-                const Locale('ar');
+              onTap: () async {
+                await changeAppLocale('ar');
               },
               child: AnimatedContainer(
-                duration:
-                const Duration(milliseconds: 200),
+                duration: const Duration(
+                  milliseconds: 200,
+                ),
                 height: double.infinity,
                 decoration: BoxDecoration(
                   color: isArabic
