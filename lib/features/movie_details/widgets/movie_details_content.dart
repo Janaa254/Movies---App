@@ -14,6 +14,7 @@ class MovieDetailsContent extends StatelessWidget {
   final MovieDetailsModel movie;
   final List<MovieDetailsModel> suggestions;
   final bool isFavorite;
+  final VoidCallback onFavoriteTap;
   final ValueChanged<int> onMovieTap;
 
   const MovieDetailsContent({
@@ -21,6 +22,7 @@ class MovieDetailsContent extends StatelessWidget {
     required this.movie,
     required this.suggestions,
     required this.isFavorite,
+    required this.onFavoriteTap,
     required this.onMovieTap,
   });
 
@@ -40,6 +42,7 @@ class MovieDetailsContent extends StatelessWidget {
           MoviePoster(
             movie: movie,
             isFavorite: isFavorite,
+            onFavoriteTap: onFavoriteTap,
           ),
 
           const SizedBox(height: 16),
@@ -63,10 +66,13 @@ class MovieDetailsContent extends StatelessWidget {
             const SectionTitle(
               title: 'Screen Shots',
             ),
+
             const SizedBox(height: 10),
+
             MovieScreenshots(
               screenshots: movie.screenshots,
             ),
+
             const SizedBox(height: 20),
           ],
 
@@ -76,6 +82,7 @@ class MovieDetailsContent extends StatelessWidget {
               movies: suggestions,
               onMovieTap: onMovieTap,
             ),
+
             const SizedBox(height: 25),
           ],
 
@@ -111,6 +118,7 @@ class MovieDetailsContent extends StatelessWidget {
             const SectionTitle(
               title: 'Genres',
             ),
+
             const SizedBox(height: 12),
 
             Wrap(

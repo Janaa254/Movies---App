@@ -69,6 +69,14 @@ class _MovieDetailsView extends StatelessWidget {
                 suggestions: state.suggestions,
                 isFavorite: state.isFavorite,
 
+                onFavoriteTap: () {
+                  context.read<MovieDetailsBloc>().add(
+                    ToggleFavorite(
+                      state.movie,
+                    ),
+                  );
+                },
+
                 // Open another movie details screen
                 onMovieTap: (id) {
                   Navigator.push(

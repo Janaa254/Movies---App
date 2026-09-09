@@ -7,11 +7,13 @@ import 'trailer_launcher.dart';
 class MoviePoster extends StatelessWidget {
   final MovieDetailsModel movie;
   final bool isFavorite;
+  final VoidCallback onFavoriteTap;
 
   const MoviePoster({
     super.key,
     required this.movie,
     required this.isFavorite,
+    required this.onFavoriteTap,
   });
 
   @override
@@ -59,14 +61,12 @@ class MoviePoster extends StatelessWidget {
           ),
         ),
 
-        // Favorite / Watchlist button
+        // Favorite button
         Positioned(
           top: 12,
           right: 12,
           child: IconButton(
-            onPressed: () {
-              // Watchlist feature.
-            },
+            onPressed: onFavoriteTap,
             icon: Icon(
               isFavorite
                   ? Icons.bookmark
