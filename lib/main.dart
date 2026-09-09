@@ -1,13 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'firebase_options.dart';
 
+import 'l10n/app_localizations.dart';
+
 import 'features/home/bloc/home_bloc.dart';
 import 'features/home/screens/home_screen.dart';
-
-import 'features/movie_details/screens/movie_details_screen.dart';
 
 import 'splash/splash_screen.dart';
 import 'onboarding/onboarding_screen.dart';
@@ -32,7 +33,26 @@ class MoviesApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Movies App',
+
+      onGenerateTitle: (context) {
+        return AppLocalizations.of(context)!.appName;
+      },
+
+      // ============================================================
+      // LOCALIZATION
+      // ============================================================
+
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ar'),
+      ],
 
       theme: ThemeData(
         useMaterial3: true,
@@ -53,16 +73,14 @@ class MoviesApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
 
         '/forget-password': (context) =>
-            const ForgetPasswordScreen(),
+        const ForgetPasswordScreen(),
 
         '/home': (context) => BlocProvider(
-              create: (_) => HomeBloc(),
-              child: const HomeScreen(),
-            ),
+          create: (_) => HomeBloc(),
+          child: const HomeScreen(),
+        ),
       },
 
-      // App flow:
-      // Splash -> Onboarding -> Login/Register -> Home
       home: const SplashScreen(),
     );
   }

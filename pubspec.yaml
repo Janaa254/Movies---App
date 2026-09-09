@@ -12,6 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_localizations:
+    sdk: flutter
+
+  intl: any
+
   cupertino_icons: ^1.0.8
   flutter_bloc: ^9.1.1
   dio: ^5.11.0
@@ -32,6 +37,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  generate: true
 
   assets:
     - assets/images/
