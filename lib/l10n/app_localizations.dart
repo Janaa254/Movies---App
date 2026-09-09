@@ -667,6 +667,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start Watching Now'**
   String get onboardingTitle6;
+
+  /// No description provided for @fillAllFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all fields.'**
+  String get fillAllFields;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match.'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters.'**
+  String get passwordMinLength;
+
+  /// No description provided for @emailAlreadyInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already in use.'**
+  String get emailAlreadyInUse;
+
+  /// No description provided for @enterValidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email.'**
+  String get enterValidEmail;
+
+  /// No description provided for @weakPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'The password is too weak.'**
+  String get weakPassword;
+
+  /// No description provided for @noAccountFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No account found with this email.'**
+  String get noAccountFound;
+
+  /// No description provided for @incorrectEmailOrPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect email or password.'**
+  String get incorrectEmailOrPassword;
+
+  /// No description provided for @noUserLoggedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'No user is currently logged in.'**
+  String get noUserLoggedIn;
+
+  /// No description provided for @loginAgainBeforeEmailChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Please log in again before changing your email.'**
+  String get loginAgainBeforeEmailChange;
+
+  /// No description provided for @changeAvatar.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Avatar'**
+  String get changeAvatar;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
 }
 
 class _AppLocalizationsDelegate

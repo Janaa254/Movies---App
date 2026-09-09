@@ -35,6 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
   // ================= LOGIN =================
 
   Future<void> login() async {
+    final l10n =
+    AppLocalizations.of(context)!;
+
     final email =
     emailController.text.trim();
 
@@ -49,6 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
     await loginController.login(
       email: email,
       password: password,
+      l10n: l10n,
     );
 
     if (!mounted) return;
@@ -146,8 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           stackTrace,
                           ) {
                         return const Icon(
-                          Icons
-                              .play_circle_outline,
+                          Icons.play_circle_outline,
                           color:
                           AuthColors.yellow,
                           size: 70,
@@ -199,10 +202,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       icon: Icon(
                         obscurePassword
-                            ? Icons
-                            .visibility_off
-                            : Icons
-                            .visibility,
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                         color: Colors.white,
                         size: 28,
                       ),
@@ -218,8 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       alignment:
                       AlignmentDirectional
                           .centerEnd,
-                      child:
-                      GestureDetector(
+                      child: GestureDetector(
                         onTap:
                         goToForgetPassword,
                         child: Text(
@@ -329,6 +329,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const Spacer(),
 
+                  // ================= LANGUAGE =================
+
                   const LanguageSwitcher(),
 
                   SizedBox(
@@ -343,6 +345,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  // ================= DISPOSE =================
 
   @override
   void dispose() {

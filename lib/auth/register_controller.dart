@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../l10n/app_localizations.dart';
+
 class RegisterController {
   final FirebaseAuth _auth;
 
@@ -13,21 +15,22 @@ class RegisterController {
     required String password,
     required String confirmPassword,
     required String phone,
+    required AppLocalizations l10n,
   }) async {
     if (name.isEmpty ||
         email.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty ||
         phone.isEmpty) {
-      return 'Please fill in all fields.';
+      return l10n.fillAllFields;
     }
 
     if (password != confirmPassword) {
-      return 'Passwords do not match.';
+      return l10n.passwordsDoNotMatch;
     }
 
     if (password.length < 6) {
-      return 'Password must be at least 6 characters.';
+      return l10n.passwordMinLength;
     }
 
     try {
@@ -42,20 +45,20 @@ class RegisterController {
       return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        return 'This email is already in use.';
+        return l10n.emailAlreadyInUse;
       }
 
       if (e.code == 'invalid-email') {
-        return 'Please enter a valid email.';
+        return l10n.enterValidEmail;
       }
 
       if (e.code == 'weak-password') {
-        return 'The password is too weak.';
+        return l10n.weakPassword;
       }
 
-      return 'Something went wrong.';
+      return l10n.somethingWentWrong;
     } catch (_) {
-      return 'Something went wrong.';
+      return l10n.somethingWentWrong;
     }
   }
 }

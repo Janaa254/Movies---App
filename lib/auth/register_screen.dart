@@ -45,32 +45,43 @@ class _RegisterScreenState
 
   int selectedAvatar = 0;
 
+  // ================= REGISTER =================
+
   Future<void> register() async {
-    setState(() => isLoading = true);
+    final l10n =
+    AppLocalizations.of(context)!;
+
+    setState(() {
+      isLoading = true;
+    });
 
     final error =
     await registerController.register(
-      name: nameController.text.trim(),
-      email: emailController.text.trim(),
+      name:
+      nameController.text.trim(),
+      email:
+      emailController.text.trim(),
       password:
       passwordController.text.trim(),
       confirmPassword:
-      confirmPasswordController.text.trim(),
+      confirmPasswordController
+          .text
+          .trim(),
       phone:
       phoneController.text.trim(),
+      l10n: l10n,
     );
 
     if (!mounted) return;
 
-    setState(() => isLoading = false);
+    setState(() {
+      isLoading = false;
+    });
 
     if (error != null) {
       showMessage(error);
       return;
     }
-
-    final l10n =
-    AppLocalizations.of(context)!;
 
     showMessage(
       l10n.accountCreatedSuccessfully,
@@ -78,6 +89,8 @@ class _RegisterScreenState
 
     Navigator.pop(context);
   }
+
+  // ================= MESSAGE =================
 
   void showMessage(String message) {
     ScaffoldMessenger.of(context)
@@ -92,6 +105,8 @@ class _RegisterScreenState
     );
   }
 
+  // ================= BUILD =================
+
   @override
   Widget build(BuildContext context) {
     final l10n =
@@ -100,6 +115,7 @@ class _RegisterScreenState
     return Scaffold(
       backgroundColor:
       AuthColors.background,
+
       body: SafeArea(
         child: Padding(
           padding:
@@ -108,13 +124,18 @@ class _RegisterScreenState
           ),
           child: Column(
             children: [
+              // ================= HEADER =================
+
               SizedBox(
                 height: 60,
                 child: RegisterHeader(
-                  onBack: () =>
-                      Navigator.pop(context),
+                  onBack: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ),
+
+              // ================= AVATAR SELECTOR =================
 
               Expanded(
                 child:
@@ -132,6 +153,8 @@ class _RegisterScreenState
                 ),
               ),
 
+              // ================= AVATAR TITLE =================
+
               Text(
                 l10n.avatar,
                 style: const TextStyle(
@@ -145,29 +168,40 @@ class _RegisterScreenState
                 height: 12,
               ),
 
+              // ================= REGISTER FORM =================
+
               RegisterForm(
                 nameController:
                 nameController,
+
                 emailController:
                 emailController,
+
                 passwordController:
                 passwordController,
+
                 confirmPasswordController:
                 confirmPasswordController,
+
                 phoneController:
                 phoneController,
+
                 obscurePassword:
                 obscurePassword,
+
                 obscureConfirmPassword:
                 obscureConfirmPassword,
+
                 isLoading:
                 isLoading,
+
                 onTogglePassword: () {
                   setState(() {
                     obscurePassword =
                     !obscurePassword;
                   });
                 },
+
                 onToggleConfirmPassword:
                     () {
                   setState(() {
@@ -175,6 +209,7 @@ class _RegisterScreenState
                     !obscureConfirmPassword;
                   });
                 },
+
                 onRegister:
                 register,
               ),
@@ -183,24 +218,30 @@ class _RegisterScreenState
                 height: 12,
               ),
 
+              // ================= LOGIN LINK =================
+
               Row(
                 mainAxisAlignment:
                 MainAxisAlignment.center,
                 children: [
-                  Text(
-                    '${l10n.alreadyHaveAccount} ',
-                    style:
-                    const TextStyle(
-                      color:
-                      AuthColors.white,
-                      fontSize: 18,
+                  Flexible(
+                    child: Text(
+                      '${l10n.alreadyHaveAccount} ',
+                      style:
+                      const TextStyle(
+                        color:
+                        AuthColors.white,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
+
                   GestureDetector(
-                    onTap: () =>
-                        Navigator.pop(
-                          context,
-                        ),
+                    onTap: () {
+                      Navigator.pop(
+                        context,
+                      );
+                    },
                     child: Text(
                       l10n.login,
                       style:
@@ -220,6 +261,8 @@ class _RegisterScreenState
                 height: 12,
               ),
 
+              // ================= LANGUAGE =================
+
               const LanguageSwitcher(),
 
               const SizedBox(
@@ -231,6 +274,8 @@ class _RegisterScreenState
       ),
     );
   }
+
+  // ================= DISPOSE =================
 
   @override
   void dispose() {

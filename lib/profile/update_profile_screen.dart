@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
+
 import 'avatar_picker.dart';
 import 'profile_colors.dart';
 
@@ -93,6 +95,9 @@ class _UpdateProfileScreenState
   // ================= SAVE CHANGES =================
 
   Future<void> saveChanges() async {
+    final l10n =
+    AppLocalizations.of(context)!;
+
     FocusScope.of(context).unfocus();
 
     final String name =
@@ -103,7 +108,7 @@ class _UpdateProfileScreenState
 
     if (name.isEmpty || email.isEmpty) {
       showMessage(
-        'Please fill in all fields.',
+        l10n.fillAllFields,
       );
       return;
     }
@@ -113,7 +118,7 @@ class _UpdateProfileScreenState
 
     if (user == null) {
       showMessage(
-        'No user is currently logged in.',
+        l10n.noUserLoggedIn,
       );
       return;
     }
@@ -161,25 +166,25 @@ class _UpdateProfileScreenState
       );
     } on FirebaseAuthException catch (e) {
       String message =
-          'Something went wrong.';
+          l10n.somethingWentWrong;
 
       if (e.code == 'invalid-email') {
         message =
-        'Please enter a valid email.';
+            l10n.enterValidEmail;
       } else if (
       e.code == 'email-already-in-use') {
         message =
-        'This email is already in use.';
+            l10n.emailAlreadyInUse;
       } else if (
       e.code == 'requires-recent-login') {
         message =
-        'Please log in again before changing your email.';
+            l10n.loginAgainBeforeEmailChange;
       }
 
       showMessage(message);
     } catch (_) {
       showMessage(
-        'Something went wrong.',
+        l10n.somethingWentWrong,
       );
     } finally {
       if (mounted) {
@@ -193,7 +198,8 @@ class _UpdateProfileScreenState
   // ================= MESSAGE =================
 
   void showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor:
@@ -217,6 +223,9 @@ class _UpdateProfileScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n =
+    AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor:
       ProfileColors.background,
@@ -230,9 +239,9 @@ class _UpdateProfileScreenState
         const IconThemeData(
           color: Colors.white,
         ),
-        title: const Text(
-          'Edit Profile',
-          style: TextStyle(
+        title: Text(
+          l10n.editProfile,
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 22,
             fontWeight:
@@ -280,9 +289,9 @@ class _UpdateProfileScreenState
                 ProfileColors.yellow,
                 size: 19,
               ),
-              label: const Text(
-                'Change Avatar',
-                style: TextStyle(
+              label: Text(
+                l10n.changeAvatar,
+                style: const TextStyle(
                   color:
                   ProfileColors.yellow,
                   fontSize: 15,
@@ -298,7 +307,7 @@ class _UpdateProfileScreenState
 
             _buildTextField(
               controller: nameController,
-              labelText: 'Name',
+              labelText: l10n.name,
               icon:
               Icons.person_outline,
             ),
@@ -309,7 +318,7 @@ class _UpdateProfileScreenState
 
             _buildTextField(
               controller: emailController,
-              labelText: 'Email',
+              labelText: l10n.email,
               icon:
               Icons.email_outlined,
               keyboardType:
@@ -361,9 +370,10 @@ class _UpdateProfileScreenState
                     Colors.black,
                   ),
                 )
-                    : const Text(
-                  'Save Changes',
-                  style: TextStyle(
+                    : Text(
+                  l10n.saveChanges,
+                  style:
+                  const TextStyle(
                     fontSize: 17,
                     fontWeight:
                     FontWeight.bold,
@@ -425,8 +435,7 @@ class _UpdateProfileScreenState
   // ================= TEXT FIELD =================
 
   Widget _buildTextField({
-    required TextEditingController
-    controller,
+    required TextEditingController controller,
     required String labelText,
     required IconData icon,
     TextInputType? keyboardType,

@@ -104,5 +104,17 @@
   "onboardingTitle5": "قيّم وراجع واكتشف",
   "onboardingDescription5": "شارك رأيك في الأفلام التي شاهدتها، وتعرّف على تفاصيلها وساعد الآخرين على اكتشاف أفلام رائعة من خلال تقييماتك.",
 
-  "onboardingTitle6": "ابدأ المشاهدة الآن"
+  "onboardingTitle6": "ابدأ المشاهدة الآن",
+  "fillAllFields": "يرجى ملء جميع الحقول.",
+  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين.",
+  "passwordMinLength": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.",
+  "emailAlreadyInUse": "هذا البريد الإلكتروني مستخدم بالفعل.",
+  "enterValidEmail": "يرجى إدخال بريد إلكتروني صحيح.",
+  "weakPassword": "كلمة المرور ضعيفة جدًا.",
+  "noAccountFound": "لا يوجد حساب مرتبط بهذا البريد الإلكتروني.",
+  "incorrectEmailOrPassword": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+  "noUserLoggedIn": "لا يوجد مستخدم مسجل الدخول حاليًا.",
+  "loginAgainBeforeEmailChange": "يرجى تسجيل الدخول مرة أخرى قبل تغيير البريد الإلكتروني.",
+  "changeAvatar": "تغيير الصورة الشخصية",
+  "saveChanges": "حفظ التغييرات"
 }

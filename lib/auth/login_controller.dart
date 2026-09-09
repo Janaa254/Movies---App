@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../l10n/app_localizations.dart';
+
 class LoginController {
   final FirebaseAuth _auth;
 
@@ -10,9 +12,10 @@ class LoginController {
   Future<String?> login({
     required String email,
     required String password,
+    required AppLocalizations l10n,
   }) async {
     if (email.isEmpty || password.isEmpty) {
-      return 'Please fill in all fields.';
+      return l10n.fillAllFields;
     }
 
     try {
@@ -24,21 +27,21 @@ class LoginController {
       return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        return 'No account found with this email.';
+        return l10n.noAccountFound;
       }
 
       if (e.code == 'wrong-password' ||
           e.code == 'invalid-credential') {
-        return 'Incorrect email or password.';
+        return l10n.incorrectEmailOrPassword;
       }
 
       if (e.code == 'invalid-email') {
-        return 'Please enter a valid email.';
+        return l10n.enterValidEmail;
       }
 
-      return 'Something went wrong.';
+      return l10n.somethingWentWrong;
     } catch (_) {
-      return 'Something went wrong.';
+      return l10n.somethingWentWrong;
     }
   }
 }

@@ -105,5 +105,17 @@
   "onboardingTitle5": "Rate, Review, and Learn",
   "onboardingDescription5": "Share your thoughts on the movies you've watched. Dive deep into film details and help others discover great movies with your reviews.",
 
-  "onboardingTitle6": "Start Watching Now"
+  "onboardingTitle6": "Start Watching Now",
+  "fillAllFields": "Please fill in all fields.",
+  "passwordsDoNotMatch": "Passwords do not match.",
+  "passwordMinLength": "Password must be at least 6 characters.",
+  "emailAlreadyInUse": "This email is already in use.",
+  "enterValidEmail": "Please enter a valid email.",
+  "weakPassword": "The password is too weak.",
+  "noAccountFound": "No account found with this email.",
+  "incorrectEmailOrPassword": "Incorrect email or password.",
+  "noUserLoggedIn": "No user is currently logged in.",
+  "loginAgainBeforeEmailChange": "Please log in again before changing your email.",
+  "changeAvatar": "Change Avatar",
+  "saveChanges": "Save Changes"
 }

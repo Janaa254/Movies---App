@@ -302,4 +302,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingTitle6 => 'Start Watching Now';
+
+  @override
+  String get fillAllFields => 'Please fill in all fields.';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match.';
+
+  @override
+  String get passwordMinLength => 'Password must be at least 6 characters.';
+
+  @override
+  String get emailAlreadyInUse => 'This email is already in use.';
+
+  @override
+  String get enterValidEmail => 'Please enter a valid email.';
+
+  @override
+  String get weakPassword => 'The password is too weak.';
+
+  @override
+  String get noAccountFound => 'No account found with this email.';
+
+  @override
+  String get incorrectEmailOrPassword => 'Incorrect email or password.';
+
+  @override
+  String get noUserLoggedIn => 'No user is currently logged in.';
+
+  @override
+  String get loginAgainBeforeEmailChange =>
+      'Please log in again before changing your email.';
+
+  @override
+  String get changeAvatar => 'Change Avatar';
+
+  @override
+  String get saveChanges => 'Save Changes';
 }

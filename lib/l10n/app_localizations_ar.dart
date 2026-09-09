@@ -301,4 +301,43 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get onboardingTitle6 => 'ابدأ المشاهدة الآن';
+
+  @override
+  String get fillAllFields => 'يرجى ملء جميع الحقول.';
+
+  @override
+  String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين.';
+
+  @override
+  String get passwordMinLength =>
+      'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.';
+
+  @override
+  String get emailAlreadyInUse => 'هذا البريد الإلكتروني مستخدم بالفعل.';
+
+  @override
+  String get enterValidEmail => 'يرجى إدخال بريد إلكتروني صحيح.';
+
+  @override
+  String get weakPassword => 'كلمة المرور ضعيفة جدًا.';
+
+  @override
+  String get noAccountFound => 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.';
+
+  @override
+  String get incorrectEmailOrPassword =>
+      'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+
+  @override
+  String get noUserLoggedIn => 'لا يوجد مستخدم مسجل الدخول حاليًا.';
+
+  @override
+  String get loginAgainBeforeEmailChange =>
+      'يرجى تسجيل الدخول مرة أخرى قبل تغيير البريد الإلكتروني.';
+
+  @override
+  String get changeAvatar => 'تغيير الصورة الشخصية';
+
+  @override
+  String get saveChanges => 'حفظ التغييرات';
 }
