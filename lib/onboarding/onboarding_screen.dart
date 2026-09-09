@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../auth/login_screen.dart';
+import '../auth/widgets/language_switcher.dart';
+import '../l10n/app_localizations.dart';
 
 import 'onboarding_data.dart';
 import 'onboarding_theme.dart';
@@ -16,8 +18,7 @@ class OnboardingScreen extends StatefulWidget {
       _OnboardingScreenState();
 }
 
-class _OnboardingScreenState
-    extends State<OnboardingScreen> {
+class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController =
   PageController();
 
@@ -26,6 +27,10 @@ class _OnboardingScreenState
   // ================= NEXT =================
 
   void nextPage() {
+    final l10n = AppLocalizations.of(context)!;
+    final onboardingData =
+    getOnboardingData(l10n);
+
     if (currentPage <
         onboardingData.length - 1) {
       _pageController.nextPage(
@@ -69,7 +74,6 @@ class _OnboardingScreenState
   @override
   void dispose() {
     _pageController.dispose();
-
     super.dispose();
   }
 
@@ -77,55 +81,73 @@ class _OnboardingScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n =
+    AppLocalizations.of(context)!;
+
+    final onboardingData =
+    getOnboardingData(l10n);
+
     return Scaffold(
       backgroundColor:
       OnboardingTheme.background,
 
-      body: PageView.builder(
-        controller: _pageController,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // ================= ONBOARDING PAGES =================
 
-        itemCount:
-        onboardingData.length,
+            Positioned.fill(
+              child: PageView.builder(
+                controller:
+                _pageController,
+                itemCount:
+                onboardingData.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    currentPage = index;
+                  });
+                },
+                itemBuilder: (
+                    context,
+                    index,
+                    ) {
+                  final item =
+                  onboardingData[index];
 
-        onPageChanged: (index) {
-          setState(() {
-            currentPage = index;
-          });
-        },
+                  if (index == 0) {
+                    return FirstOnboardingPage(
+                      item: item,
+                      onNext: nextPage,
+                    );
+                  }
 
-        itemBuilder: (
-            context,
-            index,
-            ) {
-          final item =
-          onboardingData[index];
+                  return StandardOnboardingPage(
+                    item: item,
+                    showBack:
+                    index >= 2,
+                    isLastPage:
+                    index ==
+                        onboardingData
+                            .length -
+                            1,
+                    onNext:
+                    nextPage,
+                    onBack:
+                    previousPage,
+                  );
+                },
+              ),
+            ),
 
-          // ================= FIRST PAGE =================
+            // ================= LANGUAGE SWITCHER =================
 
-          if (index == 0) {
-            return FirstOnboardingPage(
-              item: item,
-              onNext: nextPage,
-            );
-          }
-
-          // ================= OTHER PAGES =================
-
-          return StandardOnboardingPage(
-            item: item,
-
-            showBack: index >= 2,
-
-            isLastPage:
-            index ==
-                onboardingData.length -
-                    1,
-
-            onNext: nextPage,
-
-            onBack: previousPage,
-          );
-        },
+            const PositionedDirectional(
+              top: 14,
+              end: 18,
+              child: LanguageSwitcher(),
+            ),
+          ],
+        ),
       ),
     );
   }

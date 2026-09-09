@@ -263,4 +263,42 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get couldNotOpenTrailer => 'تعذر فتح الإعلان.';
+
+  @override
+  String get onboardingTitle1 => 'اكتشف فيلمك\nالمفضل القادم';
+
+  @override
+  String get onboardingDescription1 =>
+      'استمتع بمكتبة ضخمة من الأفلام التي تناسب جميع الأذواق. بالتأكيد ستجد ما يعجبك.';
+
+  @override
+  String get onboardingTitle2 => 'اكتشف الأفلام';
+
+  @override
+  String get onboardingDescription2 =>
+      'استكشف مجموعة كبيرة من الأفلام بمختلف الأنواع والجودات، واعثر على فيلمك المفضل القادم بسهولة.';
+
+  @override
+  String get onboardingTitle3 => 'أنشئ قائمة المشاهدة';
+
+  @override
+  String get onboardingDescription3 =>
+      'احفظ الأفلام في قائمة المشاهدة لتتذكر ما تريد مشاهدته لاحقًا، واستمتع بأفلام متنوعة من مختلف الأنواع.';
+
+  @override
+  String get onboardingTitle4 => 'استكشف جميع الأنواع';
+
+  @override
+  String get onboardingDescription4 =>
+      'اكتشف أفلامًا من جميع الأنواع المتاحة، واعثر كل يوم على شيء جديد وممتع لمشاهدته.';
+
+  @override
+  String get onboardingTitle5 => 'قيّم وراجع واكتشف';
+
+  @override
+  String get onboardingDescription5 =>
+      'شارك رأيك في الأفلام التي شاهدتها، وتعرّف على تفاصيلها وساعد الآخرين على اكتشاف أفلام رائعة من خلال تقييماتك.';
+
+  @override
+  String get onboardingTitle6 => 'ابدأ المشاهدة الآن';
 }
