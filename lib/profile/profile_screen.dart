@@ -24,8 +24,7 @@ import 'tabs/watchlist_tab.dart';
 import 'tabs/history_tab.dart';
 import 'tabs/favorites_tab.dart';
 
-class ProfileScreen
-    extends StatefulWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
@@ -33,8 +32,7 @@ class ProfileScreen
       _ProfileScreenState();
 }
 
-class _ProfileScreenState
-    extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
   int selectedAvatar = 0;
   bool isLoadingAvatar = true;
 
@@ -52,7 +50,6 @@ class _ProfileScreenState
   @override
   void initState() {
     super.initState();
-
     loadAvatar();
   }
 
@@ -70,7 +67,6 @@ class _ProfileScreenState
           isLoadingAvatar = false;
         });
       }
-
       return;
     }
 
@@ -84,7 +80,6 @@ class _ProfileScreenState
       if (!mounted) return;
 
       final data = doc.data();
-
       final avatarIndex =
       data?['avatarIndex'];
 
@@ -114,8 +109,7 @@ class _ProfileScreenState
   // UPDATE PROFILE
   // ============================================================
 
-  Future<void>
-  openUpdateProfile() async {
+  Future<void> openUpdateProfile() async {
     final bool? updated =
     await Navigator.push<bool>(
       context,
@@ -125,8 +119,7 @@ class _ProfileScreenState
       ),
     );
 
-    if (updated == true &&
-        mounted) {
+    if (updated == true && mounted) {
       await FirebaseAuth.instance
           .currentUser
           ?.reload();
@@ -189,8 +182,7 @@ class _ProfileScreenState
         ProfileColors.cardColor,
         child: const Icon(
           Icons.person,
-          color:
-          Colors.white70,
+          color: Colors.white70,
           size: 55,
         ),
       );
@@ -214,12 +206,10 @@ class _ProfileScreenState
           width: 104,
           height: 104,
           color:
-          ProfileColors
-              .cardColor,
+          ProfileColors.cardColor,
           child: const Icon(
             Icons.person,
-            color:
-            Colors.white70,
+            color: Colors.white70,
             size: 55,
           ),
         );
@@ -326,7 +316,6 @@ class _ProfileScreenState
     return Scaffold(
       backgroundColor:
       ProfileColors.background,
-
       body: SafeArea(
         child: Column(
           children: [
@@ -345,12 +334,9 @@ class _ProfileScreenState
               ),
               child: Column(
                 children: [
-                  // ================= LANGUAGE =================
-
                   const Align(
                     alignment:
-                    AlignmentDirectional
-                        .centerEnd,
+                    Alignment.centerLeft,
                     child:
                     CompactLanguageSwitcher(),
                   ),
@@ -367,10 +353,8 @@ class _ProfileScreenState
                       Column(
                         children: [
                           Container(
-                            width:
-                            116,
-                            height:
-                            116,
+                            width: 116,
+                            height: 116,
                             padding:
                             const EdgeInsets
                                 .all(
@@ -397,26 +381,21 @@ class _ProfileScreenState
                           ),
 
                           SizedBox(
-                            width:
-                            125,
-                            child:
-                            Text(
+                            width: 125,
+                            child: Text(
                               name,
                               textAlign:
                               TextAlign
                                   .center,
-                              maxLines:
-                              1,
+                              maxLines: 1,
                               overflow:
                               TextOverflow
                                   .ellipsis,
                               style:
                               const TextStyle(
                                 color:
-                                Colors
-                                    .white,
-                                fontSize:
-                                18,
+                                Colors.white,
+                                fontSize: 18,
                                 fontWeight:
                                 FontWeight
                                     .bold,
@@ -436,8 +415,7 @@ class _ProfileScreenState
                         ),
                         child: Row(
                           children: [
-                            StreamBuilder<
-                                int>(
+                            StreamBuilder<int>(
                               stream:
                               watchlistService
                                   .getWatchlistCountStream(),
@@ -452,7 +430,8 @@ class _ProfileScreenState
 
                                 return _Stat(
                                   number:
-                                  count.toString(),
+                                  count
+                                      .toString(),
                                   title:
                                   l10n.watchList,
                                 );
@@ -464,8 +443,7 @@ class _ProfileScreenState
                             ),
 
                             _Stat(
-                              number:
-                              '0',
+                              number: '0',
                               title:
                               l10n.history,
                             ),
@@ -474,8 +452,7 @@ class _ProfileScreenState
                               width: 20,
                             ),
 
-                            StreamBuilder<
-                                int>(
+                            StreamBuilder<int>(
                               stream:
                               favoriteService
                                   .getFavoritesCountStream(),
@@ -490,7 +467,8 @@ class _ProfileScreenState
 
                                 return _Stat(
                                   number:
-                                  count.toString(),
+                                  count
+                                      .toString(),
                                   title:
                                   l10n.favorites,
                                 );
@@ -510,10 +488,8 @@ class _ProfileScreenState
                     children: [
                       Expanded(
                         flex: 2,
-                        child:
-                        SizedBox(
-                          height:
-                          54,
+                        child: SizedBox(
+                          height: 54,
                           child:
                           ElevatedButton(
                             onPressed:
@@ -525,10 +501,8 @@ class _ProfileScreenState
                               ProfileColors
                                   .yellow,
                               foregroundColor:
-                              Colors
-                                  .black,
-                              elevation:
-                              0,
+                              Colors.black,
+                              elevation: 0,
                               shape:
                               RoundedRectangleBorder(
                                 borderRadius:
@@ -538,13 +512,11 @@ class _ProfileScreenState
                                 ),
                               ),
                             ),
-                            child:
-                            Text(
+                            child: Text(
                               l10n.editProfile,
                               style:
                               const TextStyle(
-                                fontSize:
-                                17,
+                                fontSize: 17,
                                 fontWeight:
                                 FontWeight
                                     .w500,
@@ -559,10 +531,8 @@ class _ProfileScreenState
                       ),
 
                       Expanded(
-                        child:
-                        SizedBox(
-                          height:
-                          54,
+                        child: SizedBox(
+                          height: 54,
                           child:
                           ElevatedButton(
                             onPressed:
@@ -574,10 +544,8 @@ class _ProfileScreenState
                               ProfileColors
                                   .red,
                               foregroundColor:
-                              Colors
-                                  .white,
-                              elevation:
-                              0,
+                              Colors.white,
+                              elevation: 0,
                               shape:
                               RoundedRectangleBorder(
                                 borderRadius:
@@ -587,8 +555,7 @@ class _ProfileScreenState
                                 ),
                               ),
                             ),
-                            child:
-                            Row(
+                            child: Row(
                               mainAxisAlignment:
                               MainAxisAlignment
                                   .center,
@@ -604,16 +571,12 @@ class _ProfileScreenState
                                         .w500,
                                   ),
                                 ),
-
                                 const SizedBox(
-                                  width:
-                                  6,
+                                  width: 6,
                                 ),
-
                                 const Icon(
                                   Icons.logout,
-                                  size:
-                                  20,
+                                  size: 20,
                                 ),
                               ],
                             ),
@@ -630,8 +593,7 @@ class _ProfileScreenState
                   Row(
                     children: [
                       Expanded(
-                        child:
-                        _ProfileTab(
+                        child: _ProfileTab(
                           icon:
                           Icons
                               .format_list_bulleted_rounded,
@@ -641,19 +603,16 @@ class _ProfileScreenState
                           selectedSection ==
                               0,
                           onTap: () {
-                            setState(
-                                  () {
-                                selectedSection =
-                                0;
-                              },
-                            );
+                            setState(() {
+                              selectedSection =
+                              0;
+                            });
                           },
                         ),
                       ),
 
                       Expanded(
-                        child:
-                        _ProfileTab(
+                        child: _ProfileTab(
                           icon:
                           Icons.history,
                           title:
@@ -662,19 +621,16 @@ class _ProfileScreenState
                           selectedSection ==
                               1,
                           onTap: () {
-                            setState(
-                                  () {
-                                selectedSection =
-                                1;
-                              },
-                            );
+                            setState(() {
+                              selectedSection =
+                              1;
+                            });
                           },
                         ),
                       ),
 
                       Expanded(
-                        child:
-                        _ProfileTab(
+                        child: _ProfileTab(
                           icon:
                           Icons.favorite,
                           title:
@@ -683,12 +639,10 @@ class _ProfileScreenState
                           selectedSection ==
                               2,
                           onTap: () {
-                            setState(
-                                  () {
-                                selectedSection =
-                                2;
-                              },
-                            );
+                            setState(() {
+                              selectedSection =
+                              2;
+                            });
                           },
                         ),
                       ),
@@ -700,8 +654,7 @@ class _ProfileScreenState
 
             Expanded(
               child: IndexedStack(
-                index:
-                selectedSection,
+                index: selectedSection,
                 children: const [
                   WatchlistTab(),
                   HistoryTab(),
@@ -733,7 +686,6 @@ class _ProfileScreenState
     return Scaffold(
       backgroundColor:
       ProfileColors.background,
-
       body: SafeArea(
         child: Stack(
           children: [
@@ -766,8 +718,7 @@ class _ProfileScreenState
                           color:
                           Colors
                               .white70,
-                          size:
-                          55,
+                          size: 55,
                         ),
                       ),
                     ),
@@ -780,17 +731,14 @@ class _ProfileScreenState
                       l10n
                           .welcomeToMoviesApp,
                       textAlign:
-                      TextAlign
-                          .center,
+                      TextAlign.center,
                       style:
                       const TextStyle(
                         color:
                         Colors.white,
-                        fontSize:
-                        24,
+                        fontSize: 24,
                         fontWeight:
-                        FontWeight
-                            .bold,
+                        FontWeight.bold,
                       ),
                     ),
 
@@ -802,14 +750,12 @@ class _ProfileScreenState
                       l10n
                           .guestProfileDescription,
                       textAlign:
-                      TextAlign
-                          .center,
+                      TextAlign.center,
                       style:
                       const TextStyle(
                         color:
                         Colors.white54,
-                        fontSize:
-                        14,
+                        fontSize: 14,
                       ),
                     ),
 
@@ -854,8 +800,7 @@ class _ProfileScreenState
                           l10n.login,
                           style:
                           const TextStyle(
-                            fontSize:
-                            16,
+                            fontSize: 16,
                             fontWeight:
                             FontWeight
                                 .bold,
@@ -894,8 +839,7 @@ class _ProfileScreenState
                             color:
                             ProfileColors
                                 .yellow,
-                            width:
-                            1.5,
+                            width: 1.5,
                           ),
                           shape:
                           RoundedRectangleBorder(
@@ -911,8 +855,7 @@ class _ProfileScreenState
                               .createAccount,
                           style:
                           const TextStyle(
-                            fontSize:
-                            16,
+                            fontSize: 16,
                             fontWeight:
                             FontWeight
                                 .bold,
@@ -925,9 +868,9 @@ class _ProfileScreenState
               ),
             ),
 
-            const PositionedDirectional(
+            const Positioned(
               top: 12,
-              end: 16,
+              left: 16,
               child:
               CompactLanguageSwitcher(),
             ),
@@ -966,8 +909,7 @@ class _Stat extends StatelessWidget {
           number,
           style:
           const TextStyle(
-            color:
-            Colors.white,
+            color: Colors.white,
             fontSize: 28,
             fontWeight:
             FontWeight.bold,
@@ -984,8 +926,7 @@ class _Stat extends StatelessWidget {
           TextAlign.center,
           style:
           const TextStyle(
-            color:
-            Colors.white,
+            color: Colors.white,
             fontSize: 14,
             fontWeight:
             FontWeight.w600,
@@ -1000,8 +941,7 @@ class _Stat extends StatelessWidget {
 // PROFILE TAB
 // ============================================================
 
-class _ProfileTab
-    extends StatelessWidget {
+class _ProfileTab extends StatelessWidget {
   final IconData icon;
   final String title;
   final bool isSelected;
@@ -1050,18 +990,14 @@ class _ProfileTab
                 Text(
                   title,
                   textAlign:
-                  TextAlign
-                      .center,
+                  TextAlign.center,
                   style:
                   TextStyle(
                     color:
                     isSelected
-                        ? Colors
-                        .white
-                        : Colors
-                        .white70,
-                    fontSize:
-                    15,
+                        ? Colors.white
+                        : Colors.white70,
+                    fontSize: 15,
                     fontWeight:
                     isSelected
                         ? FontWeight
@@ -1081,8 +1017,7 @@ class _ProfileTab
           AnimatedContainer(
             duration:
             const Duration(
-              milliseconds:
-              200,
+              milliseconds: 200,
             ),
             width:
             isSelected

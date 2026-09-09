@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/profile/profile_screen.dart';
 
 import '../l10n/app_localizations.dart';
 
@@ -66,26 +65,21 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    Navigator.pushReplacement(
+    Navigator.pushNamedAndRemoveUntil(
       context,
-      MaterialPageRoute(
-        builder: (_) =>
-        const ProfileScreen(),
-      ),
+      '/home',
+          (route) => false,
     );
   }
 
   // ================= MESSAGE =================
 
   void showMessage(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor:
-        AuthColors.yellow,
-        behavior:
-        SnackBarBehavior.floating,
+        backgroundColor: AuthColors.yellow,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -132,8 +126,6 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: Column(
                 children: [
-                  // ================= LOGO =================
-
                   const SizedBox(
                     height: 20,
                   ),
@@ -151,8 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ) {
                         return const Icon(
                           Icons.play_circle_outline,
-                          color:
-                          AuthColors.yellow,
+                          color: AuthColors.yellow,
                           size: 70,
                         );
                       },
@@ -164,14 +155,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     height * 0.025,
                   ),
 
-                  // ================= EMAIL =================
-
                   AuthTextField(
                     controller:
                     emailController,
                     hintText:
                     l10n.email,
-                    icon: Icons.email,
+                    icon:
+                    Icons.email,
                     keyboardType:
                     TextInputType
                         .emailAddress,
@@ -182,14 +172,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     height * 0.018,
                   ),
 
-                  // ================= PASSWORD =================
-
                   AuthTextField(
                     controller:
                     passwordController,
                     hintText:
                     l10n.password,
-                    icon: Icons.lock,
+                    icon:
+                    Icons.lock,
                     obscureText:
                     obscurePassword,
                     suffixIcon:
@@ -204,13 +193,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         obscurePassword
                             ? Icons.visibility_off
                             : Icons.visibility,
-                        color: Colors.white,
+                        color:
+                        Colors.white,
                         size: 28,
                       ),
                     ),
                   ),
-
-                  // ================= FORGET PASSWORD =================
 
                   SizedBox(
                     height:
@@ -238,8 +226,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  // ================= LOGIN =================
-
                   SizedBox(
                     height:
                     height * 0.075,
@@ -247,7 +233,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     AuthPrimaryButton(
                       text:
                       l10n.login,
-                      onPressed: login,
+                      onPressed:
+                      login,
                       isLoading:
                       isLoading,
                     ),
@@ -257,8 +244,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     height:
                     height * 0.025,
                   ),
-
-                  // ================= CREATE ACCOUNT =================
 
                   SizedBox(
                     height:
@@ -305,16 +290,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     height * 0.025,
                   ),
 
-                  // ================= OR =================
-
                   const AuthDivider(),
 
                   SizedBox(
                     height:
                     height * 0.025,
                   ),
-
-                  // ================= GOOGLE LOGIN =================
 
                   AuthPrimaryButton(
                     text:
@@ -328,8 +309,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
                   const Spacer(),
-
-                  // ================= LANGUAGE =================
 
                   const LanguageSwitcher(),
 
