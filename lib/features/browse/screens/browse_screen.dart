@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../widgets/app_bottom_nav.dart';
+
 import '../../movie_details/screens/movie_details_screen.dart';
 import '../../search/screens/search_screen.dart';
 import '../../../profile/profile_screen.dart';
@@ -123,7 +125,14 @@ class _BrowseViewState extends State<_BrowseView> {
         ),
       ),
 
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      // ==========================================================
+      // UNIFIED BOTTOM NAVIGATION
+      // ==========================================================
+
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: 2,
+        onTap: _onNavigationTap,
+      ),
     );
   }
 
@@ -280,7 +289,6 @@ class _BrowseViewState extends State<_BrowseView> {
 
         return BrowseMovieCard(
           movie: movie,
-
           onTap: () {
             Navigator.push(
               context,
@@ -363,8 +371,30 @@ class _BrowseViewState extends State<_BrowseView> {
   }
 
   // ============================================================
-  // NAVIGATION METHODS
+  // NAVIGATION
   // ============================================================
+
+  void _onNavigationTap(
+      int index,
+      ) {
+    if (index == 0) {
+      _openHome();
+      return;
+    }
+
+    if (index == 1) {
+      _openSearch();
+      return;
+    }
+
+    if (index == 2) {
+      return;
+    }
+
+    if (index == 3) {
+      _openProfile();
+    }
+  }
 
   void _openHome() {
     Navigator.pushReplacementNamed(
@@ -388,93 +418,6 @@ class _BrowseViewState extends State<_BrowseView> {
       MaterialPageRoute(
         builder: (_) => const ProfileScreen(),
       ),
-    );
-  }
-
-  // ============================================================
-  // BOTTOM NAVIGATION
-  // ============================================================
-
-  Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      // Browse screen = index 2
-      currentIndex: 2,
-
-      backgroundColor: const Color(
-        0xFF1E1E1E,
-      ),
-
-      selectedItemColor: Colors.amber,
-      unselectedItemColor: Colors.white54,
-
-      type: BottomNavigationBarType.fixed,
-
-      selectedFontSize: 10,
-      unselectedFontSize: 10,
-
-      onTap: (index) {
-        // HOME
-        if (index == 0) {
-          _openHome();
-          return;
-        }
-
-        // SEARCH
-        if (index == 1) {
-          _openSearch();
-          return;
-        }
-
-        // BROWSE
-        if (index == 2) {
-          return;
-        }
-
-        // PROFILE
-        if (index == 3) {
-          _openProfile();
-          return;
-        }
-      },
-
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home_outlined,
-          ),
-          activeIcon: Icon(
-            Icons.home,
-          ),
-          label: 'Home',
-        ),
-
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.search,
-          ),
-          label: 'Search',
-        ),
-
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.movie_outlined,
-          ),
-          activeIcon: Icon(
-            Icons.movie,
-          ),
-          label: 'Browse',
-        ),
-
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.person_outline,
-          ),
-          activeIcon: Icon(
-            Icons.person,
-          ),
-          label: 'Profile',
-        ),
-      ],
     );
   }
 }

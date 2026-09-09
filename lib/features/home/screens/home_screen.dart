@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/movie_model.dart';
+import '../../../widgets/app_bottom_nav.dart';
 
 import '../../browse/screens/browse_screen.dart';
 import '../../movie_details/screens/movie_details_screen.dart';
@@ -30,13 +31,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _scrollController.addListener(_onScroll);
 
-    context.read<HomeBloc>().add(LoadMovies());
+    context.read<HomeBloc>().add(
+      LoadMovies(),
+    );
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 300) {
-      context.read<HomeBloc>().add(LoadMoreMovies());
+      context.read<HomeBloc>().add(
+        LoadMoreMovies(),
+      );
     }
   }
 
@@ -63,11 +68,15 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             if (state is HomeError) {
-              return _buildError(state.message);
+              return _buildError(
+                state.message,
+              );
             }
 
             if (state is HomeSuccess) {
-              return _buildHome(state);
+              return _buildHome(
+                state,
+              );
             }
 
             return const SizedBox();
@@ -75,7 +84,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      // ==========================================================
+      // UNIFIED BOTTOM NAVIGATION
+      // ==========================================================
+
+      bottomNavigationBar: AppBottomNav(
+        currentIndex: 0,
+        onTap: _onNavigationTap,
+      ),
     );
   }
 
@@ -83,7 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // HOME CONTENT
   // ============================================================
 
-  Widget _buildHome(HomeSuccess state) {
+  Widget _buildHome(
+      HomeSuccess state,
+      ) {
     if (state.movies.isEmpty) {
       return const Center(
         child: Text(
@@ -97,10 +115,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return RefreshIndicator(
       color: Colors.amber,
-      backgroundColor: const Color(0xFF1E1E1E),
+      backgroundColor: const Color(
+        0xFF1E1E1E,
+      ),
 
       onRefresh: () async {
-        context.read<HomeBloc>().add(LoadMovies());
+        context.read<HomeBloc>().add(
+          LoadMovies(),
+        );
       },
 
       child: ListView(
@@ -112,24 +134,31 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
 
         children: [
-          _buildAvailableNow(state.movies),
+          _buildAvailableNow(
+            state.movies,
+          ),
 
-          const SizedBox(height: 18),
+          const SizedBox(
+            height: 18,
+          ),
 
           _buildSectionTitle(
             title: 'Action',
-            onSeeMore: () {
-              _openBrowse();
-            },
+            onSeeMore: _openBrowse,
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(
+            height: 10,
+          ),
 
-          _buildMoviesList(state.movies),
+          _buildMoviesList(
+            state.movies,
+          ),
 
           if (state.isLoadingMore) ...[
-            const SizedBox(height: 15),
-
+            const SizedBox(
+              height: 15,
+            ),
             const Center(
               child: CircularProgressIndicator(
                 color: Colors.amber,
@@ -137,7 +166,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
 
-          const SizedBox(height: 20),
+          const SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
@@ -147,7 +178,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // AVAILABLE NOW / HERO
   // ============================================================
 
-  Widget _buildAvailableNow(List<MovieModel> movies) {
+  Widget _buildAvailableNow(
+      List<MovieModel> movies,
+      ) {
     final mainMovie = movies.first;
 
     final leftMovie =
@@ -171,12 +204,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainMovie.largeCoverImage ??
                   mainMovie.mediumCoverImage ??
                   '',
-
               fit: BoxFit.cover,
-
-              errorBuilder: (_, __, ___) {
+              errorBuilder: (
+                  _,
+                  __,
+                  ___,
+                  ) {
                 return Container(
-                  color: const Color(0xFF151515),
+                  color: const Color(
+                    0xFF151515,
+                  ),
                 );
               },
             ),
@@ -192,13 +229,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-
                   colors: [
                     Color(0x55000000),
                     Color(0x99000000),
                     Color(0xFF121212),
                   ],
-
                   stops: [
                     0.0,
                     0.55,
@@ -217,7 +252,6 @@ class _HomeScreenState extends State<HomeScreen> {
             top: 12,
             left: 0,
             right: 0,
-
             child: Center(
               child: Image.asset(
                 'assets/images/available_now.png',
@@ -234,7 +268,6 @@ class _HomeScreenState extends State<HomeScreen> {
           Positioned(
             left: -28,
             top: 72,
-
             child: _buildSidePoster(
               leftMovie,
             ),
@@ -247,7 +280,6 @@ class _HomeScreenState extends State<HomeScreen> {
           Positioned(
             right: -28,
             top: 72,
-
             child: _buildSidePoster(
               rightMovie,
             ),
@@ -261,7 +293,6 @@ class _HomeScreenState extends State<HomeScreen> {
             top: 60,
             left: 0,
             right: 0,
-
             child: Center(
               child: GestureDetector(
                 onTap: () {
@@ -269,15 +300,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainMovie.id,
                   );
                 },
-
                 child: Container(
                   width: 170,
                   height: 250,
-
                   decoration: BoxDecoration(
-                    borderRadius:
-                    BorderRadius.circular(8),
-
+                    borderRadius: BorderRadius.circular(
+                      8,
+                    ),
                     boxShadow: const [
                       BoxShadow(
                         color: Colors.black87,
@@ -290,30 +319,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-
                   child: ClipRRect(
-                    borderRadius:
-                    BorderRadius.circular(8),
-
+                    borderRadius: BorderRadius.circular(
+                      8,
+                    ),
                     child: Image.network(
                       mainMovie.largeCoverImage ??
                           mainMovie.mediumCoverImage ??
                           '',
-
                       fit: BoxFit.cover,
-
-                      errorBuilder:
-                          (_, __, ___) {
+                      errorBuilder: (
+                          _,
+                          __,
+                          ___,
+                          ) {
                         return Container(
-                          color:
-                          const Color(
+                          color: const Color(
                             0xFF202020,
                           ),
-
                           child: const Icon(
                             Icons.movie,
-                            color:
-                            Colors.white54,
+                            color: Colors.white54,
                             size: 50,
                           ),
                         );
@@ -333,7 +359,6 @@ class _HomeScreenState extends State<HomeScreen> {
             left: 0,
             right: 0,
             bottom: 15,
-
             child: Center(
               child: GestureDetector(
                 onTap: () {
@@ -341,7 +366,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainMovie.id,
                   );
                 },
-
                 child: Image.asset(
                   'assets/images/watch_now.png',
                   height: 48,
@@ -365,11 +389,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       width: 85,
       height: 225,
-
       decoration: BoxDecoration(
-        borderRadius:
-        BorderRadius.circular(8),
-
+        borderRadius: BorderRadius.circular(
+          8,
+        ),
         boxShadow: const [
           BoxShadow(
             color: Colors.black87,
@@ -377,25 +400,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-
       child: ClipRRect(
-        borderRadius:
-        BorderRadius.circular(8),
-
+        borderRadius: BorderRadius.circular(
+          8,
+        ),
         child: Image.network(
           movie.mediumCoverImage ??
               movie.largeCoverImage ??
               '',
-
           fit: BoxFit.cover,
-
-          errorBuilder: (_, __, ___) {
+          errorBuilder: (
+              _,
+              __,
+              ___,
+              ) {
             return Container(
-              color:
-              const Color(
+              color: const Color(
                 0xFF202020,
               ),
-
               child: const Icon(
                 Icons.movie,
                 color: Colors.white54,
@@ -416,43 +438,35 @@ class _HomeScreenState extends State<HomeScreen> {
     required VoidCallback onSeeMore,
   }) {
     return Padding(
-      padding:
-      const EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 14,
       ),
-
       child: Row(
         mainAxisAlignment:
         MainAxisAlignment.spaceBetween,
-
         children: [
           Text(
             title,
-
             style: const TextStyle(
               color: Colors.white,
               fontSize: 19,
-              fontWeight:
-              FontWeight.bold,
+              fontWeight: FontWeight.bold,
             ),
           ),
-
           GestureDetector(
             onTap: onSeeMore,
-
             child: const Row(
               children: [
                 Text(
                   'See More',
-
                   style: TextStyle(
                     color: Colors.amber,
                     fontSize: 12,
                   ),
                 ),
-
-                SizedBox(width: 4),
-
+                SizedBox(
+                  width: 4,
+                ),
                 Icon(
                   Icons.arrow_forward_ios,
                   color: Colors.amber,
@@ -475,23 +489,18 @@ class _HomeScreenState extends State<HomeScreen> {
       ) {
     return SizedBox(
       height: 225,
-
-      child:
-      NotificationListener<
-          ScrollNotification>(
-        onNotification:
-            (notification) {
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (
+            notification,
+            ) {
           if (notification
           is ScrollUpdateNotification) {
             final metrics =
                 notification.metrics;
 
             if (metrics.pixels >=
-                metrics.maxScrollExtent -
-                    100) {
-              context
-                  .read<HomeBloc>()
-                  .add(
+                metrics.maxScrollExtent - 100) {
+              context.read<HomeBloc>().add(
                 LoadMoreMovies(),
               );
             }
@@ -499,32 +508,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return false;
         },
-
         child: ListView.separated(
-          padding:
-          const EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: 14,
           ),
-
-          scrollDirection:
-          Axis.horizontal,
-
+          scrollDirection: Axis.horizontal,
           itemCount: movies.length,
-
-          separatorBuilder:
-              (_, __) =>
+          separatorBuilder: (
+              _,
+              __,
+              ) =>
           const SizedBox(
             width: 14,
           ),
-
-          itemBuilder:
-              (context, index) {
+          itemBuilder: (
+              context,
+              index,
+              ) {
             final movie =
             movies[index];
 
             return MovieCard(
               movie: movie,
-
               onTap: () {
                 _openMovieDetails(
                   movie.id,
@@ -546,7 +551,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ) {
     Navigator.push(
       context,
-
       MaterialPageRoute(
         builder: (_) =>
             MovieDetailsScreen(
@@ -560,10 +564,31 @@ class _HomeScreenState extends State<HomeScreen> {
   // NAVIGATION
   // ============================================================
 
+  void _onNavigationTap(
+      int index,
+      ) {
+    if (index == 0) {
+      return;
+    }
+
+    if (index == 1) {
+      _openSearch();
+      return;
+    }
+
+    if (index == 2) {
+      _openBrowse();
+      return;
+    }
+
+    if (index == 3) {
+      _openProfile();
+    }
+  }
+
   void _openSearch() {
     Navigator.pushReplacement(
       context,
-
       MaterialPageRoute(
         builder: (_) =>
         const SearchScreen(),
@@ -574,7 +599,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void _openBrowse() {
     Navigator.pushReplacement(
       context,
-
       MaterialPageRoute(
         builder: (_) =>
         const BrowseScreen(),
@@ -585,7 +609,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void _openProfile() {
     Navigator.pushReplacement(
       context,
-
       MaterialPageRoute(
         builder: (_) =>
         const ProfileScreen(),
@@ -602,27 +625,23 @@ class _HomeScreenState extends State<HomeScreen> {
       ) {
     return Center(
       child: Padding(
-        padding:
-        const EdgeInsets.all(24),
-
+        padding: const EdgeInsets.all(
+          24,
+        ),
         child: Column(
           mainAxisAlignment:
           MainAxisAlignment.center,
-
           children: [
             const Icon(
               Icons.error_outline,
               color: Colors.redAccent,
               size: 50,
             ),
-
             const SizedBox(
               height: 16,
             ),
-
             const Text(
               'Something went wrong',
-
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
@@ -630,143 +649,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 FontWeight.bold,
               ),
             ),
-
             const SizedBox(
               height: 8,
             ),
-
             Text(
               message,
-
               textAlign:
               TextAlign.center,
-
-              style:
-              const TextStyle(
-                color:
-                Colors.white70,
+              style: const TextStyle(
+                color: Colors.white70,
               ),
             ),
-
             const SizedBox(
               height: 20,
             ),
-
             ElevatedButton(
               onPressed: () {
-                context
-                    .read<HomeBloc>()
-                    .add(
+                context.read<HomeBloc>().add(
                   LoadMovies(),
                 );
               },
-
-              child:
-              const Text(
+              child: const Text(
                 'Retry',
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  // ============================================================
-  // BOTTOM NAVIGATION
-  // ============================================================
-
-  Widget _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      currentIndex: 0,
-
-      backgroundColor:
-      const Color(
-        0xFF1E1E1E,
-      ),
-
-      selectedItemColor:
-      Colors.amber,
-
-      unselectedItemColor:
-      Colors.white54,
-
-      type:
-      BottomNavigationBarType.fixed,
-
-      selectedFontSize: 10,
-      unselectedFontSize: 10,
-
-      onTap: (index) {
-        // HOME
-        if (index == 0) {
-          return;
-        }
-
-        // SEARCH
-        if (index == 1) {
-          _openSearch();
-          return;
-        }
-
-        // BROWSE
-        if (index == 2) {
-          _openBrowse();
-          return;
-        }
-
-        // PROFILE
-        if (index == 3) {
-          _openProfile();
-          return;
-        }
-      },
-
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home_outlined,
-          ),
-
-          activeIcon: Icon(
-            Icons.home,
-          ),
-
-          label: 'Home',
-        ),
-
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.search,
-          ),
-
-          label: 'Search',
-        ),
-
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.movie_outlined,
-          ),
-
-          activeIcon: Icon(
-            Icons.movie,
-          ),
-
-          label: 'Browse',
-        ),
-
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.person_outline,
-          ),
-
-          activeIcon: Icon(
-            Icons.person,
-          ),
-
-          label: 'Profile',
-        ),
-      ],
     );
   }
 }
