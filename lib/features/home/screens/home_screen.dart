@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/movie_model.dart';
+import '../../browse/screens/browse_screen.dart';
 import '../../movie_details/screens/movie_details_screen.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
 import '../widgets/movie_card.dart';
+import '../../search/screens/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -124,6 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ---------------------------------------------------------
+  // AVAILABLE NOW / HERO
+  // ---------------------------------------------------------
 
   Widget _buildAvailableNow(List<MovieModel> movies) {
     final mainMovie = movies.first;
@@ -140,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 390,
       child: Stack(
         children: [
-
+          // Background movie
           Positioned.fill(
             child: Image.network(
               mainMovie.backgroundImage ??
@@ -156,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-
+          // Dark overlay
           Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
@@ -178,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-
+          // Available Now image
           Positioned(
             top: 12,
             left: 0,
@@ -192,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-
+          // Left poster
           Positioned(
             left: -28,
             top: 72,
@@ -201,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-
+          // Right poster
           Positioned(
             right: -28,
             top: 72,
@@ -210,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-
+          // Main poster
           Positioned(
             top: 60,
             left: 0,
@@ -261,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-
+          // Watch Now image
           Positioned(
             left: 0,
             right: 0,
@@ -284,6 +289,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ---------------------------------------------------------
+  // SIDE POSTERS
+  // ---------------------------------------------------------
 
   Widget _buildSidePoster(MovieModel movie) {
     return Container(
@@ -319,6 +327,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ---------------------------------------------------------
+  // ACTION TITLE
+  // ---------------------------------------------------------
 
   Widget _buildSectionTitle({
     required String title,
@@ -340,7 +351,6 @@ class _HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-
           GestureDetector(
             onTap: onSeeMore,
             child: const Row(
@@ -366,6 +376,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ---------------------------------------------------------
+  // MOVIES LIST
+  // ---------------------------------------------------------
 
   Widget _buildMoviesList(
       List<MovieModel> movies,
@@ -412,6 +425,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ---------------------------------------------------------
+  // OPEN DETAILS
+  // ---------------------------------------------------------
 
   void _openMovieDetails(int movieId) {
     Navigator.push(
@@ -424,6 +440,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ---------------------------------------------------------
+  // ERROR
+  // ---------------------------------------------------------
 
   Widget _buildError(String message) {
     return Center(
@@ -438,9 +457,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.redAccent,
               size: 50,
             ),
-
             const SizedBox(height: 16),
-
             const Text(
               'Something went wrong',
               style: TextStyle(
@@ -449,9 +466,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 8),
-
             Text(
               message,
               textAlign: TextAlign.center,
@@ -459,9 +474,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.white70,
               ),
             ),
-
             const SizedBox(height: 20),
-
             ElevatedButton(
               onPressed: () {
                 context
@@ -476,6 +489,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ---------------------------------------------------------
+  // BOTTOM NAVIGATION
+  // ---------------------------------------------------------
 
   Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
@@ -486,6 +502,25 @@ class _HomeScreenState extends State<HomeScreen> {
       type: BottomNavigationBarType.fixed,
       selectedFontSize: 10,
       unselectedFontSize: 10,
+      onTap: (index) {
+        if (index == 1) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const SearchScreen(),
+            ),
+          );
+          return;
+        }
+        if (index == 2) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const BrowseScreen(),
+            ),
+          );
+        }
+      },
       items: const [
         BottomNavigationBarItem(
           icon: Icon(
@@ -496,21 +531,21 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           label: 'Home',
         ),
-
         BottomNavigationBarItem(
           icon: Icon(
             Icons.search,
           ),
           label: 'Search',
         ),
-
         BottomNavigationBarItem(
           icon: Icon(
             Icons.movie_outlined,
           ),
+          activeIcon: Icon(
+            Icons.movie,
+          ),
           label: 'Browse',
         ),
-
         BottomNavigationBarItem(
           icon: Icon(
             Icons.person_outline,

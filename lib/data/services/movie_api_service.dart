@@ -1,3 +1,4 @@
+
 import 'package:dio/dio.dart';
 
 import '../../network/dio_helper.dart';
@@ -11,6 +12,7 @@ class MovieApiService {
     int limit = 20,
     String? genre,
     String? sortBy,
+    String? queryTerm,
   }) async {
     final response = await _dio.get(
       '/list_movies.json',
@@ -19,6 +21,8 @@ class MovieApiService {
         'limit': limit,
         if (genre != null) 'genre': genre,
         if (sortBy != null) 'sort_by': sortBy,
+        if (queryTerm != null && queryTerm.isNotEmpty)
+          'query_term': queryTerm,
       },
     );
 
