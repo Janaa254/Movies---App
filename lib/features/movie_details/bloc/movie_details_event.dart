@@ -13,3 +13,9 @@ class ToggleFavorite extends MovieDetailsEvent {
 
   ToggleFavorite(this.movie);
 }
+
+class ToggleWatchlist extends MovieDetailsEvent {
+  final MovieDetailsModel movie;
+
+  ToggleWatchlist(this.movie);
+}

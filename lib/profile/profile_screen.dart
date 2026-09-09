@@ -11,6 +11,7 @@ import '../features/search/screens/search_screen.dart';
 import '../features/browse/screens/browse_screen.dart';
 
 import '../data/services/favorite_service.dart';
+import '../data/services/watchlist_service.dart';
 
 import 'avatar_picker.dart';
 import 'profile_colors.dart';
@@ -37,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int selectedSection = 0;
 
   final FavoriteService favoriteService = FavoriteService();
+  final WatchlistService watchlistService = WatchlistService();
 
   @override
   void initState() {
@@ -339,13 +341,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         child: Row(
                           children: [
-                            const _Stat(
-                              number: '0',
-                              title: 'Wish List',
+                            // WATCH LIST COUNT
+                            StreamBuilder<int>(
+                              stream: watchlistService
+                                  .getWatchlistCountStream(),
+                              builder: (context, snapshot) {
+                                final count = snapshot.data ?? 0;
+
+                                return _Stat(
+                                  number: count.toString(),
+                                  title: 'Watch List',
+                                );
+                              },
                             ),
 
-                            const SizedBox(width: 30),
+                            const SizedBox(width: 25),
 
+                            // HISTORY COUNT
                             const _Stat(
                               number: '0',
                               title: 'History',
@@ -353,6 +365,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                             const SizedBox(width: 20),
 
+                            // FAVORITES COUNT
                             StreamBuilder<int>(
                               stream: favoriteService
                                   .getFavoritesCountStream(),
@@ -518,7 +531,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
 
       // ==========================================================
-      // UNIFIED BOTTOM NAVIGATION
+      // BOTTOM NAVIGATION
       // ==========================================================
 
       bottomNavigationBar: AppBottomNav(
@@ -535,7 +548,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget buildGuestProfile() {
     return Scaffold(
       backgroundColor: ProfileColors.background,
-
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -685,9 +697,7 @@ class _Stat extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         const SizedBox(height: 8),
-
         Text(
           title,
           style: const TextStyle(
@@ -738,9 +748,7 @@ class _ProfileTab extends StatelessWidget {
                       : Colors.white70,
                   size: 31,
                 ),
-
                 const SizedBox(height: 7),
-
                 Text(
                   title,
                   style: TextStyle(
@@ -756,9 +764,7 @@ class _ProfileTab extends StatelessWidget {
               ],
             ),
           ),
-
           const SizedBox(height: 4),
-
           AnimatedContainer(
             duration: const Duration(
               milliseconds: 200,
@@ -767,9 +773,7 @@ class _ProfileTab extends StatelessWidget {
             height: 3,
             decoration: BoxDecoration(
               color: ProfileColors.yellow,
-              borderRadius: BorderRadius.circular(
-                10,
-              ),
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
         ],

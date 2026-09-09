@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/repositories/movie_repository.dart';
 import '../../../data/services/favorite_service.dart';
+import '../../../data/services/watchlist_service.dart';
 
 import 'movie_details_event.dart';
 import 'movie_details_state.dart';
@@ -10,15 +11,22 @@ class MovieDetailsBloc
     extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   final MovieRepository movieRepository;
   final FavoriteService favoriteService;
+  final WatchlistService watchlistService;
 
   MovieDetailsBloc({
     MovieRepository? movieRepository,
     FavoriteService? favoriteService,
-  })  : movieRepository = movieRepository ?? MovieRepository(),
-        favoriteService = favoriteService ?? FavoriteService(),
+    WatchlistService? watchlistService,
+  })  : movieRepository =
+      movieRepository ?? MovieRepository(),
+        favoriteService =
+            favoriteService ?? FavoriteService(),
+        watchlistService =
+            watchlistService ?? WatchlistService(),
         super(MovieDetailsInitial()) {
     on<GetMovieDetails>(_getMovieDetails);
     on<ToggleFavorite>(_toggleFavorite);
+    on<ToggleWatchlist>(_toggleWatchlist);
   }
 
   // ============================================================
@@ -32,7 +40,8 @@ class MovieDetailsBloc
     emit(MovieDetailsLoading());
 
     try {
-      final movie = await movieRepository.getMovieDetails(
+      final movie =
+      await movieRepository.getMovieDetails(
         event.movieId,
       );
 
@@ -41,7 +50,13 @@ class MovieDetailsBloc
         event.movieId,
       );
 
-      final isFavorite = await favoriteService.isFavorite(
+      final isFavorite =
+      await favoriteService.isFavorite(
+        event.movieId,
+      );
+
+      final isInWatchlist =
+      await watchlistService.isInWatchlist(
         event.movieId,
       );
 
@@ -50,6 +65,7 @@ class MovieDetailsBloc
           movie: movie,
           suggestions: suggestions,
           isFavorite: isFavorite,
+          isInWatchlist: isInWatchlist,
         ),
       );
     } catch (e) {
@@ -84,6 +100,40 @@ class MovieDetailsBloc
       emit(
         currentState.copyWith(
           isFavorite: newFavoriteState,
+        ),
+      );
+    } catch (e) {
+      emit(
+        MovieDetailsError(
+          e.toString(),
+        ),
+      );
+    }
+  }
+
+  // ============================================================
+  // TOGGLE WATCHLIST
+  // ============================================================
+
+  Future<void> _toggleWatchlist(
+      ToggleWatchlist event,
+      Emitter<MovieDetailsState> emit,
+      ) async {
+    final currentState = state;
+
+    if (currentState is! MovieDetailsSuccess) {
+      return;
+    }
+
+    try {
+      final newWatchlistState =
+      await watchlistService.toggleWatchlist(
+        event.movie,
+      );
+
+      emit(
+        currentState.copyWith(
+          isInWatchlist: newWatchlistState,
         ),
       );
     } catch (e) {

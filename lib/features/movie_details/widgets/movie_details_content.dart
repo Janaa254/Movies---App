@@ -13,8 +13,13 @@ import 'section_title.dart';
 class MovieDetailsContent extends StatelessWidget {
   final MovieDetailsModel movie;
   final List<MovieDetailsModel> suggestions;
+
   final bool isFavorite;
+  final bool isInWatchlist;
+
   final VoidCallback onFavoriteTap;
+  final VoidCallback onWatchlistTap;
+
   final ValueChanged<int> onMovieTap;
 
   const MovieDetailsContent({
@@ -22,7 +27,9 @@ class MovieDetailsContent extends StatelessWidget {
     required this.movie,
     required this.suggestions,
     required this.isFavorite,
+    required this.isInWatchlist,
     required this.onFavoriteTap,
+    required this.onWatchlistTap,
     required this.onMovieTap,
   });
 
@@ -38,30 +45,28 @@ class MovieDetailsContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Movie poster
           MoviePoster(
             movie: movie,
             isFavorite: isFavorite,
+            isInWatchlist: isInWatchlist,
             onFavoriteTap: onFavoriteTap,
+            onWatchlistTap: onWatchlistTap,
           ),
 
           const SizedBox(height: 16),
 
-          // Watch Movie + Watch Trailer buttons
           WatchButtons(
             movie: movie,
           ),
 
           const SizedBox(height: 12),
 
-          // Likes, runtime and rating
           MovieStats(
             movie: movie,
           ),
 
           const SizedBox(height: 20),
 
-          // Screenshots
           if (movie.screenshots.isNotEmpty) ...[
             const SectionTitle(
               title: 'Screen Shots',
@@ -76,7 +81,6 @@ class MovieDetailsContent extends StatelessWidget {
             const SizedBox(height: 20),
           ],
 
-          // Similar movies
           if (suggestions.isNotEmpty) ...[
             SimilarMovies(
               movies: suggestions,
@@ -86,7 +90,6 @@ class MovieDetailsContent extends StatelessWidget {
             const SizedBox(height: 25),
           ],
 
-          // Summary
           const SectionTitle(
             title: 'Summary',
           ),
@@ -106,14 +109,12 @@ class MovieDetailsContent extends StatelessWidget {
 
           const SizedBox(height: 25),
 
-          // Cast
           CastSection(
             cast: movie.cast,
           ),
 
           const SizedBox(height: 25),
 
-          // Genres
           if (movie.genres.isNotEmpty) ...[
             const SectionTitle(
               title: 'Genres',

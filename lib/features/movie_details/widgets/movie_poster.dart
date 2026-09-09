@@ -6,14 +6,20 @@ import 'trailer_launcher.dart';
 
 class MoviePoster extends StatelessWidget {
   final MovieDetailsModel movie;
+
   final bool isFavorite;
+  final bool isInWatchlist;
+
   final VoidCallback onFavoriteTap;
+  final VoidCallback onWatchlistTap;
 
   const MoviePoster({
     super.key,
     required this.movie,
     required this.isFavorite,
+    required this.isInWatchlist,
     required this.onFavoriteTap,
+    required this.onWatchlistTap,
   });
 
   @override
@@ -50,32 +56,54 @@ class MoviePoster extends StatelessWidget {
         Positioned(
           top: 12,
           left: 12,
-          child: IconButton(
-            onPressed: () {
+          child: _CircleButton(
+            onTap: () {
               Navigator.pop(context);
             },
-            icon: const Icon(
+            child: const Icon(
               Icons.arrow_back_ios_new,
               color: Colors.white,
+              size: 21,
             ),
           ),
         ),
 
-        // Favorite button
+        // Favorite + Watchlist buttons
         Positioned(
           top: 12,
           right: 12,
-          child: IconButton(
-            onPressed: onFavoriteTap,
-            icon: Icon(
-              isFavorite
-                  ? Icons.bookmark
-                  : Icons.bookmark_border,
-              color: isFavorite
-                  ? const Color(0xffffc107)
-                  : Colors.white,
-              size: 28,
-            ),
+          child: Row(
+            children: [
+              // FAVORITE
+              _CircleButton(
+                onTap: onFavoriteTap,
+                child: Icon(
+                  isFavorite
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: isFavorite
+                      ? const Color(0xffffc107)
+                      : Colors.white,
+                  size: 25,
+                ),
+              ),
+
+              const SizedBox(width: 8),
+
+              // WATCHLIST
+              _CircleButton(
+                onTap: onWatchlistTap,
+                child: Icon(
+                  isInWatchlist
+                      ? Icons.bookmark
+                      : Icons.bookmark_border,
+                  color: isInWatchlist
+                      ? const Color(0xffffc107)
+                      : Colors.white,
+                  size: 27,
+                ),
+              ),
+            ],
           ),
         ),
 
@@ -142,6 +170,35 @@ class MoviePoster extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _CircleButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final Widget child;
+
+  const _CircleButton({
+    required this.onTap,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.black.withOpacity(0.55),
+      shape: const CircleBorder(),
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: SizedBox(
+          width: 44,
+          height: 44,
+          child: Center(
+            child: child,
+          ),
+        ),
+      ),
     );
   }
 }

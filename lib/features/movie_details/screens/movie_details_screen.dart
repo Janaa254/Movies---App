@@ -37,7 +37,6 @@ class _MovieDetailsView extends StatelessWidget {
       body: SafeArea(
         child: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
           builder: (context, state) {
-            // Loading state
             if (state is MovieDetailsLoading) {
               return const Center(
                 child: CircularProgressIndicator(
@@ -46,7 +45,6 @@ class _MovieDetailsView extends StatelessWidget {
               );
             }
 
-            // Error state
             if (state is MovieDetailsError) {
               return Center(
                 child: Padding(
@@ -62,12 +60,13 @@ class _MovieDetailsView extends StatelessWidget {
               );
             }
 
-            // Success state
             if (state is MovieDetailsSuccess) {
               return MovieDetailsContent(
                 movie: state.movie,
                 suggestions: state.suggestions,
+
                 isFavorite: state.isFavorite,
+                isInWatchlist: state.isInWatchlist,
 
                 onFavoriteTap: () {
                   context.read<MovieDetailsBloc>().add(
@@ -77,7 +76,14 @@ class _MovieDetailsView extends StatelessWidget {
                   );
                 },
 
-                // Open another movie details screen
+                onWatchlistTap: () {
+                  context.read<MovieDetailsBloc>().add(
+                    ToggleWatchlist(
+                      state.movie,
+                    ),
+                  );
+                },
+
                 onMovieTap: (id) {
                   Navigator.push(
                     context,
