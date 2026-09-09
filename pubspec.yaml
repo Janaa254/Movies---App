@@ -45,6 +45,9 @@ flutter:
   assets:
     - assets/images/
     - assets/avatars/
+    - assets/avatars/marvel/
+    - assets/avatars/disney/
+    - assets/avatars/harry_potter/
 
 flutter_launcher_icons:
   android: true
