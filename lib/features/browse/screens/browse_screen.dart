@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../movie_details/screens/movie_details_screen.dart';
+import '../../search/screens/search_screen.dart';
+import '../../../profile/profile_screen.dart';
+
 import '../bloc/browse_bloc.dart';
 import '../bloc/browse_event.dart';
 import '../bloc/browse_state.dart';
 import '../widgets/browse_movie_card.dart';
-import '../../search/screens/search_screen.dart';
 
 class BrowseScreen extends StatelessWidget {
   const BrowseScreen({super.key});
@@ -31,8 +33,7 @@ class _BrowseView extends StatefulWidget {
 }
 
 class _BrowseViewState extends State<_BrowseView> {
-  final ScrollController _scrollController =
-  ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   final List<String> genres = [
     'Action',
@@ -64,9 +65,7 @@ class _BrowseViewState extends State<_BrowseView> {
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 400) {
-      context
-          .read<BrowseBloc>()
-          .add(
+      context.read<BrowseBloc>().add(
         LoadMoreBrowseMovies(),
       );
     }
@@ -124,11 +123,13 @@ class _BrowseViewState extends State<_BrowseView> {
         ),
       ),
 
-      bottomNavigationBar:
-      _buildBottomNavigationBar(),
+      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
+  // ============================================================
+  // HEADER
+  // ============================================================
 
   Widget _buildHeader() {
     return const Padding(
@@ -152,6 +153,9 @@ class _BrowseViewState extends State<_BrowseView> {
     );
   }
 
+  // ============================================================
+  // GENRES
+  // ============================================================
 
   Widget _buildGenres() {
     return SizedBox(
@@ -170,20 +174,22 @@ class _BrowseViewState extends State<_BrowseView> {
             ),
             scrollDirection: Axis.horizontal,
             itemCount: genres.length,
-            separatorBuilder: (_, __) =>
-            const SizedBox(width: 6),
+
+            separatorBuilder: (_, __) => const SizedBox(
+              width: 6,
+            ),
+
             itemBuilder: (context, index) {
               final genre = genres[index];
 
-              final isSelected =
-                  genre == selectedGenre;
+              final isSelected = genre == selectedGenre;
 
               return GestureDetector(
                 onTap: () {
-                  context
-                      .read<BrowseBloc>()
-                      .add(
-                    ChangeGenre(genre),
+                  context.read<BrowseBloc>().add(
+                    ChangeGenre(
+                      genre,
+                    ),
                   );
                 },
                 child: Container(
@@ -195,8 +201,9 @@ class _BrowseViewState extends State<_BrowseView> {
                     color: isSelected
                         ? Colors.amber
                         : Colors.transparent,
-                    borderRadius:
-                    BorderRadius.circular(9),
+                    borderRadius: BorderRadius.circular(
+                      9,
+                    ),
                     border: Border.all(
                       color: Colors.amber,
                       width: 1,
@@ -221,8 +228,13 @@ class _BrowseViewState extends State<_BrowseView> {
     );
   }
 
+  // ============================================================
+  // MOVIES GRID
+  // ============================================================
 
-  Widget _buildMoviesGrid(BrowseSuccess state,) {
+  Widget _buildMoviesGrid(
+      BrowseSuccess state,
+      ) {
     if (state.movies.isEmpty) {
       return const Center(
         child: Text(
@@ -236,12 +248,14 @@ class _BrowseViewState extends State<_BrowseView> {
 
     return GridView.builder(
       controller: _scrollController,
+
       padding: const EdgeInsets.fromLTRB(
         14,
         5,
         14,
         20,
       ),
+
       gridDelegate:
       const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -249,8 +263,10 @@ class _BrowseViewState extends State<_BrowseView> {
         mainAxisSpacing: 10,
         childAspectRatio: 0.68,
       ),
+
       itemCount: state.movies.length +
           (state.isLoadingMore ? 2 : 0),
+
       itemBuilder: (context, index) {
         if (index >= state.movies.length) {
           return const Center(
@@ -264,14 +280,14 @@ class _BrowseViewState extends State<_BrowseView> {
 
         return BrowseMovieCard(
           movie: movie,
+
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) =>
-                    MovieDetailsScreen(
-                      movieId: movie.id,
-                    ),
+                builder: (_) => MovieDetailsScreen(
+                  movieId: movie.id,
+                ),
               ),
             );
           },
@@ -280,14 +296,20 @@ class _BrowseViewState extends State<_BrowseView> {
     );
   }
 
+  // ============================================================
+  // ERROR
+  // ============================================================
 
-  Widget _buildError(String message) {
+  Widget _buildError(
+      String message,
+      ) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(
+          24,
+        ),
         child: Column(
-          mainAxisAlignment:
-          MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(
               Icons.error_outline,
@@ -295,7 +317,9 @@ class _BrowseViewState extends State<_BrowseView> {
               size: 50,
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(
+              height: 16,
+            ),
 
             const Text(
               'Something went wrong',
@@ -306,7 +330,9 @@ class _BrowseViewState extends State<_BrowseView> {
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(
+              height: 8,
+            ),
 
             Text(
               message,
@@ -316,13 +342,13 @@ class _BrowseViewState extends State<_BrowseView> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(
+              height: 20,
+            ),
 
             ElevatedButton(
               onPressed: () {
-                context
-                    .read<BrowseBloc>()
-                    .add(
+                context.read<BrowseBloc>().add(
                   LoadBrowseMovies(),
                 );
               },
@@ -336,25 +362,78 @@ class _BrowseViewState extends State<_BrowseView> {
     );
   }
 
+  // ============================================================
+  // NAVIGATION METHODS
+  // ============================================================
+
+  void _openHome() {
+    Navigator.pushReplacementNamed(
+      context,
+      '/home',
+    );
+  }
+
+  void _openSearch() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const SearchScreen(),
+      ),
+    );
+  }
+
+  void _openProfile() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const ProfileScreen(),
+      ),
+    );
+  }
+
+  // ============================================================
+  // BOTTOM NAVIGATION
+  // ============================================================
 
   Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
+      // Browse screen = index 2
       currentIndex: 2,
-      backgroundColor: const Color(0xFF1E1E1E),
+
+      backgroundColor: const Color(
+        0xFF1E1E1E,
+      ),
+
       selectedItemColor: Colors.amber,
       unselectedItemColor: Colors.white54,
+
       type: BottomNavigationBarType.fixed,
+
       selectedFontSize: 10,
       unselectedFontSize: 10,
 
       onTap: (index) {
+        // HOME
+        if (index == 0) {
+          _openHome();
+          return;
+        }
+
+        // SEARCH
         if (index == 1) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const SearchScreen(),
-            ),
-          );
+          _openSearch();
+          return;
+        }
+
+        // BROWSE
+        if (index == 2) {
+          return;
+        }
+
+        // PROFILE
+        if (index == 3) {
+          _openProfile();
+          return;
         }
       },
 
@@ -368,12 +447,14 @@ class _BrowseViewState extends State<_BrowseView> {
           ),
           label: 'Home',
         ),
+
         BottomNavigationBarItem(
           icon: Icon(
             Icons.search,
           ),
           label: 'Search',
         ),
+
         BottomNavigationBarItem(
           icon: Icon(
             Icons.movie_outlined,
@@ -383,9 +464,13 @@ class _BrowseViewState extends State<_BrowseView> {
           ),
           label: 'Browse',
         ),
+
         BottomNavigationBarItem(
           icon: Icon(
             Icons.person_outline,
+          ),
+          activeIcon: Icon(
+            Icons.person,
           ),
           label: 'Profile',
         ),
