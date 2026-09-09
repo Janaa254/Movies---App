@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../data/models/movie_details_model.dart';
+import '../../../l10n/app_localizations.dart';
 
 import 'trailer_launcher.dart';
 
@@ -14,6 +15,8 @@ class WatchButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Row(
       children: [
         // Watch Movie button
@@ -22,11 +25,10 @@ class WatchButtons extends StatelessWidget {
             height: 48,
             child: ElevatedButton.icon(
               onPressed: () {
-                // Movie playback will be implemented later.
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text(
-                      'Movie playback will be available soon.',
+                      l10n.moviePlaybackComingSoon,
                     ),
                   ),
                 );
@@ -43,9 +45,9 @@ class WatchButtons extends StatelessWidget {
                 Icons.play_circle_fill,
                 size: 20,
               ),
-              label: const Text(
-                'Watch Movie',
-                style: TextStyle(
+              label: Text(
+                l10n.watchMovie,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 13,
                 ),
@@ -79,9 +81,9 @@ class WatchButtons extends StatelessWidget {
                 Icons.video_library_rounded,
                 size: 20,
               ),
-              label: const Text(
-                'Watch Trailer',
-                style: TextStyle(
+              label: Text(
+                l10n.watchTrailer,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 13,
                 ),

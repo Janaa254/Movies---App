@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../l10n/app_localizations.dart';
 import '../profile_colors.dart';
 
 class HistoryTab extends StatelessWidget {
@@ -6,61 +8,50 @@ class HistoryTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       color: ProfileColors.background,
-
       child: Center(
         child: Padding(
-          padding:
-          const EdgeInsets.all(25),
-
+          padding: const EdgeInsets.all(25),
           child: Container(
             width: double.infinity,
-
-            padding:
-            const EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 25,
               vertical: 45,
             ),
-
             decoration: BoxDecoration(
-              color:
-              ProfileColors.cardColor,
-              borderRadius:
-              BorderRadius.circular(18),
+              color: ProfileColors.cardColor,
+              borderRadius: BorderRadius.circular(18),
             ),
-
-            child: const Column(
-              mainAxisSize:
-              MainAxisSize.min,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.history,
-                  color:
-                  ProfileColors.yellow,
+                  color: ProfileColors.yellow,
                   size: 70,
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 Text(
-                  'No History Yet',
-                  style: TextStyle(
+                  l10n.noHistoryYet,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 21,
-                    fontWeight:
-                    FontWeight.bold,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
 
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
 
                 Text(
-                  'Movies you watch will appear here.',
-                  textAlign:
-                  TextAlign.center,
-                  style: TextStyle(
+                  l10n.moviesYouWatchAppearHere,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
                     color: Colors.white54,
                     fontSize: 14,
                   ),

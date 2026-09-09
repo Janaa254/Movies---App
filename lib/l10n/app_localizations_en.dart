@@ -78,4 +78,190 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get somethingWentWrong => 'Something went wrong';
+
+  @override
+  String get profileUpdatedSuccessfully => 'Profile updated successfully.';
+
+  @override
+  String get user => 'User';
+
+  @override
+  String get welcomeToMoviesApp => 'Welcome to Movies App';
+
+  @override
+  String get guestProfileDescription =>
+      'Login or create an account to access your profile, watchlist and favorites.';
+
+  @override
+  String get couldNotLoadWatchList => 'Could not load watch list.';
+
+  @override
+  String get unknownMovie => 'Unknown Movie';
+
+  @override
+  String get notAvailable => 'N/A';
+
+  @override
+  String get couldNotLoadFavorites => 'Could not load favorites.';
+
+  @override
+  String get movie => 'Movie';
+
+  @override
+  String get noHistoryYet => 'No History Yet';
+
+  @override
+  String get moviesYouWatchAppearHere => 'Movies you watch will appear here.';
+
+  @override
+  String get noFavoritesYet => 'No Favorites Yet';
+
+  @override
+  String get moviesYouLikeAppearHere => 'Movies you like will appear here.';
+
+  @override
+  String get action => 'Action';
+
+  @override
+  String get seeMore => 'See More';
+
+  @override
+  String get searchHint => 'Search...';
+
+  @override
+  String get searchForMovie => 'Search for a movie';
+
+  @override
+  String get genreAction => 'Action';
+
+  @override
+  String get genreAdventure => 'Adventure';
+
+  @override
+  String get genreAnimation => 'Animation';
+
+  @override
+  String get genreComedy => 'Comedy';
+
+  @override
+  String get genreCrime => 'Crime';
+
+  @override
+  String get genreDocumentary => 'Documentary';
+
+  @override
+  String get genreDrama => 'Drama';
+
+  @override
+  String get genreFamily => 'Family';
+
+  @override
+  String get genreFantasy => 'Fantasy';
+
+  @override
+  String get genreHorror => 'Horror';
+
+  @override
+  String get genreMystery => 'Mystery';
+
+  @override
+  String get genreRomance => 'Romance';
+
+  @override
+  String get genreSciFi => 'Sci-Fi';
+
+  @override
+  String get genreSport => 'Sport';
+
+  @override
+  String get genreThriller => 'Thriller';
+
+  @override
+  String get genreWar => 'War';
+
+  @override
+  String get genreWestern => 'Western';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get forgetPassword => 'Forget Password';
+
+  @override
+  String get forgetPasswordQuestion => 'Forget Password?';
+
+  @override
+  String get dontHaveAccount => 'Don’t Have Account?';
+
+  @override
+  String get createOne => 'Create One';
+
+  @override
+  String get loginWithGoogle => 'Login With Google';
+
+  @override
+  String get googleLoginNotImplemented =>
+      'Google login is not implemented yet.';
+
+  @override
+  String get avatar => 'Avatar';
+
+  @override
+  String get alreadyHaveAccount => 'Already Have Account?';
+
+  @override
+  String get accountCreatedSuccessfully => 'Account created successfully.';
+
+  @override
+  String get pleaseEnterYourEmail => 'Please enter your email';
+
+  @override
+  String get verifyEmail => 'Verify Email';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get or => 'OR';
+
+  @override
+  String get noSummaryAvailable => 'No summary available.';
+
+  @override
+  String get watchMovie => 'Watch Movie';
+
+  @override
+  String get watchTrailer => 'Watch Trailer';
+
+  @override
+  String get moviePlaybackComingSoon =>
+      'Movie playback will be available soon.';
+
+  @override
+  String get similar => 'Similar';
+
+  @override
+  String get cast => 'Cast';
+
+  @override
+  String get nameLabel => 'Name';
+
+  @override
+  String get characterLabel => 'Character';
+
+  @override
+  String get trailerNotAvailable => 'Trailer is not available for this movie.';
+
+  @override
+  String get couldNotOpenTrailer => 'Could not open the trailer.';
 }

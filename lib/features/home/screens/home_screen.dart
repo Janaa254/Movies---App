@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/movie_model.dart';
 import '../../../widgets/app_bottom_nav.dart';
+import '../../../l10n/app_localizations.dart';
 
 import '../../browse/screens/browse_screen.dart';
 import '../../movie_details/screens/movie_details_screen.dart';
@@ -84,10 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
 
-      // ==========================================================
-      // UNIFIED BOTTOM NAVIGATION
-      // ==========================================================
-
       bottomNavigationBar: AppBottomNav(
         currentIndex: 0,
         onTap: _onNavigationTap,
@@ -102,11 +99,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildHome(
       HomeSuccess state,
       ) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (state.movies.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'No movies found',
-          style: TextStyle(
+          l10n.noMoviesFound,
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
@@ -118,21 +117,17 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: const Color(
         0xFF1E1E1E,
       ),
-
       onRefresh: () async {
         context.read<HomeBloc>().add(
           LoadMovies(),
         );
       },
-
       child: ListView(
         controller: _scrollController,
-
         padding: const EdgeInsets.only(
           top: 0,
           bottom: 20,
         ),
-
         children: [
           _buildAvailableNow(
             state.movies,
@@ -143,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
           _buildSectionTitle(
-            title: 'Action',
+            title: l10n.action,
             onSeeMore: _openBrowse,
           ),
 
@@ -191,13 +186,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SizedBox(
       height: 390,
-
       child: Stack(
         children: [
-          // ====================================================
-          // BACKGROUND
-          // ====================================================
-
           Positioned.fill(
             child: Image.network(
               mainMovie.backgroundImage ??
@@ -218,10 +208,6 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
-
-          // ====================================================
-          // DARK OVERLAY
-          // ====================================================
 
           Positioned.fill(
             child: Container(
@@ -244,10 +230,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // ====================================================
-          // AVAILABLE NOW
-          // ====================================================
-
           Positioned(
             top: 12,
             left: 0,
@@ -261,10 +243,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // ====================================================
-          // LEFT POSTER
-          // ====================================================
-
           Positioned(
             left: -28,
             top: 72,
@@ -273,10 +251,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // ====================================================
-          // RIGHT POSTER
-          // ====================================================
-
           Positioned(
             right: -28,
             top: 72,
@@ -284,10 +258,6 @@ class _HomeScreenState extends State<HomeScreen> {
               rightMovie,
             ),
           ),
-
-          // ====================================================
-          // MAIN POSTER
-          // ====================================================
 
           Positioned(
             top: 60,
@@ -350,10 +320,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
-          // ====================================================
-          // WATCH NOW
-          // ====================================================
 
           Positioned(
             left: 0,
@@ -437,6 +403,8 @@ class _HomeScreenState extends State<HomeScreen> {
     required String title,
     required VoidCallback onSeeMore,
   }) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 14,
@@ -455,19 +423,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           GestureDetector(
             onTap: onSeeMore,
-            child: const Row(
+            child: Row(
               children: [
                 Text(
-                  'See More',
-                  style: TextStyle(
+                  l10n.seeMore,
+                  style: const TextStyle(
                     color: Colors.amber,
                     fontSize: 12,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
-                Icon(
+                const Icon(
                   Icons.arrow_forward_ios,
                   color: Colors.amber,
                   size: 10,
@@ -525,8 +493,7 @@ class _HomeScreenState extends State<HomeScreen> {
               context,
               index,
               ) {
-            final movie =
-            movies[index];
+            final movie = movies[index];
 
             return MovieCard(
               movie: movie,
@@ -623,6 +590,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildError(
       String message,
       ) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(
@@ -640,9 +609,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 16,
             ),
-            const Text(
-              'Something went wrong',
-              style: TextStyle(
+            Text(
+              l10n.somethingWentWrong,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight:
@@ -669,8 +638,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   LoadMovies(),
                 );
               },
-              child: const Text(
-                'Retry',
+              child: Text(
+                l10n.retry,
               ),
             ),
           ],

@@ -34,8 +34,11 @@ class _MovieDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff101010),
+
       body: SafeArea(
-        child: BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
+        child: BlocBuilder<
+            MovieDetailsBloc,
+            MovieDetailsState>(
           builder: (context, state) {
             if (state is MovieDetailsLoading) {
               return const Center(
@@ -63,13 +66,19 @@ class _MovieDetailsView extends StatelessWidget {
             if (state is MovieDetailsSuccess) {
               return MovieDetailsContent(
                 movie: state.movie,
-                suggestions: state.suggestions,
+                suggestions:
+                state.suggestions,
 
-                isFavorite: state.isFavorite,
-                isInWatchlist: state.isInWatchlist,
+                isFavorite:
+                state.isFavorite,
+
+                isInWatchlist:
+                state.isInWatchlist,
 
                 onFavoriteTap: () {
-                  context.read<MovieDetailsBloc>().add(
+                  context
+                      .read<MovieDetailsBloc>()
+                      .add(
                     ToggleFavorite(
                       state.movie,
                     ),
@@ -77,7 +86,9 @@ class _MovieDetailsView extends StatelessWidget {
                 },
 
                 onWatchlistTap: () {
-                  context.read<MovieDetailsBloc>().add(
+                  context
+                      .read<MovieDetailsBloc>()
+                      .add(
                     ToggleWatchlist(
                       state.movie,
                     ),
@@ -88,9 +99,10 @@ class _MovieDetailsView extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => MovieDetailsScreen(
-                        movieId: id,
-                      ),
+                      builder: (_) =>
+                          MovieDetailsScreen(
+                            movieId: id,
+                          ),
                     ),
                   );
                 },

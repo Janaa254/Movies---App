@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 import '../../data/services/watchlist_service.dart';
 import '../../features/movie_details/screens/movie_details_screen.dart';
 
@@ -12,12 +14,13 @@ class WatchlistTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     final user = FirebaseAuth.instance.currentUser;
-    final WatchlistService watchlistService =
-    WatchlistService();
+    final WatchlistService watchlistService = WatchlistService();
 
     if (user == null) {
-      return _buildEmptyState();
+      return _buildEmptyState(context);
     }
 
     return Container(
@@ -37,10 +40,10 @@ class WatchlistTab extends StatelessWidget {
           }
 
           if (snapshot.hasError) {
-            return const Center(
+            return Center(
               child: Text(
-                'Could not load watch list.',
-                style: TextStyle(
+                l10n.couldNotLoadWatchList,
+                style: const TextStyle(
                   color: Colors.white70,
                 ),
               ),
@@ -50,7 +53,7 @@ class WatchlistTab extends StatelessWidget {
           final docs = snapshot.data?.docs ?? [];
 
           if (docs.isEmpty) {
-            return _buildEmptyState();
+            return _buildEmptyState(context);
           }
 
           return GridView.builder(
@@ -71,7 +74,7 @@ class WatchlistTab extends StatelessWidget {
 
               final String title =
                   data['title']?.toString() ??
-                      'Unknown Movie';
+                      l10n.unknownMovie;
 
               final String image =
                   data['largeCoverImage']?.toString() ??
@@ -83,7 +86,7 @@ class WatchlistTab extends StatelessWidget {
 
               final String rating =
               ratingValue == null
-                  ? 'N/A'
+                  ? l10n.notAvailable
                   : ratingValue.toString();
 
               return GestureDetector(
@@ -178,7 +181,8 @@ class WatchlistTab extends StatelessWidget {
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontWeight:
+                            FontWeight.w600,
                           ),
                         ),
                       ),
@@ -195,7 +199,8 @@ class WatchlistTab extends StatelessWidget {
                           children: [
                             const Icon(
                               Icons.star,
-                              color: ProfileColors.yellow,
+                              color:
+                              ProfileColors.yellow,
                               size: 16,
                             ),
                             const SizedBox(width: 4),
@@ -220,7 +225,9 @@ class WatchlistTab extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       color: ProfileColors.background,
@@ -237,29 +244,29 @@ class WatchlistTab extends StatelessWidget {
               color: ProfileColors.cardColor,
               borderRadius: BorderRadius.circular(18),
             ),
-            child: const Column(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.bookmark_border,
                   color: ProfileColors.yellow,
                   size: 70,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
-                  'No Movies in Watch List',
+                  l10n.noMoviesWatchList,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 21,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  'Movies you add to your watch list will appear here.',
+                  l10n.watchListDescription,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white54,
                     fontSize: 14,
                   ),

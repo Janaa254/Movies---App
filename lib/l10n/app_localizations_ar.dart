@@ -52,14 +52,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get watchListDescription =>
-      'الأفلام التي تضيفيها إلى قائمة المشاهدة ستظهر هنا.';
+      'الأفلام التي تضيفها إلى قائمة المشاهدة ستظهر هنا.';
 
   @override
   String get noFavorites => 'لا توجد أفلام مفضلة';
 
   @override
   String get favoritesDescription =>
-      'الأفلام التي تضيفيها إلى المفضلة ستظهر هنا.';
+      'الأفلام التي تضيفها إلى المفضلة ستظهر هنا.';
 
   @override
   String get summary => 'الملخص';
@@ -78,4 +78,189 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get somethingWentWrong => 'حدث خطأ ما';
+
+  @override
+  String get profileUpdatedSuccessfully => 'تم تحديث الملف الشخصي بنجاح.';
+
+  @override
+  String get user => 'مستخدم';
+
+  @override
+  String get welcomeToMoviesApp => 'مرحبًا بك في تطبيق الأفلام';
+
+  @override
+  String get guestProfileDescription =>
+      'سجّل الدخول أو أنشئ حسابًا للوصول إلى ملفك الشخصي وقائمة المشاهدة والمفضلة.';
+
+  @override
+  String get couldNotLoadWatchList => 'تعذر تحميل قائمة المشاهدة.';
+
+  @override
+  String get unknownMovie => 'فيلم غير معروف';
+
+  @override
+  String get notAvailable => 'غير متاح';
+
+  @override
+  String get couldNotLoadFavorites => 'تعذر تحميل المفضلة.';
+
+  @override
+  String get movie => 'فيلم';
+
+  @override
+  String get noHistoryYet => 'لا يوجد سجل مشاهدة بعد';
+
+  @override
+  String get moviesYouWatchAppearHere => 'الأفلام التي تشاهدها ستظهر هنا.';
+
+  @override
+  String get noFavoritesYet => 'لا توجد مفضلة بعد';
+
+  @override
+  String get moviesYouLikeAppearHere => 'الأفلام التي تعجبك ستظهر هنا.';
+
+  @override
+  String get action => 'أكشن';
+
+  @override
+  String get seeMore => 'عرض المزيد';
+
+  @override
+  String get searchHint => 'ابحث...';
+
+  @override
+  String get searchForMovie => 'ابحث عن فيلم';
+
+  @override
+  String get genreAction => 'أكشن';
+
+  @override
+  String get genreAdventure => 'مغامرة';
+
+  @override
+  String get genreAnimation => 'رسوم متحركة';
+
+  @override
+  String get genreComedy => 'كوميدي';
+
+  @override
+  String get genreCrime => 'جريمة';
+
+  @override
+  String get genreDocumentary => 'وثائقي';
+
+  @override
+  String get genreDrama => 'دراما';
+
+  @override
+  String get genreFamily => 'عائلي';
+
+  @override
+  String get genreFantasy => 'فانتازيا';
+
+  @override
+  String get genreHorror => 'رعب';
+
+  @override
+  String get genreMystery => 'غموض';
+
+  @override
+  String get genreRomance => 'رومانسي';
+
+  @override
+  String get genreSciFi => 'خيال علمي';
+
+  @override
+  String get genreSport => 'رياضي';
+
+  @override
+  String get genreThriller => 'إثارة';
+
+  @override
+  String get genreWar => 'حربي';
+
+  @override
+  String get genreWestern => 'غربي';
+
+  @override
+  String get email => 'البريد الإلكتروني';
+
+  @override
+  String get password => 'كلمة المرور';
+
+  @override
+  String get forgetPassword => 'نسيت كلمة المرور';
+
+  @override
+  String get forgetPasswordQuestion => 'نسيت كلمة المرور؟';
+
+  @override
+  String get dontHaveAccount => 'ليس لديك حساب؟';
+
+  @override
+  String get createOne => 'أنشئ حسابًا';
+
+  @override
+  String get loginWithGoogle => 'تسجيل الدخول باستخدام Google';
+
+  @override
+  String get googleLoginNotImplemented =>
+      'تسجيل الدخول باستخدام Google غير متاح حاليًا.';
+
+  @override
+  String get avatar => 'الصورة الشخصية';
+
+  @override
+  String get alreadyHaveAccount => 'لديك حساب بالفعل؟';
+
+  @override
+  String get accountCreatedSuccessfully => 'تم إنشاء الحساب بنجاح.';
+
+  @override
+  String get pleaseEnterYourEmail => 'يرجى إدخال بريدك الإلكتروني';
+
+  @override
+  String get verifyEmail => 'تحقق من البريد الإلكتروني';
+
+  @override
+  String get name => 'الاسم';
+
+  @override
+  String get confirmPassword => 'تأكيد كلمة المرور';
+
+  @override
+  String get phoneNumber => 'رقم الهاتف';
+
+  @override
+  String get or => 'أو';
+
+  @override
+  String get noSummaryAvailable => 'لا يوجد ملخص متاح.';
+
+  @override
+  String get watchMovie => 'مشاهدة الفيلم';
+
+  @override
+  String get watchTrailer => 'مشاهدة الإعلان';
+
+  @override
+  String get moviePlaybackComingSoon => 'تشغيل الفيلم سيكون متاحًا قريبًا.';
+
+  @override
+  String get similar => 'أفلام مشابهة';
+
+  @override
+  String get cast => 'طاقم التمثيل';
+
+  @override
+  String get nameLabel => 'الاسم';
+
+  @override
+  String get characterLabel => 'الشخصية';
+
+  @override
+  String get trailerNotAvailable => 'الإعلان غير متاح لهذا الفيلم.';
+
+  @override
+  String get couldNotOpenTrailer => 'تعذر فتح الإعلان.';
 }

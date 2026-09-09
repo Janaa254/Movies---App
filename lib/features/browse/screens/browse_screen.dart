@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../widgets/app_bottom_nav.dart';
+import '../../../l10n/app_localizations.dart';
 
 import '../../movie_details/screens/movie_details_screen.dart';
 import '../../search/screens/search_screen.dart';
@@ -35,7 +36,8 @@ class _BrowseView extends StatefulWidget {
 }
 
 class _BrowseViewState extends State<_BrowseView> {
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController =
+  ScrollController();
 
   final List<String> genres = [
     'Action',
@@ -125,10 +127,6 @@ class _BrowseViewState extends State<_BrowseView> {
         ),
       ),
 
-      // ==========================================================
-      // UNIFIED BOTTOM NAVIGATION
-      // ==========================================================
-
       bottomNavigationBar: AppBottomNav(
         currentIndex: 2,
         onTap: _onNavigationTap,
@@ -141,18 +139,20 @@ class _BrowseViewState extends State<_BrowseView> {
   // ============================================================
 
   Widget _buildHeader() {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(
+    final l10n = AppLocalizations.of(context)!;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
         16,
         8,
         16,
         4,
       ),
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: AlignmentDirectional.centerStart,
         child: Text(
-          'Browse',
-          style: TextStyle(
+          l10n.browse,
+          style: const TextStyle(
             color: Colors.white70,
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -167,6 +167,8 @@ class _BrowseViewState extends State<_BrowseView> {
   // ============================================================
 
   Widget _buildGenres() {
+    final l10n = AppLocalizations.of(context)!;
+
     return SizedBox(
       height: 42,
       child: BlocBuilder<BrowseBloc, BrowseState>(
@@ -183,18 +185,19 @@ class _BrowseViewState extends State<_BrowseView> {
             ),
             scrollDirection: Axis.horizontal,
             itemCount: genres.length,
-
-            separatorBuilder: (_, __) => const SizedBox(
+            separatorBuilder: (_, __) =>
+            const SizedBox(
               width: 6,
             ),
-
             itemBuilder: (context, index) {
               final genre = genres[index];
 
-              final isSelected = genre == selectedGenre;
+              final isSelected =
+                  genre == selectedGenre;
 
               return GestureDetector(
                 onTap: () {
+                  // Keep API / Bloc value in English.
                   context.read<BrowseBloc>().add(
                     ChangeGenre(
                       genre,
@@ -202,7 +205,8 @@ class _BrowseViewState extends State<_BrowseView> {
                   );
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
+                  padding:
+                  const EdgeInsets.symmetric(
                     horizontal: 13,
                   ),
                   alignment: Alignment.center,
@@ -210,7 +214,8 @@ class _BrowseViewState extends State<_BrowseView> {
                     color: isSelected
                         ? Colors.amber
                         : Colors.transparent,
-                    borderRadius: BorderRadius.circular(
+                    borderRadius:
+                    BorderRadius.circular(
                       9,
                     ),
                     border: Border.all(
@@ -219,13 +224,17 @@ class _BrowseViewState extends State<_BrowseView> {
                     ),
                   ),
                   child: Text(
-                    genre,
+                    _localizedGenre(
+                      genre,
+                      l10n,
+                    ),
                     style: TextStyle(
                       color: isSelected
                           ? Colors.black
                           : Colors.amber,
                       fontSize: 11,
-                      fontWeight: FontWeight.bold,
+                      fontWeight:
+                      FontWeight.bold,
                     ),
                   ),
                 ),
@@ -237,6 +246,67 @@ class _BrowseViewState extends State<_BrowseView> {
     );
   }
 
+  String _localizedGenre(
+      String genre,
+      AppLocalizations l10n,
+      ) {
+    switch (genre) {
+      case 'Action':
+        return l10n.genreAction;
+
+      case 'Adventure':
+        return l10n.genreAdventure;
+
+      case 'Animation':
+        return l10n.genreAnimation;
+
+      case 'Comedy':
+        return l10n.genreComedy;
+
+      case 'Crime':
+        return l10n.genreCrime;
+
+      case 'Documentary':
+        return l10n.genreDocumentary;
+
+      case 'Drama':
+        return l10n.genreDrama;
+
+      case 'Family':
+        return l10n.genreFamily;
+
+      case 'Fantasy':
+        return l10n.genreFantasy;
+
+      case 'Horror':
+        return l10n.genreHorror;
+
+      case 'Mystery':
+        return l10n.genreMystery;
+
+      case 'Romance':
+        return l10n.genreRomance;
+
+      case 'Sci-Fi':
+        return l10n.genreSciFi;
+
+      case 'Sport':
+        return l10n.genreSport;
+
+      case 'Thriller':
+        return l10n.genreThriller;
+
+      case 'War':
+        return l10n.genreWar;
+
+      case 'Western':
+        return l10n.genreWestern;
+
+      default:
+        return genre;
+    }
+  }
+
   // ============================================================
   // MOVIES GRID
   // ============================================================
@@ -244,11 +314,13 @@ class _BrowseViewState extends State<_BrowseView> {
   Widget _buildMoviesGrid(
       BrowseSuccess state,
       ) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (state.movies.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'No movies found',
-          style: TextStyle(
+          l10n.noMoviesFound,
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
@@ -293,9 +365,10 @@ class _BrowseViewState extends State<_BrowseView> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => MovieDetailsScreen(
-                  movieId: movie.id,
-                ),
+                builder: (_) =>
+                    MovieDetailsScreen(
+                      movieId: movie.id,
+                    ),
               ),
             );
           },
@@ -311,13 +384,16 @@ class _BrowseViewState extends State<_BrowseView> {
   Widget _buildError(
       String message,
       ) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(
           24,
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment:
+          MainAxisAlignment.center,
           children: [
             const Icon(
               Icons.error_outline,
@@ -329,12 +405,13 @@ class _BrowseViewState extends State<_BrowseView> {
               height: 16,
             ),
 
-            const Text(
-              'Something went wrong',
-              style: TextStyle(
+            Text(
+              l10n.somethingWentWrong,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
-                fontWeight: FontWeight.bold,
+                fontWeight:
+                FontWeight.bold,
               ),
             ),
 
@@ -344,7 +421,8 @@ class _BrowseViewState extends State<_BrowseView> {
 
             Text(
               message,
-              textAlign: TextAlign.center,
+              textAlign:
+              TextAlign.center,
               style: const TextStyle(
                 color: Colors.white70,
               ),
@@ -360,8 +438,8 @@ class _BrowseViewState extends State<_BrowseView> {
                   LoadBrowseMovies(),
                 );
               },
-              child: const Text(
-                'Retry',
+              child: Text(
+                l10n.retry,
               ),
             ),
           ],
@@ -407,7 +485,8 @@ class _BrowseViewState extends State<_BrowseView> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => const SearchScreen(),
+        builder: (_) =>
+        const SearchScreen(),
       ),
     );
   }
@@ -416,7 +495,8 @@ class _BrowseViewState extends State<_BrowseView> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => const ProfileScreen(),
+        builder: (_) =>
+        const ProfileScreen(),
       ),
     );
   }

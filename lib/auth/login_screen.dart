@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/profile/profile_screen.dart';
 
+import '../l10n/app_localizations.dart';
+
 import 'auth_colors.dart';
 import 'login_controller.dart';
 
@@ -17,8 +19,7 @@ class LoginScreen extends StatefulWidget {
       _LoginScreenState();
 }
 
-class _LoginScreenState
-    extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final emailController =
   TextEditingController();
 
@@ -105,10 +106,12 @@ class _LoginScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n =
+    AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor:
       AuthColors.background,
-
       body: SafeArea(
         child: LayoutBuilder(
           builder: (
@@ -123,7 +126,6 @@ class _LoginScreenState
               const EdgeInsets.symmetric(
                 horizontal: 23,
               ),
-
               child: Column(
                 children: [
                   // ================= LOGO =================
@@ -164,7 +166,8 @@ class _LoginScreenState
                   AuthTextField(
                     controller:
                     emailController,
-                    hintText: 'Email',
+                    hintText:
+                    l10n.email,
                     icon: Icons.email,
                     keyboardType:
                     TextInputType
@@ -181,7 +184,8 @@ class _LoginScreenState
                   AuthTextField(
                     controller:
                     passwordController,
-                    hintText: 'Password',
+                    hintText:
+                    l10n.password,
                     icon: Icons.lock,
                     obscureText:
                     obscurePassword,
@@ -197,7 +201,8 @@ class _LoginScreenState
                         obscurePassword
                             ? Icons
                             .visibility_off
-                            : Icons.visibility,
+                            : Icons
+                            .visibility,
                         color: Colors.white,
                         size: 28,
                       ),
@@ -211,16 +216,17 @@ class _LoginScreenState
                     height * 0.055,
                     child: Align(
                       alignment:
-                      Alignment.centerRight,
+                      AlignmentDirectional
+                          .centerEnd,
                       child:
                       GestureDetector(
                         onTap:
                         goToForgetPassword,
-                        child:
-                        const Text(
-                          'Forget Password ?',
+                        child: Text(
+                          l10n
+                              .forgetPasswordQuestion,
                           style:
-                          TextStyle(
+                          const TextStyle(
                             color:
                             AuthColors.yellow,
                             fontSize: 16,
@@ -239,7 +245,8 @@ class _LoginScreenState
                     height * 0.075,
                     child:
                     AuthPrimaryButton(
-                      text: 'Login',
+                      text:
+                      l10n.login,
                       onPressed: login,
                       isLoading:
                       isLoading,
@@ -256,35 +263,30 @@ class _LoginScreenState
                   SizedBox(
                     height:
                     height * 0.04,
-
                     child: FittedBox(
                       fit:
                       BoxFit.scaleDown,
-
                       child: Row(
                         mainAxisAlignment:
                         MainAxisAlignment
                             .center,
-
                         children: [
-                          const Text(
-                            "Don’t Have Account ? ",
+                          Text(
+                            '${l10n.dontHaveAccount} ',
                             style:
-                            TextStyle(
+                            const TextStyle(
                               color:
                               Colors.white,
                               fontSize: 16,
                             ),
                           ),
-
                           GestureDetector(
                             onTap:
                             goToRegister,
-                            child:
-                            const Text(
-                              'Create One',
+                            child: Text(
+                              l10n.createOne,
                               style:
-                              TextStyle(
+                              const TextStyle(
                                 color:
                                 AuthColors.yellow,
                                 fontSize: 16,
@@ -316,17 +318,16 @@ class _LoginScreenState
 
                   AuthPrimaryButton(
                     text:
-                    'Login With Google',
+                    l10n.loginWithGoogle,
                     onPressed: () {
                       showMessage(
-                        'Google login is not implemented yet.',
+                        l10n
+                            .googleLoginNotImplemented,
                       );
                     },
                   ),
 
                   const Spacer(),
-
-                  // ================= LANGUAGE =================
 
                   const LanguageSwitcher(),
 
@@ -342,8 +343,6 @@ class _LoginScreenState
       ),
     );
   }
-
-  // ================= DISPOSE =================
 
   @override
   void dispose() {

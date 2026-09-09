@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
+
 import '../widgets/app_bottom_nav.dart';
 
 import '../auth/login_screen.dart';
@@ -113,10 +115,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       setState(() {});
 
+      final l10n = AppLocalizations.of(context)!;
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Profile updated successfully.',
+            l10n.profileUpdatedSuccessfully,
           ),
           backgroundColor: ProfileColors.yellow,
         ),
@@ -257,6 +261,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     final User? user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
@@ -265,18 +271,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     final String name = user.displayName?.isNotEmpty == true
         ? user.displayName!
-        : 'User';
+        : l10n.user;
 
     return Scaffold(
       backgroundColor: ProfileColors.background,
-
       body: SafeArea(
         child: Column(
           children: [
-            // ==================================================
-            // PROFILE HEADER
-            // ==================================================
-
             Container(
               width: double.infinity,
               color: ProfileColors.topSection,
@@ -291,10 +292,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // ==========================================
-                      // AVATAR + NAME
-                      // ==========================================
-
                       Column(
                         children: [
                           Container(
@@ -331,17 +328,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                       const Spacer(),
 
-                      // ==========================================
-                      // STATS
-                      // ==========================================
-
                       Padding(
                         padding: const EdgeInsets.only(
                           top: 28,
                         ),
                         child: Row(
                           children: [
-                            // WATCH LIST COUNT
                             StreamBuilder<int>(
                               stream: watchlistService
                                   .getWatchlistCountStream(),
@@ -350,22 +342,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                                 return _Stat(
                                   number: count.toString(),
-                                  title: 'Watch List',
+                                  title: l10n.watchList,
                                 );
                               },
                             ),
 
                             const SizedBox(width: 25),
 
-                            // HISTORY COUNT
-                            const _Stat(
+                            _Stat(
                               number: '0',
-                              title: 'History',
+                              title: l10n.history,
                             ),
 
                             const SizedBox(width: 20),
 
-                            // FAVORITES COUNT
                             StreamBuilder<int>(
                               stream: favoriteService
                                   .getFavoritesCountStream(),
@@ -374,7 +364,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                                 return _Stat(
                                   number: count.toString(),
-                                  title: 'Favorites',
+                                  title: l10n.favorites,
                                 );
                               },
                             ),
@@ -385,10 +375,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
 
                   const SizedBox(height: 22),
-
-                  // ==============================================
-                  // BUTTONS
-                  // ==============================================
 
                   Row(
                     children: [
@@ -408,9 +394,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            child: const Text(
-                              'Edit Profile',
-                              style: TextStyle(
+                            child: Text(
+                              l10n.editProfile,
+                              style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -436,19 +422,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                             ),
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment:
                               MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Exit',
-                                  style: TextStyle(
+                                  l10n.exit,
+                                  style: const TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                SizedBox(width: 6),
-                                Icon(
+
+                                const SizedBox(width: 6),
+
+                                const Icon(
                                   Icons.logout,
                                   size: 20,
                                 ),
@@ -462,16 +450,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   const SizedBox(height: 22),
 
-                  // ==============================================
-                  // PROFILE TABS
-                  // ==============================================
-
                   Row(
                     children: [
                       Expanded(
                         child: _ProfileTab(
                           icon: Icons.format_list_bulleted_rounded,
-                          title: 'Watch List',
+                          title: l10n.watchList,
                           isSelected: selectedSection == 0,
                           onTap: () {
                             setState(() {
@@ -484,7 +468,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Expanded(
                         child: _ProfileTab(
                           icon: Icons.history,
-                          title: 'History',
+                          title: l10n.history,
                           isSelected: selectedSection == 1,
                           onTap: () {
                             setState(() {
@@ -497,7 +481,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Expanded(
                         child: _ProfileTab(
                           icon: Icons.favorite,
-                          title: 'Favorites',
+                          title: l10n.favorites,
                           isSelected: selectedSection == 2,
                           onTap: () {
                             setState(() {
@@ -511,10 +495,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-
-            // ==================================================
-            // TAB CONTENT
-            // ==================================================
 
             Expanded(
               child: IndexedStack(
@@ -530,10 +510,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
 
-      // ==========================================================
-      // BOTTOM NAVIGATION
-      // ==========================================================
-
       bottomNavigationBar: AppBottomNav(
         currentIndex: 3,
         onTap: _onNavigationTap,
@@ -546,6 +522,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // ============================================================
 
   Widget buildGuestProfile() {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: ProfileColors.background,
       body: SafeArea(
@@ -573,10 +551,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 const SizedBox(height: 20),
 
-                const Text(
-                  'Welcome to Movies App',
+                Text(
+                  l10n.welcomeToMoviesApp,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -585,10 +563,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 const SizedBox(height: 10),
 
-                const Text(
-                  'Login or create an account to access your profile, watchlist and favorites.',
+                Text(
+                  l10n.guestProfileDescription,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white54,
                     fontSize: 14,
                   ),
@@ -618,9 +596,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(
+                    child: Text(
+                      l10n.login,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -654,9 +632,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    child: const Text(
-                      'Create Account',
-                      style: TextStyle(
+                    child: Text(
+                      l10n.createAccount,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -697,9 +675,12 @@ class _Stat extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+
         const SizedBox(height: 8),
+
         Text(
           title,
+          textAlign: TextAlign.center,
           style: const TextStyle(
             color: Colors.white,
             fontSize: 14,
@@ -748,9 +729,12 @@ class _ProfileTab extends StatelessWidget {
                       : Colors.white70,
                   size: 31,
                 ),
+
                 const SizedBox(height: 7),
+
                 Text(
                   title,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: isSelected
                         ? Colors.white
@@ -764,7 +748,9 @@ class _ProfileTab extends StatelessWidget {
               ],
             ),
           ),
+
           const SizedBox(height: 4),
+
           AnimatedContainer(
             duration: const Duration(
               milliseconds: 200,

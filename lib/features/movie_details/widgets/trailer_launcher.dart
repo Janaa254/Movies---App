@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class TrailerLauncher {
   const TrailerLauncher._();
 
@@ -8,12 +10,16 @@ class TrailerLauncher {
     required BuildContext context,
     required String? trailerCode,
   }) async {
-    // Check if the movie has a trailer.
-    if (trailerCode == null || trailerCode.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+    final l10n =
+    AppLocalizations.of(context)!;
+
+    if (trailerCode == null ||
+        trailerCode.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+        SnackBar(
           content: Text(
-            'Trailer is not available for this movie.',
+            l10n.trailerNotAvailable,
           ),
         ),
       );
@@ -25,17 +31,17 @@ class TrailerLauncher {
       'https://www.youtube.com/watch?v=$trailerCode',
     );
 
-    // Open trailer using YouTube or the browser.
     final launched = await launchUrl(
       uri,
       mode: LaunchMode.externalApplication,
     );
 
     if (!launched && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+        SnackBar(
           content: Text(
-            'Could not open the trailer.',
+            l10n.couldNotOpenTrailer,
           ),
         ),
       );

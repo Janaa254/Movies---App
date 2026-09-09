@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
+
 import 'auth_colors.dart';
 import 'register_controller.dart';
 import 'register_data.dart';
@@ -19,12 +21,20 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState
     extends State<RegisterScreen> {
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final nameController =
+  TextEditingController();
+
+  final emailController =
+  TextEditingController();
+
+  final passwordController =
+  TextEditingController();
+
   final confirmPasswordController =
   TextEditingController();
-  final phoneController = TextEditingController();
+
+  final phoneController =
+  TextEditingController();
 
   final RegisterController registerController =
   RegisterController();
@@ -38,13 +48,16 @@ class _RegisterScreenState
   Future<void> register() async {
     setState(() => isLoading = true);
 
-    final error = await registerController.register(
+    final error =
+    await registerController.register(
       name: nameController.text.trim(),
       email: emailController.text.trim(),
-      password: passwordController.text.trim(),
+      password:
+      passwordController.text.trim(),
       confirmPassword:
       confirmPasswordController.text.trim(),
-      phone: phoneController.text.trim(),
+      phone:
+      phoneController.text.trim(),
     );
 
     if (!mounted) return;
@@ -56,32 +69,43 @@ class _RegisterScreenState
       return;
     }
 
-    showMessage('Account created successfully.');
+    final l10n =
+    AppLocalizations.of(context)!;
+
+    showMessage(
+      l10n.accountCreatedSuccessfully,
+    );
 
     Navigator.pop(context);
   }
 
   void showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.of(context)
+        .showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AuthColors.yellow,
-        behavior: SnackBarBehavior.floating,
+        backgroundColor:
+        AuthColors.yellow,
+        behavior:
+        SnackBarBehavior.floating,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AuthColors.background,
+    final l10n =
+    AppLocalizations.of(context)!;
 
+    return Scaffold(
+      backgroundColor:
+      AuthColors.background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
+          padding:
+          const EdgeInsets.symmetric(
             horizontal: 30,
           ),
-
           child: Column(
             children: [
               SizedBox(
@@ -93,28 +117,33 @@ class _RegisterScreenState
               ),
 
               Expanded(
-                child: RegisterAvatarSelector(
+                child:
+                RegisterAvatarSelector(
                   avatars:
                   RegisterData.avatars,
                   selectedAvatar:
                   selectedAvatar,
                   onSelected: (index) {
                     setState(() {
-                      selectedAvatar = index;
+                      selectedAvatar =
+                          index;
                     });
                   },
                 ),
               ),
 
-              const Text(
-                'Avatar',
-                style: TextStyle(
-                  color: AuthColors.white,
+              Text(
+                l10n.avatar,
+                style: const TextStyle(
+                  color:
+                  AuthColors.white,
                   fontSize: 25,
                 ),
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(
+                height: 12,
+              ),
 
               RegisterForm(
                 nameController:
@@ -133,34 +162,35 @@ class _RegisterScreenState
                 obscureConfirmPassword,
                 isLoading:
                 isLoading,
-
                 onTogglePassword: () {
                   setState(() {
                     obscurePassword =
                     !obscurePassword;
                   });
                 },
-
-                onToggleConfirmPassword: () {
+                onToggleConfirmPassword:
+                    () {
                   setState(() {
                     obscureConfirmPassword =
                     !obscureConfirmPassword;
                   });
                 },
-
                 onRegister:
                 register,
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(
+                height: 12,
+              ),
 
               Row(
                 mainAxisAlignment:
                 MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Already Have Account ? ',
-                    style: TextStyle(
+                  Text(
+                    '${l10n.alreadyHaveAccount} ',
+                    style:
+                    const TextStyle(
                       color:
                       AuthColors.white,
                       fontSize: 18,
@@ -168,10 +198,13 @@ class _RegisterScreenState
                   ),
                   GestureDetector(
                     onTap: () =>
-                        Navigator.pop(context),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(
+                        Navigator.pop(
+                          context,
+                        ),
+                    child: Text(
+                      l10n.login,
+                      style:
+                      const TextStyle(
                         color:
                         AuthColors.yellow,
                         fontSize: 18,
@@ -183,11 +216,15 @@ class _RegisterScreenState
                 ],
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(
+                height: 12,
+              ),
 
               const LanguageSwitcher(),
 
-              const SizedBox(height: 12),
+              const SizedBox(
+                height: 12,
+              ),
             ],
           ),
         ),

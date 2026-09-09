@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 import '../auth_colors.dart';
 import 'auth_text_field.dart';
 import 'auth_primary_button.dart';
@@ -36,11 +38,13 @@ class RegisterForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         AuthTextField(
           controller: nameController,
-          hintText: 'Name',
+          hintText: l10n.name,
           icon: Icons.badge_outlined,
           borderRadius: 25,
           fontSize: 20,
@@ -50,7 +54,7 @@ class RegisterForm extends StatelessWidget {
 
         AuthTextField(
           controller: emailController,
-          hintText: 'Email',
+          hintText: l10n.email,
           icon: Icons.email,
           keyboardType: TextInputType.emailAddress,
           borderRadius: 25,
@@ -61,7 +65,7 @@ class RegisterForm extends StatelessWidget {
 
         AuthTextField(
           controller: passwordController,
-          hintText: 'Password',
+          hintText: l10n.password,
           icon: Icons.lock,
           obscureText: obscurePassword,
           borderRadius: 25,
@@ -81,7 +85,7 @@ class RegisterForm extends StatelessWidget {
 
         AuthTextField(
           controller: confirmPasswordController,
-          hintText: 'Confirm Password',
+          hintText: l10n.confirmPassword,
           icon: Icons.lock,
           obscureText: obscureConfirmPassword,
           borderRadius: 25,
@@ -101,7 +105,7 @@ class RegisterForm extends StatelessWidget {
 
         AuthTextField(
           controller: phoneController,
-          hintText: 'Phone Number',
+          hintText: l10n.phoneNumber,
           icon: Icons.phone,
           keyboardType: TextInputType.phone,
           borderRadius: 25,
@@ -111,7 +115,7 @@ class RegisterForm extends StatelessWidget {
         const SizedBox(height: 18),
 
         AuthPrimaryButton(
-          text: 'Create Account',
+          text: l10n.createAccount,
           onPressed: onRegister,
           isLoading: isLoading,
         ),

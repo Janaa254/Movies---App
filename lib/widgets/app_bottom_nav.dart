@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
+
 class AppBottomNav extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
@@ -12,6 +14,8 @@ class AppBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       padding: const EdgeInsets.symmetric(
@@ -28,7 +32,7 @@ class AppBottomNav extends StatelessWidget {
             child: _NavItem(
               icon: Icons.home_outlined,
               activeIcon: Icons.home,
-              label: 'Home',
+              label: l10n.home,
               isSelected: currentIndex == 0,
               onTap: () => onTap(0),
             ),
@@ -37,7 +41,7 @@ class AppBottomNav extends StatelessWidget {
             child: _NavItem(
               icon: Icons.search,
               activeIcon: Icons.search,
-              label: 'Search',
+              label: l10n.search,
               isSelected: currentIndex == 1,
               onTap: () => onTap(1),
             ),
@@ -46,7 +50,7 @@ class AppBottomNav extends StatelessWidget {
             child: _NavItem(
               icon: Icons.movie_outlined,
               activeIcon: Icons.movie,
-              label: 'Browse',
+              label: l10n.browse,
               isSelected: currentIndex == 2,
               onTap: () => onTap(2),
             ),
@@ -55,7 +59,7 @@ class AppBottomNav extends StatelessWidget {
             child: _NavItem(
               icon: Icons.person_outline,
               activeIcon: Icons.person,
-              label: 'Profile',
+              label: l10n.profile,
               isSelected: currentIndex == 3,
               onTap: () => onTap(3),
             ),
@@ -119,6 +123,7 @@ class _NavItem extends StatelessWidget {
             const SizedBox(height: 3),
             Text(
               label,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: isSelected
                     ? const Color(0xffffc107)

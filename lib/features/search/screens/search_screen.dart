@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../widgets/app_bottom_nav.dart';
+import '../../../l10n/app_localizations.dart';
 
 import '../../browse/screens/browse_screen.dart';
 import '../../movie_details/screens/movie_details_screen.dart';
@@ -46,10 +47,6 @@ class _SearchViewState extends State<_SearchView> {
     _scrollController.addListener(_onScroll);
   }
 
-  // ============================================================
-  // SCROLL
-  // ============================================================
-
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 400) {
@@ -58,10 +55,6 @@ class _SearchViewState extends State<_SearchView> {
       );
     }
   }
-
-  // ============================================================
-  // SEARCH
-  // ============================================================
 
   void _search() {
     final query = _searchController.text.trim();
@@ -77,10 +70,6 @@ class _SearchViewState extends State<_SearchView> {
     );
   }
 
-  // ============================================================
-  // DISPOSE
-  // ============================================================
-
   @override
   void dispose() {
     _searchController.dispose();
@@ -88,10 +77,6 @@ class _SearchViewState extends State<_SearchView> {
 
     super.dispose();
   }
-
-  // ============================================================
-  // BUILD
-  // ============================================================
 
   @override
   Widget build(BuildContext context) {
@@ -146,10 +131,6 @@ class _SearchViewState extends State<_SearchView> {
         ),
       ),
 
-      // ==========================================================
-      // UNIFIED BOTTOM NAVIGATION
-      // ==========================================================
-
       bottomNavigationBar: AppBottomNav(
         currentIndex: 1,
         onTap: _onNavigationTap,
@@ -162,18 +143,20 @@ class _SearchViewState extends State<_SearchView> {
   // ============================================================
 
   Widget _buildHeader() {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(
+    final l10n = AppLocalizations.of(context)!;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
         16,
         8,
         16,
         12,
       ),
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: AlignmentDirectional.centerStart,
         child: Text(
-          'Search',
-          style: TextStyle(
+          l10n.search,
+          style: const TextStyle(
             color: Colors.white70,
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -188,6 +171,8 @@ class _SearchViewState extends State<_SearchView> {
   // ============================================================
 
   Widget _buildSearchBar() {
+    final l10n = AppLocalizations.of(context)!;
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 16,
@@ -203,7 +188,7 @@ class _SearchViewState extends State<_SearchView> {
           fontSize: 13,
         ),
         decoration: InputDecoration(
-          hintText: 'Search...',
+          hintText: l10n.searchHint,
           hintStyle: const TextStyle(
             color: Colors.white38,
             fontSize: 13,
@@ -265,22 +250,24 @@ class _SearchViewState extends State<_SearchView> {
   // ============================================================
 
   Widget _buildInitial() {
-    return const Center(
+    final l10n = AppLocalizations.of(context)!;
+
+    return Center(
       child: Column(
         mainAxisAlignment:
         MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.search,
             color: Colors.white24,
             size: 60,
           ),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           Text(
-            'Search for a movie',
-            style: TextStyle(
+            l10n.searchForMovie,
+            style: const TextStyle(
               color: Colors.white54,
               fontSize: 14,
             ),
@@ -297,11 +284,13 @@ class _SearchViewState extends State<_SearchView> {
   Widget _buildMoviesGrid(
       SearchSuccess state,
       ) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (state.movies.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'No movies found',
-          style: TextStyle(
+          l10n.noMoviesFound,
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 14,
           ),
@@ -424,10 +413,6 @@ class _SearchViewState extends State<_SearchView> {
               ),
             ),
 
-            // ==================================================
-            // RATING
-            // ==================================================
-
             Positioned(
               top: 7,
               left: 7,
@@ -489,6 +474,8 @@ class _SearchViewState extends State<_SearchView> {
   Widget _buildError(
       String message,
       ) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(
@@ -506,9 +493,9 @@ class _SearchViewState extends State<_SearchView> {
             const SizedBox(
               height: 16,
             ),
-            const Text(
-              'Something went wrong',
-              style: TextStyle(
+            Text(
+              l10n.somethingWentWrong,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight:
@@ -533,8 +520,8 @@ class _SearchViewState extends State<_SearchView> {
             ),
             ElevatedButton(
               onPressed: _search,
-              child: const Text(
-                'Retry',
+              child: Text(
+                l10n.retry,
               ),
             ),
           ],

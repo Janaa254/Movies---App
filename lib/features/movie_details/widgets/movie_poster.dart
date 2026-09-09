@@ -24,9 +24,11 @@ class MoviePoster extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isRtl =
+        Directionality.of(context) == TextDirection.rtl;
+
     return Stack(
       children: [
-        // Movie cover image
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: AspectRatio(
@@ -52,29 +54,28 @@ class MoviePoster extends StatelessWidget {
           ),
         ),
 
-        // Back button
-        Positioned(
+        PositionedDirectional(
           top: 12,
-          left: 12,
+          start: 12,
           child: _CircleButton(
             onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(
-              Icons.arrow_back_ios_new,
+            child: Icon(
+              isRtl
+                  ? Icons.arrow_forward_ios
+                  : Icons.arrow_back_ios_new,
               color: Colors.white,
               size: 21,
             ),
           ),
         ),
 
-        // Favorite + Watchlist buttons
-        Positioned(
+        PositionedDirectional(
           top: 12,
-          right: 12,
+          end: 12,
           child: Row(
             children: [
-              // FAVORITE
               _CircleButton(
                 onTap: onFavoriteTap,
                 child: Icon(
@@ -90,7 +91,6 @@ class MoviePoster extends StatelessWidget {
 
               const SizedBox(width: 8),
 
-              // WATCHLIST
               _CircleButton(
                 onTap: onWatchlistTap,
                 child: Icon(
@@ -107,7 +107,6 @@ class MoviePoster extends StatelessWidget {
           ),
         ),
 
-        // Trailer play button
         Positioned.fill(
           child: Center(
             child: GestureDetector(
@@ -138,11 +137,10 @@ class MoviePoster extends StatelessWidget {
           ),
         ),
 
-        // Movie title and year
-        Positioned(
+        PositionedDirectional(
           bottom: 75,
-          left: 20,
-          right: 20,
+          start: 20,
+          end: 20,
           child: Column(
             children: [
               Text(

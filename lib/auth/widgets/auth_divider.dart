@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../auth_colors.dart';
 
 class AuthDivider extends StatelessWidget {
@@ -7,6 +8,8 @@ class AuthDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Row(
       children: [
         Expanded(
@@ -15,16 +18,20 @@ class AuthDivider extends StatelessWidget {
             color: AuthColors.yellow,
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 13),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 13,
+          ),
           child: Text(
-            'OR',
-            style: TextStyle(
+            l10n.or,
+            style: const TextStyle(
               color: AuthColors.yellow,
               fontSize: 16,
             ),
           ),
         ),
+
         Expanded(
           child: Container(
             height: 2,

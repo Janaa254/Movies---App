@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 import '../../features/movie_details/screens/movie_details_screen.dart';
 import '../../data/services/favorite_service.dart';
 
@@ -12,10 +14,11 @@ class FavoritesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
-      return _buildEmptyState();
+      return _buildEmptyState(context);
     }
 
     final favoriteService = FavoriteService();
@@ -39,7 +42,7 @@ class FavoritesTab extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(25),
                 child: Text(
-                  'Something went wrong\n${snapshot.error}',
+                  l10n.couldNotLoadFavorites,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white70,
@@ -52,7 +55,7 @@ class FavoritesTab extends StatelessWidget {
           final docs = snapshot.data?.docs ?? [];
 
           if (docs.isEmpty) {
-            return _buildEmptyState();
+            return _buildEmptyState(context);
           }
 
           return GridView.builder(
@@ -82,7 +85,7 @@ class FavoritesTab extends StatelessWidget {
                   0;
 
               final String title =
-                  data['title']?.toString() ?? 'Movie';
+                  data['title']?.toString() ?? l10n.movie;
 
               final String image =
                   data['mediumCoverImage']?.toString() ??
@@ -156,7 +159,6 @@ class FavoritesTab extends StatelessWidget {
                       ),
                     ),
 
-                    // Dark gradient
                     Positioned.fill(
                       child: Container(
                         decoration: BoxDecoration(
@@ -179,7 +181,6 @@ class FavoritesTab extends StatelessWidget {
                       ),
                     ),
 
-                    // Rating
                     Positioned(
                       top: 8,
                       left: 8,
@@ -214,7 +215,6 @@ class FavoritesTab extends StatelessWidget {
                       ),
                     ),
 
-                    // Remove favorite
                     Positioned(
                       top: 5,
                       right: 5,
@@ -244,14 +244,13 @@ class FavoritesTab extends StatelessWidget {
                           }
                         },
                         icon: const Icon(
-                          Icons.bookmark,
+                          Icons.favorite,
                           color: ProfileColors.yellow,
                           size: 27,
                         ),
                       ),
                     ),
 
-                    // Movie title
                     Positioned(
                       left: 10,
                       right: 10,
@@ -277,7 +276,9 @@ class FavoritesTab extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       color: ProfileColors.background,
@@ -294,28 +295,28 @@ class FavoritesTab extends StatelessWidget {
               color: ProfileColors.cardColor,
               borderRadius: BorderRadius.circular(18),
             ),
-            child: const Column(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.favorite_border,
                   color: ProfileColors.yellow,
                   size: 70,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
-                  'No Favorites Yet',
-                  style: TextStyle(
+                  l10n.noFavoritesYet,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 21,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
-                  'Movies you like will appear here.',
+                  l10n.moviesYouLikeAppearHere,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white54,
                     fontSize: 14,
                   ),

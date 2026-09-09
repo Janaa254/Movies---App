@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../data/models/movie_details_model.dart';
+import '../../../l10n/app_localizations.dart';
 
 import 'cast_section.dart';
 import 'similar_movies.dart';
@@ -35,6 +36,8 @@ class MovieDetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(
         16,
@@ -68,8 +71,8 @@ class MovieDetailsContent extends StatelessWidget {
           const SizedBox(height: 20),
 
           if (movie.screenshots.isNotEmpty) ...[
-            const SectionTitle(
-              title: 'Screen Shots',
+            SectionTitle(
+              title: l10n.screenShots,
             ),
 
             const SizedBox(height: 10),
@@ -90,8 +93,8 @@ class MovieDetailsContent extends StatelessWidget {
             const SizedBox(height: 25),
           ],
 
-          const SectionTitle(
-            title: 'Summary',
+          SectionTitle(
+            title: l10n.summary,
           ),
 
           const SizedBox(height: 10),
@@ -99,7 +102,7 @@ class MovieDetailsContent extends StatelessWidget {
           Text(
             movie.summary ??
                 movie.description ??
-                'No summary available.',
+                l10n.noSummaryAvailable,
             style: const TextStyle(
               color: Colors.white70,
               height: 1.5,
@@ -116,8 +119,8 @@ class MovieDetailsContent extends StatelessWidget {
           const SizedBox(height: 25),
 
           if (movie.genres.isNotEmpty) ...[
-            const SectionTitle(
-              title: 'Genres',
+            SectionTitle(
+              title: l10n.genres,
             ),
 
             const SizedBox(height: 12),

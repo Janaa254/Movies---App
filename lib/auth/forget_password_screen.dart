@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
+
 class ForgetPasswordScreen extends StatefulWidget {
-  const ForgetPasswordScreen({super.key});
+  const ForgetPasswordScreen({
+    super.key,
+  });
 
   @override
-  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+  State<ForgetPasswordScreen> createState() =>
+      _ForgetPasswordScreenState();
 }
 
-class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
-  final TextEditingController emailController = TextEditingController();
+class _ForgetPasswordScreenState
+    extends State<ForgetPasswordScreen> {
+  final TextEditingController emailController =
+  TextEditingController();
 
   @override
   void dispose() {
@@ -17,28 +24,42 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   }
 
   void verifyEmail() {
-    final email = emailController.text.trim();
+    final l10n =
+    AppLocalizations.of(context)!;
+
+    final email =
+    emailController.text.trim();
 
     if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter your email'),
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
+        SnackBar(
+          content: Text(
+            l10n.pleaseEnterYourEmail,
+          ),
         ),
       );
+
       return;
     }
 
-    // Add your API or Firebase password reset logic here
     debugPrint('Email: $email');
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n =
+    AppLocalizations.of(context)!;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF101211),
+      backgroundColor:
+      const Color(0xFF101211),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+          padding:
+          const EdgeInsets.symmetric(
+            horizontal: 30,
+          ),
           child: Column(
             children: [
               // Header
@@ -48,34 +69,52 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   alignment: Alignment.center,
                   children: [
                     Align(
-                      alignment: Alignment.centerLeft,
+                      alignment:
+                      AlignmentDirectional
+                          .centerStart,
                       child: IconButton(
                         onPressed: () {
-                          Navigator.pop(context);
+                          Navigator.pop(
+                            context,
+                          );
                         },
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          color: Color(0xFFFFC400),
+                        icon: Icon(
+                          Directionality.of(
+                              context) ==
+                              TextDirection.rtl
+                              ? Icons.arrow_forward
+                              : Icons.arrow_back,
+                          color:
+                          const Color(
+                            0xFFFFC400,
+                          ),
                           size: 38,
                         ),
-                        padding: EdgeInsets.zero,
+                        padding:
+                        EdgeInsets.zero,
                       ),
                     ),
-                    const Text(
-                      'Forget Password',
-                      style: TextStyle(
-                        color: Color(0xFFFFC400),
+
+                    Text(
+                      l10n.forgetPassword,
+                      style:
+                      const TextStyle(
+                        color: Color(
+                          0xFFFFC400,
+                        ),
                         fontSize: 30,
-                        fontWeight: FontWeight.w400,
+                        fontWeight:
+                        FontWeight.w400,
                       ),
                     ),
                   ],
                 ),
               ),
 
-              const Spacer(flex: 1),
+              const Spacer(
+                flex: 1,
+              ),
 
-              // Illustration
               Expanded(
                 flex: 5,
                 child: Image.asset(
@@ -84,67 +123,105 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 ),
               ),
 
-              const Spacer(flex: 1),
+              const Spacer(
+                flex: 1,
+              ),
 
-              // Email Field
               SizedBox(
                 height: 75,
                 width: double.infinity,
                 child: TextField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  style: const TextStyle(
+                  controller:
+                  emailController,
+                  keyboardType:
+                  TextInputType
+                      .emailAddress,
+                  style:
+                  const TextStyle(
                     color: Colors.white,
                     fontSize: 22,
                   ),
-                  decoration: InputDecoration(
+                  decoration:
+                  InputDecoration(
                     filled: true,
-                    fillColor: const Color(0xFF292B2A),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(24),
-                      borderSide: BorderSide.none,
+                    fillColor:
+                    const Color(
+                      0xFF292B2A,
                     ),
-                    prefixIcon: const Icon(
+                    border:
+                    OutlineInputBorder(
+                      borderRadius:
+                      BorderRadius
+                          .circular(
+                        24,
+                      ),
+                      borderSide:
+                      BorderSide.none,
+                    ),
+                    prefixIcon:
+                    const Icon(
                       Icons.email,
-                      color: Colors.white,
+                      color:
+                      Colors.white,
                       size: 35,
                     ),
-                    hintText: 'Email',
-                    hintStyle: const TextStyle(
-                      color: Colors.white,
+                    hintText:
+                    l10n.email,
+                    hintStyle:
+                    const TextStyle(
+                      color:
+                      Colors.white,
                       fontSize: 22,
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(
+                height: 18,
+              ),
 
-              // Verify Email Button
               SizedBox(
                 height: 75,
                 width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: verifyEmail,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFC400),
-                    foregroundColor: Colors.black,
+                child:
+                ElevatedButton(
+                  onPressed:
+                  verifyEmail,
+                  style:
+                  ElevatedButton
+                      .styleFrom(
+                    backgroundColor:
+                    const Color(
+                      0xFFFFC400,
+                    ),
+                    foregroundColor:
+                    Colors.black,
                     elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                    shape:
+                    RoundedRectangleBorder(
+                      borderRadius:
+                      BorderRadius
+                          .circular(
+                        24,
+                      ),
                     ),
                   ),
-                  child: const Text(
-                    'Verify Email',
-                    style: TextStyle(
+                  child: Text(
+                    l10n.verifyEmail,
+                    style:
+                    const TextStyle(
                       fontSize: 25,
-                      fontWeight: FontWeight.w500,
+                      fontWeight:
+                      FontWeight.w500,
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),

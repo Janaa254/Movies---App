@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../data/models/movie_details_model.dart';
+import '../../../l10n/app_localizations.dart';
 
 class SimilarMovies extends StatelessWidget {
   final List<MovieDetailsModel> movies;
@@ -14,6 +15,8 @@ class SimilarMovies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (movies.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -21,15 +24,17 @@ class SimilarMovies extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Similar',
-          style: TextStyle(
+        Text(
+          l10n.similar,
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
+
         const SizedBox(height: 12),
+
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

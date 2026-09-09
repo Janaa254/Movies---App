@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../auth_colors.dart';
 
 class RegisterHeader extends StatelessWidget {
@@ -12,24 +13,28 @@ class RegisterHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Stack(
       alignment: Alignment.center,
       children: [
         Align(
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: IconButton(
             onPressed: onBack,
             padding: EdgeInsets.zero,
-            icon: const Icon(
-              Icons.arrow_back,
+            icon: Icon(
+              Directionality.of(context) == TextDirection.rtl
+                  ? Icons.arrow_forward
+                  : Icons.arrow_back,
               color: AuthColors.yellow,
               size: 36,
             ),
           ),
         ),
-        const Text(
-          'Register',
-          style: TextStyle(
+        Text(
+          l10n.register,
+          style: const TextStyle(
             color: AuthColors.yellow,
             fontSize: 28,
           ),

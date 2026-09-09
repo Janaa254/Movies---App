@@ -20,7 +20,8 @@ class MovieScreenshots extends StatelessWidget {
             width: double.infinity,
             height: 150,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius:
+              BorderRadius.circular(10),
               child: Image.network(
                 image,
                 fit: BoxFit.cover,
@@ -30,10 +31,12 @@ class MovieScreenshots extends StatelessWidget {
                     stackTrace,
                     ) {
                   return Container(
-                    color: const Color(0xff292929),
+                    color:
+                    const Color(0xff292929),
                     child: const Center(
                       child: Icon(
-                        Icons.broken_image_outlined,
+                        Icons
+                            .broken_image_outlined,
                         color: Colors.grey,
                       ),
                     ),
