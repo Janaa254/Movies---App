@@ -1,0 +1,28 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "movies-app-rewan",
+          "appId": "1:384518109352:android:9a7e1067888ddca33c6a9d",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "movies-app-rewan",
+          "configurations": {
+            "android": "1:384518109352:android:9a7e1067888ddca33c6a9d",
+            "ios": "1:384518109352:ios:ee3815d7c0c7381e3c6a9d",
+            "macos": "1:384518109352:ios:ee3815d7c0c7381e3c6a9d",
+            "web": "1:384518109352:web:3ae3ecf57033fd343c6a9d",
+            "windows": "1:384518109352:web:8fc24852b378e7df3c6a9d"
+          }
+        }
+      }
+    }
+  },
+  "auth": {
+    "providers": {}
+  }
+}
