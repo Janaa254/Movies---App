@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import '../widgets/compact_language_switcher.dart';
 
 import 'avatar_picker.dart';
 import 'profile_colors.dart';
@@ -128,19 +129,13 @@ class _UpdateProfileScreenState
     });
 
     try {
-      // ================= UPDATE NAME =================
-
       if (name != user.displayName) {
         await user.updateDisplayName(name);
       }
 
-      // ================= UPDATE EMAIL =================
-
       if (email != user.email) {
         await user.verifyBeforeUpdateEmail(email);
       }
-
-      // ================= SAVE FIRESTORE DATA =================
 
       await FirebaseFirestore.instance
           .collection('users')
@@ -198,8 +193,7 @@ class _UpdateProfileScreenState
   // ================= MESSAGE =================
 
   void showMessage(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor:
@@ -216,6 +210,7 @@ class _UpdateProfileScreenState
   void dispose() {
     nameController.dispose();
     emailController.dispose();
+
     super.dispose();
   }
 
@@ -239,6 +234,7 @@ class _UpdateProfileScreenState
         const IconThemeData(
           color: Colors.white,
         ),
+
         title: Text(
           l10n.editProfile,
           style: const TextStyle(
@@ -248,6 +244,19 @@ class _UpdateProfileScreenState
             FontWeight.bold,
           ),
         ),
+
+        actions: const [
+          Padding(
+            padding:
+            EdgeInsetsDirectional.only(
+              end: 12,
+            ),
+            child: Center(
+              child:
+              CompactLanguageSwitcher(),
+            ),
+          ),
+        ],
       ),
 
       body: SingleChildScrollView(
@@ -257,8 +266,6 @@ class _UpdateProfileScreenState
         child: Column(
           children: [
             const SizedBox(height: 15),
-
-            // ================= AVATAR =================
 
             GestureDetector(
               onTap: showAvatarPicker,
@@ -274,7 +281,8 @@ class _UpdateProfileScreenState
                   ProfileColors.yellow,
                 ),
                 child: ClipOval(
-                  child: _buildSelectedAvatar(),
+                  child:
+                  _buildSelectedAvatar(),
                 ),
               ),
             ),
@@ -303,8 +311,6 @@ class _UpdateProfileScreenState
 
             const SizedBox(height: 30),
 
-            // ================= NAME =================
-
             _buildTextField(
               controller: nameController,
               labelText: l10n.name,
@@ -313,8 +319,6 @@ class _UpdateProfileScreenState
             ),
 
             const SizedBox(height: 18),
-
-            // ================= EMAIL =================
 
             _buildTextField(
               controller: emailController,
@@ -326,8 +330,6 @@ class _UpdateProfileScreenState
             ),
 
             const SizedBox(height: 30),
-
-            // ================= SAVE BUTTON =================
 
             SizedBox(
               width: double.infinity,

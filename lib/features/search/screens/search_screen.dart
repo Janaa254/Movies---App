@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../widgets/app_bottom_nav.dart';
+import '../../../widgets/compact_language_switcher.dart';
 import '../../../l10n/app_localizations.dart';
 
 import '../../browse/screens/browse_screen.dart';
@@ -30,10 +31,12 @@ class _SearchView extends StatefulWidget {
   const _SearchView();
 
   @override
-  State<_SearchView> createState() => _SearchViewState();
+  State<_SearchView> createState() =>
+      _SearchViewState();
 }
 
-class _SearchViewState extends State<_SearchView> {
+class _SearchViewState
+    extends State<_SearchView> {
   final TextEditingController _searchController =
   TextEditingController();
 
@@ -49,7 +52,8 @@ class _SearchViewState extends State<_SearchView> {
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 400) {
+        _scrollController.position.maxScrollExtent -
+            400) {
       context.read<SearchBloc>().add(
         LoadMoreSearchMovies(),
       );
@@ -57,7 +61,8 @@ class _SearchViewState extends State<_SearchView> {
   }
 
   void _search() {
-    final query = _searchController.text.trim();
+    final query =
+    _searchController.text.trim();
 
     if (query.isEmpty) {
       return;
@@ -81,7 +86,8 @@ class _SearchViewState extends State<_SearchView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(
+      backgroundColor:
+      const Color(
         0xFF121212,
       ),
 
@@ -97,27 +103,36 @@ class _SearchViewState extends State<_SearchView> {
             ),
 
             Expanded(
-              child: BlocBuilder<SearchBloc, SearchState>(
-                builder: (context, state) {
-                  if (state is SearchInitial) {
+              child: BlocBuilder<
+                  SearchBloc,
+                  SearchState>(
+                builder:
+                    (context, state) {
+                  if (state
+                  is SearchInitial) {
                     return _buildInitial();
                   }
 
-                  if (state is SearchLoading) {
+                  if (state
+                  is SearchLoading) {
                     return const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.amber,
+                      child:
+                      CircularProgressIndicator(
+                        color:
+                        Colors.amber,
                       ),
                     );
                   }
 
-                  if (state is SearchError) {
+                  if (state
+                  is SearchError) {
                     return _buildError(
                       state.message,
                     );
                   }
 
-                  if (state is SearchSuccess) {
+                  if (state
+                  is SearchSuccess) {
                     return _buildMoviesGrid(
                       state,
                     );
@@ -131,9 +146,11 @@ class _SearchViewState extends State<_SearchView> {
         ),
       ),
 
-      bottomNavigationBar: AppBottomNav(
+      bottomNavigationBar:
+      AppBottomNav(
         currentIndex: 1,
-        onTap: _onNavigationTap,
+        onTap:
+        _onNavigationTap,
       ),
     );
   }
@@ -143,25 +160,40 @@ class _SearchViewState extends State<_SearchView> {
   // ============================================================
 
   Widget _buildHeader() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
+      padding:
+      const EdgeInsets.fromLTRB(
         16,
         8,
         16,
         12,
       ),
-      child: Align(
-        alignment: AlignmentDirectional.centerStart,
-        child: Text(
-          l10n.search,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+      child: Row(
+        children: [
+          Expanded(
+            child: Align(
+              alignment:
+              AlignmentDirectional
+                  .centerStart,
+              child: Text(
+                l10n.search,
+                style:
+                const TextStyle(
+                  color:
+                  Colors.white70,
+                  fontSize: 16,
+                  fontWeight:
+                  FontWeight.w500,
+                ),
+              ),
+            ),
           ),
-        ),
+
+          const CompactLanguageSwitcher(),
+        ],
       ),
     );
   }
@@ -171,72 +203,96 @@ class _SearchViewState extends State<_SearchView> {
   // ============================================================
 
   Widget _buildSearchBar() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
+      padding:
+      const EdgeInsets.symmetric(
         horizontal: 16,
       ),
       child: TextField(
-        controller: _searchController,
-        textInputAction: TextInputAction.search,
+        controller:
+        _searchController,
+        textInputAction:
+        TextInputAction.search,
         onSubmitted: (_) {
           _search();
         },
-        style: const TextStyle(
+        style:
+        const TextStyle(
           color: Colors.white,
           fontSize: 13,
         ),
-        decoration: InputDecoration(
-          hintText: l10n.searchHint,
-          hintStyle: const TextStyle(
-            color: Colors.white38,
+        decoration:
+        InputDecoration(
+          hintText:
+          l10n.searchHint,
+          hintStyle:
+          const TextStyle(
+            color:
+            Colors.white38,
             fontSize: 13,
           ),
-          prefixIcon: const Icon(
+          prefixIcon:
+          const Icon(
             Icons.search,
-            color: Colors.white54,
+            color:
+            Colors.white54,
             size: 20,
           ),
-          suffixIcon: IconButton(
+          suffixIcon:
+          IconButton(
             onPressed: _search,
             icon: const Icon(
               Icons.arrow_forward,
-              color: Colors.amber,
+              color:
+              Colors.amber,
               size: 20,
             ),
           ),
           filled: true,
-          fillColor: const Color(
+          fillColor:
+          const Color(
             0xFF1E1E1E,
           ),
           contentPadding:
-          const EdgeInsets.symmetric(
+          const EdgeInsets
+              .symmetric(
             vertical: 13,
             horizontal: 12,
           ),
-          border: OutlineInputBorder(
+          border:
+          OutlineInputBorder(
             borderRadius:
-            BorderRadius.circular(
+            BorderRadius
+                .circular(
               12,
             ),
-            borderSide: BorderSide.none,
+            borderSide:
+            BorderSide.none,
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder:
+          OutlineInputBorder(
             borderRadius:
-            BorderRadius.circular(
+            BorderRadius
+                .circular(
               12,
             ),
-            borderSide: BorderSide.none,
+            borderSide:
+            BorderSide.none,
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder:
+          OutlineInputBorder(
             borderRadius:
-            BorderRadius.circular(
+            BorderRadius
+                .circular(
               12,
             ),
             borderSide:
             const BorderSide(
-              color: Colors.amber,
+              color:
+              Colors.amber,
               width: 1,
             ),
           ),
@@ -250,7 +306,8 @@ class _SearchViewState extends State<_SearchView> {
   // ============================================================
 
   Widget _buildInitial() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     return Center(
       child: Column(
@@ -259,16 +316,21 @@ class _SearchViewState extends State<_SearchView> {
         children: [
           const Icon(
             Icons.search,
-            color: Colors.white24,
+            color:
+            Colors.white24,
             size: 60,
           ),
+
           const SizedBox(
             height: 12,
           ),
+
           Text(
             l10n.searchForMovie,
-            style: const TextStyle(
-              color: Colors.white54,
+            style:
+            const TextStyle(
+              color:
+              Colors.white54,
               fontSize: 14,
             ),
           ),
@@ -284,13 +346,15 @@ class _SearchViewState extends State<_SearchView> {
   Widget _buildMoviesGrid(
       SearchSuccess state,
       ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     if (state.movies.isEmpty) {
       return Center(
         child: Text(
           l10n.noMoviesFound,
-          style: const TextStyle(
+          style:
+          const TextStyle(
             color: Colors.white,
             fontSize: 14,
           ),
@@ -299,8 +363,10 @@ class _SearchViewState extends State<_SearchView> {
     }
 
     return GridView.builder(
-      controller: _scrollController,
-      padding: const EdgeInsets.fromLTRB(
+      controller:
+      _scrollController,
+      padding:
+      const EdgeInsets.fromLTRB(
         16,
         4,
         16,
@@ -313,13 +379,20 @@ class _SearchViewState extends State<_SearchView> {
         mainAxisSpacing: 12,
         childAspectRatio: 0.68,
       ),
-      itemCount: state.movies.length +
-          (state.isLoadingMore ? 2 : 0),
-      itemBuilder: (context, index) {
-        if (index >= state.movies.length) {
+      itemCount:
+      state.movies.length +
+          (state.isLoadingMore
+              ? 2
+              : 0),
+      itemBuilder:
+          (context, index) {
+        if (index >=
+            state.movies.length) {
           return const Center(
-            child: CircularProgressIndicator(
-              color: Colors.amber,
+            child:
+            CircularProgressIndicator(
+              color:
+              Colors.amber,
             ),
           );
         }
@@ -335,7 +408,8 @@ class _SearchViewState extends State<_SearchView> {
               MaterialPageRoute(
                 builder: (_) =>
                     MovieDetailsScreen(
-                      movieId: movie.id,
+                      movieId:
+                      movie.id,
                     ),
               ),
             );
@@ -362,31 +436,39 @@ class _SearchViewState extends State<_SearchView> {
             Positioned.fill(
               child: ClipRRect(
                 borderRadius:
-                BorderRadius.circular(
+                BorderRadius
+                    .circular(
                   10,
                 ),
-                child: Image.network(
+                child:
+                Image.network(
                   movie.mediumCoverImage ??
                       movie.largeCoverImage ??
                       '',
-                  fit: BoxFit.cover,
+                  fit:
+                  BoxFit.cover,
                   errorBuilder:
                       (_, __, ___) {
                     return Container(
-                      color: const Color(
+                      color:
+                      const Color(
                         0xFF242424,
                       ),
-                      child: const Center(
+                      child:
+                      const Center(
                         child: Icon(
                           Icons.movie,
                           color:
-                          Colors.white54,
-                          size: 40,
+                          Colors
+                              .white54,
+                          size:
+                          40,
                         ),
                       ),
                     );
                   },
-                  loadingBuilder: (
+                  loadingBuilder:
+                      (
                       context,
                       child,
                       loadingProgress,
@@ -397,14 +479,17 @@ class _SearchViewState extends State<_SearchView> {
                     }
 
                     return Container(
-                      color: const Color(
+                      color:
+                      const Color(
                         0xFF242424,
                       ),
-                      child: const Center(
+                      child:
+                      const Center(
                         child:
                         CircularProgressIndicator(
                           color:
-                          Colors.amber,
+                          Colors
+                              .amber,
                         ),
                       ),
                     );
@@ -413,27 +498,32 @@ class _SearchViewState extends State<_SearchView> {
               ),
             ),
 
-            Positioned(
+            PositionedDirectional(
               top: 7,
-              left: 7,
+              start: 7,
               child: Container(
                 padding:
-                const EdgeInsets.symmetric(
+                const EdgeInsets
+                    .symmetric(
                   horizontal: 7,
                   vertical: 4,
                 ),
-                decoration: BoxDecoration(
-                  color: const Color(
+                decoration:
+                BoxDecoration(
+                  color:
+                  const Color(
                     0xDD202020,
                   ),
                   borderRadius:
-                  BorderRadius.circular(
+                  BorderRadius
+                      .circular(
                     7,
                   ),
                 ),
                 child: Row(
                   mainAxisSize:
-                  MainAxisSize.min,
+                  MainAxisSize
+                      .min,
                   children: [
                     Text(
                       movie.rating
@@ -443,18 +533,24 @@ class _SearchViewState extends State<_SearchView> {
                           '0.0',
                       style:
                       const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
+                        color:
+                        Colors.white,
+                        fontSize:
+                        10,
                         fontWeight:
-                        FontWeight.bold,
+                        FontWeight
+                            .bold,
                       ),
                     ),
+
                     const SizedBox(
                       width: 3,
                     ),
+
                     const Icon(
                       Icons.star,
-                      color: Colors.amber,
+                      color:
+                      Colors.amber,
                       size: 12,
                     ),
                   ],
@@ -474,50 +570,64 @@ class _SearchViewState extends State<_SearchView> {
   Widget _buildError(
       String message,
       ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(
+        padding:
+        const EdgeInsets.all(
           24,
         ),
         child: Column(
           mainAxisAlignment:
-          MainAxisAlignment.center,
+          MainAxisAlignment
+              .center,
           children: [
             const Icon(
               Icons.error_outline,
-              color: Colors.redAccent,
+              color:
+              Colors.redAccent,
               size: 50,
             ),
+
             const SizedBox(
               height: 16,
             ),
+
             Text(
-              l10n.somethingWentWrong,
-              style: const TextStyle(
-                color: Colors.white,
+              l10n
+                  .somethingWentWrong,
+              style:
+              const TextStyle(
+                color:
+                Colors.white,
                 fontSize: 18,
                 fontWeight:
                 FontWeight.bold,
               ),
             ),
+
             const SizedBox(
               height: 8,
             ),
+
             Text(
               message,
               textAlign:
               TextAlign.center,
               style:
               const TextStyle(
-                color: Colors.white70,
+                color:
+                Colors.white70,
                 fontSize: 12,
               ),
             ),
+
             const SizedBox(
               height: 20,
             ),
+
             ElevatedButton(
               onPressed: _search,
               child: Text(

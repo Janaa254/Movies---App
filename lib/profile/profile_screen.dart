@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 
 import '../widgets/app_bottom_nav.dart';
+import '../widgets/compact_language_switcher.dart';
 
 import '../auth/login_screen.dart';
 import '../auth/register_screen.dart';
@@ -23,14 +24,17 @@ import 'tabs/watchlist_tab.dart';
 import 'tabs/history_tab.dart';
 import 'tabs/favorites_tab.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen
+    extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<ProfileScreen> createState() =>
+      _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState
+    extends State<ProfileScreen> {
   int selectedAvatar = 0;
   bool isLoadingAvatar = true;
 
@@ -39,12 +43,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // 2 = Favorites
   int selectedSection = 0;
 
-  final FavoriteService favoriteService = FavoriteService();
-  final WatchlistService watchlistService = WatchlistService();
+  final FavoriteService favoriteService =
+  FavoriteService();
+
+  final WatchlistService watchlistService =
+  WatchlistService();
 
   @override
   void initState() {
     super.initState();
+
     loadAvatar();
   }
 
@@ -53,7 +61,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // ============================================================
 
   Future<void> loadAvatar() async {
-    final User? user = FirebaseAuth.instance.currentUser;
+    final User? user =
+        FirebaseAuth.instance.currentUser;
 
     if (user == null) {
       if (mounted) {
@@ -66,7 +75,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     try {
-      final doc = await FirebaseFirestore.instance
+      final doc =
+      await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
           .get();
@@ -74,13 +84,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (!mounted) return;
 
       final data = doc.data();
-      final avatarIndex = data?['avatarIndex'];
+
+      final avatarIndex =
+      data?['avatarIndex'];
 
       if (avatarIndex is int &&
           avatarIndex >= 0 &&
-          avatarIndex < AvatarPicker.allAvatars.length) {
+          avatarIndex <
+              AvatarPicker
+                  .allAvatars.length) {
         setState(() {
-          selectedAvatar = avatarIndex;
+          selectedAvatar =
+              avatarIndex;
         });
       }
     } catch (_) {
@@ -88,7 +103,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } finally {
       if (mounted) {
         setState(() {
-          isLoadingAvatar = false;
+          isLoadingAvatar =
+          false;
         });
       }
     }
@@ -98,16 +114,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // UPDATE PROFILE
   // ============================================================
 
-  Future<void> openUpdateProfile() async {
-    final bool? updated = await Navigator.push<bool>(
+  Future<void>
+  openUpdateProfile() async {
+    final bool? updated =
+    await Navigator.push<bool>(
       context,
       MaterialPageRoute(
-        builder: (_) => const UpdateProfileScreen(),
+        builder: (_) =>
+        const UpdateProfileScreen(),
       ),
     );
 
-    if (updated == true && mounted) {
-      await FirebaseAuth.instance.currentUser?.reload();
+    if (updated == true &&
+        mounted) {
+      await FirebaseAuth.instance
+          .currentUser
+          ?.reload();
 
       await loadAvatar();
 
@@ -115,14 +137,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       setState(() {});
 
-      final l10n = AppLocalizations.of(context)!;
+      final l10n =
+      AppLocalizations.of(
+        context,
+      )!;
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context)
+          .showSnackBar(
         SnackBar(
           content: Text(
-            l10n.profileUpdatedSuccessfully,
+            l10n
+                .profileUpdatedSuccessfully,
           ),
-          backgroundColor: ProfileColors.yellow,
+          backgroundColor:
+          ProfileColors.yellow,
         ),
       );
     }
@@ -137,10 +165,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return Container(
         width: 104,
         height: 104,
-        color: ProfileColors.cardColor,
+        color:
+        ProfileColors.cardColor,
         child: const Center(
-          child: CircularProgressIndicator(
-            color: ProfileColors.yellow,
+          child:
+          CircularProgressIndicator(
+            color:
+            ProfileColors.yellow,
             strokeWidth: 2,
           ),
         ),
@@ -148,20 +179,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     if (selectedAvatar < 0 ||
-        selectedAvatar >= AvatarPicker.allAvatars.length) {
+        selectedAvatar >=
+            AvatarPicker
+                .allAvatars.length) {
       return Container(
         width: 104,
         height: 104,
-        color: ProfileColors.cardColor,
+        color:
+        ProfileColors.cardColor,
         child: const Icon(
           Icons.person,
-          color: Colors.white70,
+          color:
+          Colors.white70,
           size: 55,
         ),
       );
     }
 
-    final avatar = AvatarPicker.allAvatars[selectedAvatar];
+    final avatar =
+    AvatarPicker.allAvatars[
+    selectedAvatar];
 
     return Image.asset(
       avatar.imagePath,
@@ -176,10 +213,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return Container(
           width: 104,
           height: 104,
-          color: ProfileColors.cardColor,
+          color:
+          ProfileColors
+              .cardColor,
           child: const Icon(
             Icons.person,
-            color: Colors.white70,
+            color:
+            Colors.white70,
             size: 55,
           ),
         );
@@ -192,14 +232,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // ============================================================
 
   Future<void> logout() async {
-    await FirebaseAuth.instance.signOut();
+    await FirebaseAuth.instance
+        .signOut();
 
     if (!mounted) return;
 
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
+        builder: (_) =>
+        const LoginScreen(),
       ),
           (route) => false,
     );
@@ -209,7 +251,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // NAVIGATION
   // ============================================================
 
-  void _onNavigationTap(int index) {
+  void _onNavigationTap(
+      int index,
+      ) {
     if (index == 0) {
       openHome();
       return;
@@ -241,7 +285,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => const SearchScreen(),
+        builder: (_) =>
+        const SearchScreen(),
       ),
     );
   }
@@ -250,7 +295,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => const BrowseScreen(),
+        builder: (_) =>
+        const BrowseScreen(),
       ),
     );
   }
@@ -261,65 +307,119 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
-    final User? user = FirebaseAuth.instance.currentUser;
+    final User? user =
+        FirebaseAuth.instance.currentUser;
 
     if (user == null) {
       return buildGuestProfile();
     }
 
-    final String name = user.displayName?.isNotEmpty == true
+    final String name =
+    user.displayName?.isNotEmpty ==
+        true
         ? user.displayName!
         : l10n.user;
 
     return Scaffold(
-      backgroundColor: ProfileColors.background,
+      backgroundColor:
+      ProfileColors.background,
+
       body: SafeArea(
         child: Column(
           children: [
             Container(
               width: double.infinity,
-              color: ProfileColors.topSection,
-              padding: const EdgeInsets.fromLTRB(
+              color:
+              ProfileColors
+                  .topSection,
+              padding:
+              const EdgeInsets
+                  .fromLTRB(
                 16,
-                20,
+                14,
                 16,
                 0,
               ),
               child: Column(
                 children: [
+                  // ================= LANGUAGE =================
+
+                  const Align(
+                    alignment:
+                    AlignmentDirectional
+                        .centerEnd,
+                    child:
+                    CompactLanguageSwitcher(),
+                  ),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment:
+                    CrossAxisAlignment
+                        .start,
                     children: [
                       Column(
                         children: [
                           Container(
-                            width: 116,
-                            height: 116,
-                            padding: const EdgeInsets.all(3),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: ProfileColors.yellow,
+                            width:
+                            116,
+                            height:
+                            116,
+                            padding:
+                            const EdgeInsets
+                                .all(
+                              3,
                             ),
-                            child: ClipOval(
-                              child: buildProfileAvatar(),
+                            decoration:
+                            const BoxDecoration(
+                              shape:
+                              BoxShape
+                                  .circle,
+                              color:
+                              ProfileColors
+                                  .yellow,
+                            ),
+                            child:
+                            ClipOval(
+                              child:
+                              buildProfileAvatar(),
                             ),
                           ),
 
-                          const SizedBox(height: 10),
+                          const SizedBox(
+                            height: 10,
+                          ),
 
                           SizedBox(
-                            width: 125,
-                            child: Text(
+                            width:
+                            125,
+                            child:
+                            Text(
                               name,
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                              textAlign:
+                              TextAlign
+                                  .center,
+                              maxLines:
+                              1,
+                              overflow:
+                              TextOverflow
+                                  .ellipsis,
+                              style:
+                              const TextStyle(
+                                color:
+                                Colors
+                                    .white,
+                                fontSize:
+                                18,
+                                fontWeight:
+                                FontWeight
+                                    .bold,
                               ),
                             ),
                           ),
@@ -329,42 +429,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const Spacer(),
 
                       Padding(
-                        padding: const EdgeInsets.only(
+                        padding:
+                        const EdgeInsets
+                            .only(
                           top: 28,
                         ),
                         child: Row(
                           children: [
-                            StreamBuilder<int>(
-                              stream: watchlistService
+                            StreamBuilder<
+                                int>(
+                              stream:
+                              watchlistService
                                   .getWatchlistCountStream(),
-                              builder: (context, snapshot) {
-                                final count = snapshot.data ?? 0;
+                              builder:
+                                  (
+                                  context,
+                                  snapshot,
+                                  ) {
+                                final count =
+                                    snapshot.data ??
+                                        0;
 
                                 return _Stat(
-                                  number: count.toString(),
-                                  title: l10n.watchList,
+                                  number:
+                                  count.toString(),
+                                  title:
+                                  l10n.watchList,
                                 );
                               },
                             ),
 
-                            const SizedBox(width: 25),
-
-                            _Stat(
-                              number: '0',
-                              title: l10n.history,
+                            const SizedBox(
+                              width: 25,
                             ),
 
-                            const SizedBox(width: 20),
+                            _Stat(
+                              number:
+                              '0',
+                              title:
+                              l10n.history,
+                            ),
 
-                            StreamBuilder<int>(
-                              stream: favoriteService
+                            const SizedBox(
+                              width: 20,
+                            ),
+
+                            StreamBuilder<
+                                int>(
+                              stream:
+                              favoriteService
                                   .getFavoritesCountStream(),
-                              builder: (context, snapshot) {
-                                final count = snapshot.data ?? 0;
+                              builder:
+                                  (
+                                  context,
+                                  snapshot,
+                                  ) {
+                                final count =
+                                    snapshot.data ??
+                                        0;
 
                                 return _Stat(
-                                  number: count.toString(),
-                                  title: l10n.favorites,
+                                  number:
+                                  count.toString(),
+                                  title:
+                                  l10n.favorites,
                                 );
                               },
                             ),
@@ -374,71 +502,118 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
 
-                  const SizedBox(height: 22),
+                  const SizedBox(
+                    height: 22,
+                  ),
 
                   Row(
                     children: [
                       Expanded(
                         flex: 2,
-                        child: SizedBox(
-                          height: 54,
-                          child: ElevatedButton(
-                            onPressed: openUpdateProfile,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: ProfileColors.yellow,
-                              foregroundColor: Colors.black,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
+                        child:
+                        SizedBox(
+                          height:
+                          54,
+                          child:
+                          ElevatedButton(
+                            onPressed:
+                            openUpdateProfile,
+                            style:
+                            ElevatedButton
+                                .styleFrom(
+                              backgroundColor:
+                              ProfileColors
+                                  .yellow,
+                              foregroundColor:
+                              Colors
+                                  .black,
+                              elevation:
+                              0,
+                              shape:
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius
+                                    .circular(
                                   14,
                                 ),
                               ),
                             ),
-                            child: Text(
+                            child:
+                            Text(
                               l10n.editProfile,
-                              style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
+                              style:
+                              const TextStyle(
+                                fontSize:
+                                17,
+                                fontWeight:
+                                FontWeight
+                                    .w500,
                               ),
                             ),
                           ),
                         ),
                       ),
 
-                      const SizedBox(width: 10),
+                      const SizedBox(
+                        width: 10,
+                      ),
 
                       Expanded(
-                        child: SizedBox(
-                          height: 54,
-                          child: ElevatedButton(
-                            onPressed: logout,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: ProfileColors.red,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
+                        child:
+                        SizedBox(
+                          height:
+                          54,
+                          child:
+                          ElevatedButton(
+                            onPressed:
+                            logout,
+                            style:
+                            ElevatedButton
+                                .styleFrom(
+                              backgroundColor:
+                              ProfileColors
+                                  .red,
+                              foregroundColor:
+                              Colors
+                                  .white,
+                              elevation:
+                              0,
+                              shape:
+                              RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius
+                                    .circular(
                                   14,
                                 ),
                               ),
                             ),
-                            child: Row(
+                            child:
+                            Row(
                               mainAxisAlignment:
-                              MainAxisAlignment.center,
+                              MainAxisAlignment
+                                  .center,
                               children: [
                                 Text(
                                   l10n.exit,
-                                  style: const TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500,
+                                  style:
+                                  const TextStyle(
+                                    fontSize:
+                                    17,
+                                    fontWeight:
+                                    FontWeight
+                                        .w500,
                                   ),
                                 ),
 
-                                const SizedBox(width: 6),
+                                const SizedBox(
+                                  width:
+                                  6,
+                                ),
 
                                 const Icon(
                                   Icons.logout,
-                                  size: 20,
+                                  size:
+                                  20,
                                 ),
                               ],
                             ),
@@ -448,45 +623,72 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
 
-                  const SizedBox(height: 22),
+                  const SizedBox(
+                    height: 22,
+                  ),
 
                   Row(
                     children: [
                       Expanded(
-                        child: _ProfileTab(
-                          icon: Icons.format_list_bulleted_rounded,
-                          title: l10n.watchList,
-                          isSelected: selectedSection == 0,
+                        child:
+                        _ProfileTab(
+                          icon:
+                          Icons
+                              .format_list_bulleted_rounded,
+                          title:
+                          l10n.watchList,
+                          isSelected:
+                          selectedSection ==
+                              0,
                           onTap: () {
-                            setState(() {
-                              selectedSection = 0;
-                            });
+                            setState(
+                                  () {
+                                selectedSection =
+                                0;
+                              },
+                            );
                           },
                         ),
                       ),
 
                       Expanded(
-                        child: _ProfileTab(
-                          icon: Icons.history,
-                          title: l10n.history,
-                          isSelected: selectedSection == 1,
+                        child:
+                        _ProfileTab(
+                          icon:
+                          Icons.history,
+                          title:
+                          l10n.history,
+                          isSelected:
+                          selectedSection ==
+                              1,
                           onTap: () {
-                            setState(() {
-                              selectedSection = 1;
-                            });
+                            setState(
+                                  () {
+                                selectedSection =
+                                1;
+                              },
+                            );
                           },
                         ),
                       ),
 
                       Expanded(
-                        child: _ProfileTab(
-                          icon: Icons.favorite,
-                          title: l10n.favorites,
-                          isSelected: selectedSection == 2,
+                        child:
+                        _ProfileTab(
+                          icon:
+                          Icons.favorite,
+                          title:
+                          l10n.favorites,
+                          isSelected:
+                          selectedSection ==
+                              2,
                           onTap: () {
-                            setState(() {
-                              selectedSection = 2;
-                            });
+                            setState(
+                                  () {
+                                selectedSection =
+                                2;
+                              },
+                            );
                           },
                         ),
                       ),
@@ -498,7 +700,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             Expanded(
               child: IndexedStack(
-                index: selectedSection,
+                index:
+                selectedSection,
                 children: const [
                   WatchlistTab(),
                   HistoryTab(),
@@ -510,9 +713,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
 
-      bottomNavigationBar: AppBottomNav(
+      bottomNavigationBar:
+      AppBottomNav(
         currentIndex: 3,
-        onTap: _onNavigationTap,
+        onTap:
+        _onNavigationTap,
       ),
     );
   }
@@ -522,129 +727,219 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // ============================================================
 
   Widget buildGuestProfile() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: ProfileColors.background,
+      backgroundColor:
+      ProfileColors.background,
+
       body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 25,
+        child: Stack(
+          children: [
+            Center(
+              child: Padding(
+                padding:
+                const EdgeInsets
+                    .symmetric(
+                  horizontal: 25,
+                ),
+                child: Column(
+                  mainAxisAlignment:
+                  MainAxisAlignment
+                      .center,
+                  children: [
+                    const CircleAvatar(
+                      radius: 55,
+                      backgroundColor:
+                      ProfileColors
+                          .yellow,
+                      child:
+                      CircleAvatar(
+                        radius: 52,
+                        backgroundColor:
+                        ProfileColors
+                            .cardColor,
+                        child: Icon(
+                          Icons
+                              .person_outline,
+                          color:
+                          Colors
+                              .white70,
+                          size:
+                          55,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height: 20,
+                    ),
+
+                    Text(
+                      l10n
+                          .welcomeToMoviesApp,
+                      textAlign:
+                      TextAlign
+                          .center,
+                      style:
+                      const TextStyle(
+                        color:
+                        Colors.white,
+                        fontSize:
+                        24,
+                        fontWeight:
+                        FontWeight
+                            .bold,
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height: 10,
+                    ),
+
+                    Text(
+                      l10n
+                          .guestProfileDescription,
+                      textAlign:
+                      TextAlign
+                          .center,
+                      style:
+                      const TextStyle(
+                        color:
+                        Colors.white54,
+                        fontSize:
+                        14,
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height: 30,
+                    ),
+
+                    SizedBox(
+                      width:
+                      double.infinity,
+                      height: 52,
+                      child:
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                              const LoginScreen(),
+                            ),
+                          );
+                        },
+                        style:
+                        ElevatedButton
+                            .styleFrom(
+                          backgroundColor:
+                          ProfileColors
+                              .yellow,
+                          foregroundColor:
+                          Colors.black,
+                          elevation: 0,
+                          shape:
+                          RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius
+                                .circular(
+                              14,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          l10n.login,
+                          style:
+                          const TextStyle(
+                            fontSize:
+                            16,
+                            fontWeight:
+                            FontWeight
+                                .bold,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height: 12,
+                    ),
+
+                    SizedBox(
+                      width:
+                      double.infinity,
+                      height: 52,
+                      child:
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                              const RegisterScreen(),
+                            ),
+                          );
+                        },
+                        style:
+                        OutlinedButton
+                            .styleFrom(
+                          foregroundColor:
+                          ProfileColors
+                              .yellow,
+                          side:
+                          const BorderSide(
+                            color:
+                            ProfileColors
+                                .yellow,
+                            width:
+                            1.5,
+                          ),
+                          shape:
+                          RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius
+                                .circular(
+                              14,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          l10n
+                              .createAccount,
+                          style:
+                          const TextStyle(
+                            fontSize:
+                            16,
+                            fontWeight:
+                            FontWeight
+                                .bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircleAvatar(
-                  radius: 55,
-                  backgroundColor: ProfileColors.yellow,
-                  child: CircleAvatar(
-                    radius: 52,
-                    backgroundColor: ProfileColors.cardColor,
-                    child: Icon(
-                      Icons.person_outline,
-                      color: Colors.white70,
-                      size: 55,
-                    ),
-                  ),
-                ),
 
-                const SizedBox(height: 20),
-
-                Text(
-                  l10n.welcomeToMoviesApp,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                Text(
-                  l10n.guestProfileDescription,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white54,
-                    fontSize: 14,
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const LoginScreen(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ProfileColors.yellow,
-                      foregroundColor: Colors.black,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          14,
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      l10n.login,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const RegisterScreen(),
-                        ),
-                      );
-                    },
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: ProfileColors.yellow,
-                      side: const BorderSide(
-                        color: ProfileColors.yellow,
-                        width: 1.5,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          14,
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      l10n.createAccount,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            const PositionedDirectional(
+              top: 12,
+              end: 16,
+              child:
+              CompactLanguageSwitcher(),
             ),
-          ),
+          ],
         ),
+      ),
+
+      bottomNavigationBar:
+      AppBottomNav(
+        currentIndex: 3,
+        onTap:
+        _onNavigationTap,
       ),
     );
   }
@@ -669,22 +964,31 @@ class _Stat extends StatelessWidget {
       children: [
         Text(
           number,
-          style: const TextStyle(
-            color: Colors.white,
+          style:
+          const TextStyle(
+            color:
+            Colors.white,
             fontSize: 28,
-            fontWeight: FontWeight.bold,
+            fontWeight:
+            FontWeight.bold,
           ),
         ),
 
-        const SizedBox(height: 8),
+        const SizedBox(
+          height: 8,
+        ),
 
         Text(
           title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
+          textAlign:
+          TextAlign.center,
+          style:
+          const TextStyle(
+            color:
+            Colors.white,
             fontSize: 14,
-            fontWeight: FontWeight.w600,
+            fontWeight:
+            FontWeight.w600,
           ),
         ),
       ],
@@ -696,7 +1000,8 @@ class _Stat extends StatelessWidget {
 // PROFILE TAB
 // ============================================================
 
-class _ProfileTab extends StatelessWidget {
+class _ProfileTab
+    extends StatelessWidget {
   final IconData icon;
   final String title;
   final bool isSelected;
@@ -713,53 +1018,87 @@ class _ProfileTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
+      borderRadius:
+      BorderRadius.circular(
+        10,
+      ),
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(
+            padding:
+            const EdgeInsets
+                .symmetric(
               vertical: 8,
             ),
             child: Column(
               children: [
                 Icon(
                   icon,
-                  color: isSelected
-                      ? ProfileColors.yellow
-                      : Colors.white70,
+                  color:
+                  isSelected
+                      ? ProfileColors
+                      .yellow
+                      : Colors
+                      .white70,
                   size: 31,
                 ),
 
-                const SizedBox(height: 7),
+                const SizedBox(
+                  height: 7,
+                ),
 
                 Text(
                   title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: isSelected
-                        ? Colors.white
-                        : Colors.white70,
-                    fontSize: 15,
-                    fontWeight: isSelected
-                        ? FontWeight.w600
-                        : FontWeight.normal,
+                  textAlign:
+                  TextAlign
+                      .center,
+                  style:
+                  TextStyle(
+                    color:
+                    isSelected
+                        ? Colors
+                        .white
+                        : Colors
+                        .white70,
+                    fontSize:
+                    15,
+                    fontWeight:
+                    isSelected
+                        ? FontWeight
+                        .w600
+                        : FontWeight
+                        .normal,
                   ),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: 4),
+          const SizedBox(
+            height: 4,
+          ),
 
           AnimatedContainer(
-            duration: const Duration(
-              milliseconds: 200,
+            duration:
+            const Duration(
+              milliseconds:
+              200,
             ),
-            width: isSelected ? 65 : 0,
+            width:
+            isSelected
+                ? 65
+                : 0,
             height: 3,
-            decoration: BoxDecoration(
-              color: ProfileColors.yellow,
-              borderRadius: BorderRadius.circular(10),
+            decoration:
+            BoxDecoration(
+              color:
+              ProfileColors
+                  .yellow,
+              borderRadius:
+              BorderRadius
+                  .circular(
+                10,
+              ),
             ),
           ),
         ],

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/movie_model.dart';
 import '../../../widgets/app_bottom_nav.dart';
+import '../../../widgets/compact_language_switcher.dart';
 import '../../../l10n/app_localizations.dart';
 
 import '../../browse/screens/browse_screen.dart';
@@ -20,11 +21,13 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() =>
+      _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController =
+  ScrollController();
 
   @override
   void initState() {
@@ -39,7 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 300) {
+        _scrollController.position.maxScrollExtent -
+            300) {
       context.read<HomeBloc>().add(
         LoadMoreMovies(),
       );
@@ -55,12 +59,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor:
+      const Color(0xFF121212),
 
       body: SafeArea(
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            if (state is HomeInitial || state is HomeLoading) {
+            if (state is HomeInitial ||
+                state is HomeLoading) {
               return const Center(
                 child: CircularProgressIndicator(
                   color: Colors.amber,
@@ -99,7 +105,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildHome(
       HomeSuccess state,
       ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     if (state.movies.isEmpty) {
       return Center(
@@ -114,14 +121,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return RefreshIndicator(
       color: Colors.amber,
-      backgroundColor: const Color(
-        0xFF1E1E1E,
-      ),
+      backgroundColor:
+      const Color(0xFF1E1E1E),
+
       onRefresh: () async {
         context.read<HomeBloc>().add(
           LoadMovies(),
         );
       },
+
       child: ListView(
         controller: _scrollController,
         padding: const EdgeInsets.only(
@@ -176,13 +184,18 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildAvailableNow(
       List<MovieModel> movies,
       ) {
-    final mainMovie = movies.first;
+    final mainMovie =
+        movies.first;
 
     final leftMovie =
-    movies.length > 1 ? movies[1] : mainMovie;
+    movies.length > 1
+        ? movies[1]
+        : mainMovie;
 
     final rightMovie =
-    movies.length > 2 ? movies[2] : mainMovie;
+    movies.length > 2
+        ? movies[2]
+        : mainMovie;
 
     return SizedBox(
       height: 390,
@@ -201,7 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ___,
                   ) {
                 return Container(
-                  color: const Color(
+                  color:
+                  const Color(
                     0xFF151515,
                   ),
                 );
@@ -211,10 +225,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+              decoration:
+              const BoxDecoration(
+                gradient:
+                LinearGradient(
+                  begin:
+                  Alignment.topCenter,
+                  end:
+                  Alignment.bottomCenter,
                   colors: [
                     Color(0x55000000),
                     Color(0x99000000),
@@ -238,15 +256,24 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Image.asset(
                 'assets/images/available_now.png',
                 height: 42,
-                fit: BoxFit.contain,
+                fit:
+                BoxFit.contain,
               ),
             ),
+          ),
+
+          const PositionedDirectional(
+            top: 10,
+            end: 12,
+            child:
+            CompactLanguageSwitcher(),
           ),
 
           Positioned(
             left: -28,
             top: 72,
-            child: _buildSidePoster(
+            child:
+            _buildSidePoster(
               leftMovie,
             ),
           ),
@@ -254,7 +281,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Positioned(
             right: -28,
             top: 72,
-            child: _buildSidePoster(
+            child:
+            _buildSidePoster(
               rightMovie,
             ),
           ),
@@ -264,7 +292,8 @@ class _HomeScreenState extends State<HomeScreen> {
             left: 0,
             right: 0,
             child: Center(
-              child: GestureDetector(
+              child:
+              GestureDetector(
                 onTap: () {
                   _openMovieDetails(
                     mainMovie.id,
@@ -273,44 +302,66 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   width: 170,
                   height: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
+                  decoration:
+                  BoxDecoration(
+                    borderRadius:
+                    BorderRadius
+                        .circular(
                       8,
                     ),
-                    boxShadow: const [
+                    boxShadow:
+                    const [
                       BoxShadow(
-                        color: Colors.black87,
-                        blurRadius: 18,
-                        spreadRadius: 2,
-                        offset: Offset(
+                        color:
+                        Colors
+                            .black87,
+                        blurRadius:
+                        18,
+                        spreadRadius:
+                        2,
+                        offset:
+                        Offset(
                           0,
                           8,
                         ),
                       ),
                     ],
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
+                  child:
+                  ClipRRect(
+                    borderRadius:
+                    BorderRadius
+                        .circular(
                       8,
                     ),
-                    child: Image.network(
-                      mainMovie.largeCoverImage ??
-                          mainMovie.mediumCoverImage ??
+                    child:
+                    Image.network(
+                      mainMovie
+                          .largeCoverImage ??
+                          mainMovie
+                              .mediumCoverImage ??
                           '',
-                      fit: BoxFit.cover,
-                      errorBuilder: (
+                      fit:
+                      BoxFit.cover,
+                      errorBuilder:
+                          (
                           _,
                           __,
                           ___,
                           ) {
                         return Container(
-                          color: const Color(
+                          color:
+                          const Color(
                             0xFF202020,
                           ),
-                          child: const Icon(
+                          child:
+                          const Icon(
                             Icons.movie,
-                            color: Colors.white54,
-                            size: 50,
+                            color:
+                            Colors
+                                .white54,
+                            size:
+                            50,
                           ),
                         );
                       },
@@ -326,16 +377,19 @@ class _HomeScreenState extends State<HomeScreen> {
             right: 0,
             bottom: 15,
             child: Center(
-              child: GestureDetector(
+              child:
+              GestureDetector(
                 onTap: () {
                   _openMovieDetails(
                     mainMovie.id,
                   );
                 },
-                child: Image.asset(
+                child:
+                Image.asset(
                   'assets/images/watch_now.png',
                   height: 48,
-                  fit: BoxFit.contain,
+                  fit:
+                  BoxFit.contain,
                 ),
               ),
             ),
@@ -356,18 +410,21 @@ class _HomeScreenState extends State<HomeScreen> {
       width: 85,
       height: 225,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
+        borderRadius:
+        BorderRadius.circular(
           8,
         ),
         boxShadow: const [
           BoxShadow(
-            color: Colors.black87,
+            color:
+            Colors.black87,
             blurRadius: 10,
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(
+        borderRadius:
+        BorderRadius.circular(
           8,
         ),
         child: Image.network(
@@ -381,12 +438,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ___,
               ) {
             return Container(
-              color: const Color(
+              color:
+              const Color(
                 0xFF202020,
               ),
               child: const Icon(
                 Icons.movie,
-                color: Colors.white54,
+                color:
+                Colors.white54,
               ),
             );
           },
@@ -403,22 +462,27 @@ class _HomeScreenState extends State<HomeScreen> {
     required String title,
     required VoidCallback onSeeMore,
   }) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
+      padding:
+      const EdgeInsets.symmetric(
         horizontal: 14,
       ),
       child: Row(
         mainAxisAlignment:
-        MainAxisAlignment.spaceBetween,
+        MainAxisAlignment
+            .spaceBetween,
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style:
+            const TextStyle(
               color: Colors.white,
               fontSize: 19,
-              fontWeight: FontWeight.bold,
+              fontWeight:
+              FontWeight.bold,
             ),
           ),
           GestureDetector(
@@ -427,8 +491,10 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Text(
                   l10n.seeMore,
-                  style: const TextStyle(
-                    color: Colors.amber,
+                  style:
+                  const TextStyle(
+                    color:
+                    Colors.amber,
                     fontSize: 12,
                   ),
                 ),
@@ -436,8 +502,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 4,
                 ),
                 const Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.amber,
+                  Icons
+                      .arrow_forward_ios,
+                  color:
+                  Colors.amber,
                   size: 10,
                 ),
               ],
@@ -457,7 +525,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ) {
     return SizedBox(
       height: 225,
-      child: NotificationListener<ScrollNotification>(
+      child:
+      NotificationListener<
+          ScrollNotification>(
         onNotification: (
             notification,
             ) {
@@ -467,8 +537,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 notification.metrics;
 
             if (metrics.pixels >=
-                metrics.maxScrollExtent - 100) {
-              context.read<HomeBloc>().add(
+                metrics.maxScrollExtent -
+                    100) {
+              context
+                  .read<HomeBloc>()
+                  .add(
                 LoadMoreMovies(),
               );
             }
@@ -476,13 +549,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return false;
         },
-        child: ListView.separated(
-          padding: const EdgeInsets.symmetric(
+        child:
+        ListView.separated(
+          padding:
+          const EdgeInsets
+              .symmetric(
             horizontal: 14,
           ),
-          scrollDirection: Axis.horizontal,
-          itemCount: movies.length,
-          separatorBuilder: (
+          scrollDirection:
+          Axis.horizontal,
+          itemCount:
+          movies.length,
+          separatorBuilder:
+              (
               _,
               __,
               ) =>
@@ -493,7 +572,8 @@ class _HomeScreenState extends State<HomeScreen> {
               context,
               index,
               ) {
-            final movie = movies[index];
+            final movie =
+            movies[index];
 
             return MovieCard(
               movie: movie,
@@ -590,61 +670,89 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildError(
       String message,
       ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(
-          24,
+    return Stack(
+      children: [
+        Center(
+          child: Padding(
+            padding:
+            const EdgeInsets.all(
+              24,
+            ),
+            child: Column(
+              mainAxisAlignment:
+              MainAxisAlignment
+                  .center,
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  color:
+                  Colors.redAccent,
+                  size: 50,
+                ),
+
+                const SizedBox(
+                  height: 16,
+                ),
+
+                Text(
+                  l10n
+                      .somethingWentWrong,
+                  style:
+                  const TextStyle(
+                    color:
+                    Colors.white,
+                    fontSize: 18,
+                    fontWeight:
+                    FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 8,
+                ),
+
+                Text(
+                  message,
+                  textAlign:
+                  TextAlign.center,
+                  style:
+                  const TextStyle(
+                    color:
+                    Colors.white70,
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                ElevatedButton(
+                  onPressed: () {
+                    context
+                        .read<HomeBloc>()
+                        .add(
+                      LoadMovies(),
+                    );
+                  },
+                  child: Text(
+                    l10n.retry,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        child: Column(
-          mainAxisAlignment:
-          MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.error_outline,
-              color: Colors.redAccent,
-              size: 50,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Text(
-              l10n.somethingWentWrong,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight:
-                FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              message,
-              textAlign:
-              TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white70,
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                context.read<HomeBloc>().add(
-                  LoadMovies(),
-                );
-              },
-              child: Text(
-                l10n.retry,
-              ),
-            ),
-          ],
+
+        const PositionedDirectional(
+          top: 10,
+          end: 12,
+          child:
+          CompactLanguageSwitcher(),
         ),
-      ),
+      ],
     );
   }
 }

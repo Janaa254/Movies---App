@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../widgets/app_bottom_nav.dart';
+import '../../../widgets/compact_language_switcher.dart';
 import '../../../l10n/app_localizations.dart';
 
 import '../../movie_details/screens/movie_details_screen.dart';
@@ -19,7 +20,8 @@ class BrowseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => BrowseBloc()
+      create: (_) =>
+      BrowseBloc()
         ..add(
           LoadBrowseMovies(),
         ),
@@ -28,14 +30,17 @@ class BrowseScreen extends StatelessWidget {
   }
 }
 
-class _BrowseView extends StatefulWidget {
+class _BrowseView
+    extends StatefulWidget {
   const _BrowseView();
 
   @override
-  State<_BrowseView> createState() => _BrowseViewState();
+  State<_BrowseView> createState() =>
+      _BrowseViewState();
 }
 
-class _BrowseViewState extends State<_BrowseView> {
+class _BrowseViewState
+    extends State<_BrowseView> {
   final ScrollController _scrollController =
   ScrollController();
 
@@ -63,12 +68,15 @@ class _BrowseViewState extends State<_BrowseView> {
   void initState() {
     super.initState();
 
-    _scrollController.addListener(_onScroll);
+    _scrollController.addListener(
+      _onScroll,
+    );
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 400) {
+        _scrollController.position.maxScrollExtent -
+            400) {
       context.read<BrowseBloc>().add(
         LoadMoreBrowseMovies(),
       );
@@ -78,13 +86,17 @@ class _BrowseViewState extends State<_BrowseView> {
   @override
   void dispose() {
     _scrollController.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor:
+      const Color(
+        0xFF121212,
+      ),
 
       body: SafeArea(
         child: Column(
@@ -93,27 +105,38 @@ class _BrowseViewState extends State<_BrowseView> {
 
             _buildGenres(),
 
-            const SizedBox(height: 10),
+            const SizedBox(
+              height: 10,
+            ),
 
             Expanded(
-              child: BlocBuilder<BrowseBloc, BrowseState>(
-                builder: (context, state) {
-                  if (state is BrowseInitial ||
-                      state is BrowseLoading) {
+              child: BlocBuilder<
+                  BrowseBloc,
+                  BrowseState>(
+                builder:
+                    (context, state) {
+                  if (state
+                  is BrowseInitial ||
+                      state
+                      is BrowseLoading) {
                     return const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.amber,
+                      child:
+                      CircularProgressIndicator(
+                        color:
+                        Colors.amber,
                       ),
                     );
                   }
 
-                  if (state is BrowseError) {
+                  if (state
+                  is BrowseError) {
                     return _buildError(
                       state.message,
                     );
                   }
 
-                  if (state is BrowseSuccess) {
+                  if (state
+                  is BrowseSuccess) {
                     return _buildMoviesGrid(
                       state,
                     );
@@ -127,9 +150,11 @@ class _BrowseViewState extends State<_BrowseView> {
         ),
       ),
 
-      bottomNavigationBar: AppBottomNav(
+      bottomNavigationBar:
+      AppBottomNav(
         currentIndex: 2,
-        onTap: _onNavigationTap,
+        onTap:
+        _onNavigationTap,
       ),
     );
   }
@@ -139,25 +164,40 @@ class _BrowseViewState extends State<_BrowseView> {
   // ============================================================
 
   Widget _buildHeader() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
+      padding:
+      const EdgeInsets.fromLTRB(
         16,
         8,
         16,
         4,
       ),
-      child: Align(
-        alignment: AlignmentDirectional.centerStart,
-        child: Text(
-          l10n.browse,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+      child: Row(
+        children: [
+          Expanded(
+            child: Align(
+              alignment:
+              AlignmentDirectional
+                  .centerStart,
+              child: Text(
+                l10n.browse,
+                style:
+                const TextStyle(
+                  color:
+                  Colors.white70,
+                  fontSize: 16,
+                  fontWeight:
+                  FontWeight.w500,
+                ),
+              ),
+            ),
           ),
-        ),
+
+          const CompactLanguageSwitcher(),
+        ],
       ),
     );
   }
@@ -167,38 +207,54 @@ class _BrowseViewState extends State<_BrowseView> {
   // ============================================================
 
   Widget _buildGenres() {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     return SizedBox(
       height: 42,
-      child: BlocBuilder<BrowseBloc, BrowseState>(
+      child: BlocBuilder<
+          BrowseBloc,
+          BrowseState>(
         builder: (context, state) {
-          String selectedGenre = 'Action';
+          String selectedGenre =
+              'Action';
 
-          if (state is BrowseSuccess) {
-            selectedGenre = state.selectedGenre;
+          if (state
+          is BrowseSuccess) {
+            selectedGenre =
+                state.selectedGenre;
           }
 
           return ListView.separated(
-            padding: const EdgeInsets.symmetric(
+            padding:
+            const EdgeInsets
+                .symmetric(
               horizontal: 14,
             ),
-            scrollDirection: Axis.horizontal,
-            itemCount: genres.length,
-            separatorBuilder: (_, __) =>
+            scrollDirection:
+            Axis.horizontal,
+            itemCount:
+            genres.length,
+            separatorBuilder:
+                (_, __) =>
             const SizedBox(
               width: 6,
             ),
-            itemBuilder: (context, index) {
-              final genre = genres[index];
+            itemBuilder:
+                (context, index) {
+              final genre =
+              genres[index];
 
               final isSelected =
-                  genre == selectedGenre;
+                  genre ==
+                      selectedGenre;
 
               return GestureDetector(
                 onTap: () {
-                  // Keep API / Bloc value in English.
-                  context.read<BrowseBloc>().add(
+                  context
+                      .read<
+                      BrowseBloc>()
+                      .add(
                     ChangeGenre(
                       genre,
                     ),
@@ -206,20 +262,27 @@ class _BrowseViewState extends State<_BrowseView> {
                 },
                 child: Container(
                   padding:
-                  const EdgeInsets.symmetric(
+                  const EdgeInsets
+                      .symmetric(
                     horizontal: 13,
                   ),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
+                  alignment:
+                  Alignment.center,
+                  decoration:
+                  BoxDecoration(
                     color: isSelected
                         ? Colors.amber
-                        : Colors.transparent,
+                        : Colors
+                        .transparent,
                     borderRadius:
-                    BorderRadius.circular(
+                    BorderRadius
+                        .circular(
                       9,
                     ),
-                    border: Border.all(
-                      color: Colors.amber,
+                    border:
+                    Border.all(
+                      color:
+                      Colors.amber,
                       width: 1,
                     ),
                   ),
@@ -228,13 +291,15 @@ class _BrowseViewState extends State<_BrowseView> {
                       genre,
                       l10n,
                     ),
-                    style: TextStyle(
+                    style:
+                    TextStyle(
                       color: isSelected
                           ? Colors.black
                           : Colors.amber,
                       fontSize: 11,
                       fontWeight:
-                      FontWeight.bold,
+                      FontWeight
+                          .bold,
                     ),
                   ),
                 ),
@@ -314,23 +379,28 @@ class _BrowseViewState extends State<_BrowseView> {
   Widget _buildMoviesGrid(
       BrowseSuccess state,
       ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     if (state.movies.isEmpty) {
       return Center(
         child: Text(
           l10n.noMoviesFound,
-          style: const TextStyle(
-            color: Colors.white,
+          style:
+          const TextStyle(
+            color:
+            Colors.white,
           ),
         ),
       );
     }
 
     return GridView.builder(
-      controller: _scrollController,
+      controller:
+      _scrollController,
 
-      padding: const EdgeInsets.fromLTRB(
+      padding:
+      const EdgeInsets.fromLTRB(
         14,
         5,
         14,
@@ -345,19 +415,27 @@ class _BrowseViewState extends State<_BrowseView> {
         childAspectRatio: 0.68,
       ),
 
-      itemCount: state.movies.length +
-          (state.isLoadingMore ? 2 : 0),
+      itemCount:
+      state.movies.length +
+          (state.isLoadingMore
+              ? 2
+              : 0),
 
-      itemBuilder: (context, index) {
-        if (index >= state.movies.length) {
+      itemBuilder:
+          (context, index) {
+        if (index >=
+            state.movies.length) {
           return const Center(
-            child: CircularProgressIndicator(
-              color: Colors.amber,
+            child:
+            CircularProgressIndicator(
+              color:
+              Colors.amber,
             ),
           );
         }
 
-        final movie = state.movies[index];
+        final movie =
+        state.movies[index];
 
         return BrowseMovieCard(
           movie: movie,
@@ -367,7 +445,8 @@ class _BrowseViewState extends State<_BrowseView> {
               MaterialPageRoute(
                 builder: (_) =>
                     MovieDetailsScreen(
-                      movieId: movie.id,
+                      movieId:
+                      movie.id,
                     ),
               ),
             );
@@ -384,20 +463,24 @@ class _BrowseViewState extends State<_BrowseView> {
   Widget _buildError(
       String message,
       ) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n =
+    AppLocalizations.of(context)!;
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(
+        padding:
+        const EdgeInsets.all(
           24,
         ),
         child: Column(
           mainAxisAlignment:
-          MainAxisAlignment.center,
+          MainAxisAlignment
+              .center,
           children: [
             const Icon(
               Icons.error_outline,
-              color: Colors.redAccent,
+              color:
+              Colors.redAccent,
               size: 50,
             ),
 
@@ -406,9 +489,12 @@ class _BrowseViewState extends State<_BrowseView> {
             ),
 
             Text(
-              l10n.somethingWentWrong,
-              style: const TextStyle(
-                color: Colors.white,
+              l10n
+                  .somethingWentWrong,
+              style:
+              const TextStyle(
+                color:
+                Colors.white,
                 fontSize: 18,
                 fontWeight:
                 FontWeight.bold,
@@ -423,8 +509,10 @@ class _BrowseViewState extends State<_BrowseView> {
               message,
               textAlign:
               TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white70,
+              style:
+              const TextStyle(
+                color:
+                Colors.white70,
               ),
             ),
 
@@ -434,7 +522,10 @@ class _BrowseViewState extends State<_BrowseView> {
 
             ElevatedButton(
               onPressed: () {
-                context.read<BrowseBloc>().add(
+                context
+                    .read<
+                    BrowseBloc>()
+                    .add(
                   LoadBrowseMovies(),
                 );
               },

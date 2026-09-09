@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../widgets/compact_language_switcher.dart';
+
 import '../bloc/movie_details_bloc.dart';
 import '../bloc/movie_details_event.dart';
 import '../bloc/movie_details_state.dart';
@@ -34,83 +36,84 @@ class _MovieDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff101010),
-
       body: SafeArea(
-        child: BlocBuilder<
-            MovieDetailsBloc,
-            MovieDetailsState>(
-          builder: (context, state) {
-            if (state is MovieDetailsLoading) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Color(0xffffc107),
-                ),
-              );
-            }
-
-            if (state is MovieDetailsError) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Text(
-                    state.message,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              );
-            }
-
-            if (state is MovieDetailsSuccess) {
-              return MovieDetailsContent(
-                movie: state.movie,
-                suggestions:
-                state.suggestions,
-
-                isFavorite:
-                state.isFavorite,
-
-                isInWatchlist:
-                state.isInWatchlist,
-
-                onFavoriteTap: () {
-                  context
-                      .read<MovieDetailsBloc>()
-                      .add(
-                    ToggleFavorite(
-                      state.movie,
+        child: Stack(
+          children: [
+            BlocBuilder<
+                MovieDetailsBloc,
+                MovieDetailsState>(
+              builder: (context, state) {
+                if (state is MovieDetailsLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xffffc107),
                     ),
                   );
-                },
+                }
 
-                onWatchlistTap: () {
-                  context
-                      .read<MovieDetailsBloc>()
-                      .add(
-                    ToggleWatchlist(
-                      state.movie,
+                if (state is MovieDetailsError) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Text(
+                        state.message,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   );
-                },
+                }
 
-                onMovieTap: (id) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          MovieDetailsScreen(
-                            movieId: id,
-                          ),
-                    ),
+                if (state is MovieDetailsSuccess) {
+                  return MovieDetailsContent(
+                    movie: state.movie,
+                    suggestions: state.suggestions,
+                    isFavorite: state.isFavorite,
+                    isInWatchlist: state.isInWatchlist,
+                    onFavoriteTap: () {
+                      context
+                          .read<MovieDetailsBloc>()
+                          .add(
+                        ToggleFavorite(
+                          state.movie,
+                        ),
+                      );
+                    },
+                    onWatchlistTap: () {
+                      context
+                          .read<MovieDetailsBloc>()
+                          .add(
+                        ToggleWatchlist(
+                          state.movie,
+                        ),
+                      );
+                    },
+                    onMovieTap: (id) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              MovieDetailsScreen(
+                                movieId: id,
+                              ),
+                        ),
+                      );
+                    },
                   );
-                },
-              );
-            }
+                }
 
-            return const SizedBox.shrink();
-          },
+                return const SizedBox.shrink();
+              },
+            ),
+
+            const PositionedDirectional(
+              top: 10,
+              end: 12,
+              child: CompactLanguageSwitcher(),
+            ),
+          ],
         ),
       ),
     );
