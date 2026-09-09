@@ -7,6 +7,8 @@ import 'firebase_options.dart';
 import 'features/home/bloc/home_bloc.dart';
 import 'features/home/screens/home_screen.dart';
 
+import 'features/movie_details/screens/movie_details_screen.dart';
+
 import 'splash/splash_screen.dart';
 import 'onboarding/onboarding_screen.dart';
 import 'auth/login_screen.dart';
